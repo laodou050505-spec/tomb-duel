@@ -202,7 +202,12 @@ namespace Guandan.UI
             if (viewport.z > 0.1f)
             {
                 var visibleHeight = 2f * viewport.z * Mathf.Tan(targetCamera.fieldOfView * 0.5f * Mathf.Deg2Rad);
-                var scale = Mathf.Min(WorldScale, visibleHeight * 0.065f / CanvasHeight);
+                // Spec C distance-based scaling: scale = WorldScale × max(1, d / 2m).
+                // Ensures title cap height ≥ d × 0.028 at any viewing distance.
+                // Cap at 30% of visible height to prevent screen-filling plaques.
+                var distance = (targetCamera.transform.position - transform.position).magnitude;
+                var scale = WorldScale * Mathf.Max(1f, distance / 2.0f);
+                scale = Mathf.Min(scale, visibleHeight * 0.30f / CanvasHeight);
                 canvasRect.localScale = Vector3.one * scale;
                 var lowerExtent = CanvasHeight * 0.5f + (playedCardsRoot.rect.height > 0f ? 140f + playedCardsRoot.rect.height : 0f);
                 position.y += Mathf.Max(0f, 0.14f + lowerExtent * scale - HeadGap);
