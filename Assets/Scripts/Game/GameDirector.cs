@@ -716,7 +716,7 @@ namespace Guandan.Game
             }
             aiPromptRequested = true;
             gameAudio?.Bell();
-            ShowMessage($"The bell urges {GuandanMatchEngine.SeatLabel(thinkingSeat)} to play.");
+            ShowMessage($"The bell urges {GuandanMatchEngine.SeatLabelInline(thinkingSeat)} to play.");
         }
 
         public void PlayBellFeedback(Vector3 position)

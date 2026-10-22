@@ -270,7 +270,7 @@ namespace Guandan.Game
             var exchange = tributeExchanges.First(item => item.Recipient == seat && !item.IsReturned);
             MoveCard(card, seat, exchange.Payer);
             exchange.ReturnCard = card;
-            Raise(MatchEventType.TributeReturned, seat, $"{SeatLabel(seat)} returned tribute to {SeatLabel(exchange.Payer)}", exchange.Payer, card: card);
+            Raise(MatchEventType.TributeReturned, seat, $"{SeatLabel(seat)} returned tribute to {SeatLabelInline(exchange.Payer)}", exchange.Payer, card: card);
             ContinueTributeReturnsOrBeginPlay();
             return true;
         }
@@ -392,7 +392,7 @@ namespace Guandan.Game
                 Raise(
                     MatchEventType.TributeAssigned,
                     assignment.Payer,
-                    $"{SeatLabel(assignment.Payer)} paid tribute to {SeatLabel(assignment.Recipient)}",
+                    $"{SeatLabel(assignment.Payer)} paid tribute to {SeatLabelInline(assignment.Recipient)}",
                     assignment.Recipient,
                     card: exchange.TributeCard);
             }
@@ -567,5 +567,9 @@ namespace Guandan.Game
         // "You lead" for South; "East leads" etc. for AI seats.
         public static string SeatLeadPhrase(PlayerSeat seat) =>
             seat == PlayerSeat.South ? "You lead" : $"{SeatLabel(seat)} leads";
+
+        // Lowercase "you" for South when the name appears mid-sentence (not at the start).
+        public static string SeatLabelInline(PlayerSeat seat) =>
+            seat == PlayerSeat.South ? "you" : SeatLabel(seat);
     }
 }
