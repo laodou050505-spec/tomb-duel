@@ -182,5 +182,7 @@ No new 3D assets generated (Tripo credits: 0 used for this delivery).
 - [x] GameplayComfortValidation.cs updated: EN assertions (S\nJKR, B\nJKR, Wild→8, VICTORY!, DEFEATED), folder → VisualQA/EN-20261022
 - [x] EN_TEXT_TABLE.md updated to reflect all terminology changes
 - [x] UI texture audit: all 11 GuandanUI PNGs inspected — no baked Chinese text found
-- [x] Emulator install: com.guandan.tombxr.en installed on emulator-5554
-- [x] Slot released: /tmp/en-unity-slotA removed after build
+- [x] Emulator install: com.guandan.tombxr.en installed on emulator-5554 (`adb install` Success)
+  - Original `com.guandan.tombxr` preserved and coexists
+  - Verified: `pm list packages | grep guandan` shows both packages
+- [x] Slot released: /tmp/en-unity-slotA files cleared after build
