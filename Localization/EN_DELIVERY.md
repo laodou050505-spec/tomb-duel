@@ -108,31 +108,24 @@ f56fad3 fix: 修复 C# 10 插值字符串内不合法的 \" 转义引号
 
 ## 5. APK Build Status
 
-**Status: PENDING — awaiting disk space and Unity slot**
+**Status: COMPLETE**
 
-The APK build requires >=10 GB free disk space and Unity slot-1 (per emergency rule). During this session, disk reached 99% full (123 MB remaining) and slot-1 was held by GravityFrontline-EN.
+**APK:** `Builds/EN/TombDuel-EN-PICO.apk`
+**Size:** 77 MB
+**SHA-256:** `73f2be2f1282839621362e99466d56f40b1862ef0a781bae30a9bb0ed507b44a`
+**Build date:** 2026-10-22 13:20
+**Build log:** `Builds/EN/apk_build4_log.txt`
+**Unity exit:** `Exiting batchmode successfully now!`
 
-**Build configuration (from `GuandanProjectSetup.cs`):**
+**Build configuration:**
 - Platform: Android / ARM64
 - Scripting backend: IL2CPP
 - XR Plugin: PXR Loader (PICO)
 - Stereo rendering: Multiview
 - Output: `Builds/EN/TombDuel-EN-PICO.apk`
-- Build method: `TombDuel.Editor.GuandanProjectSetup.BuildPicoApk`
+- Build method: `Guandan.Editor.GuandanProjectSetup.BuildPicoApk`
 
-**Command to run when conditions are met:**
-```sh
-echo "TombDuel-EN $(date +%Y%m%d-%H%M%S)" > /tmp/en-unity-slot-1/owner
-echo $$ > /tmp/en-unity-slot-1/unity_pid
-
-/Applications/Unity/Hub/Editor/6000.5.5f1/Unity.app/Contents/MacOS/Unity \
-  -batchmode -quit \
-  -projectPath /Users/ld/Documents/Codex/EnglishEditions/TombDuel-EN \
-  -executeMethod TombDuel.Editor.GuandanProjectSetup.BuildPicoApk \
-  -logFile /Users/ld/Documents/Codex/EnglishEditions/TombDuel-EN/Builds/EN/apk_build3_log.txt
-
-rm -rf /tmp/en-unity-slot-1
-```
+Note: Build 1 and 2 failed due to C# 10 interpolated string syntax errors (fixed in commit f56fad3). Build 3 failed due to wrong namespace (`TombDuel.Editor` instead of `Guandan.Editor`). Build 4 succeeded.
 
 ---
 
@@ -182,8 +175,9 @@ No new 3D assets generated (Tripo credits: 0 used for this delivery).
 - [x] C# 10 syntax errors fixed (6 locations across 3 files)
 - [x] ProjectSettings: productName=TOMB DUEL, bundleId=com.guandan.tombxr.en
 - [x] Title cover image replaced with English version
-- [x] Git history: 3 commits from baseline
-- [ ] APK build (pending disk space + slot)
-- [ ] APK SHA-256
-- [ ] VisualQA screenshots (pending APK + simulator)
-- [ ] Library/Temp cleanup after build
+- [x] Git history: 5 commits (baseline → translation → syntax fix → delivery report → EN_TEXT_TABLE fix)
+- [x] APK build: `Builds/EN/TombDuel-EN-PICO.apk` (77 MB, build 4 succeeded)
+- [x] APK SHA-256: `73f2be2f1282839621362e99466d56f40b1862ef0a781bae30a9bb0ed507b44a`
+- [x] Library/Bee and intermediate artifacts cleaned up after build
+- [ ] VisualQA screenshots (requires PICO device or simulator with loaded APK — not available in this session)
+- [ ] slot-1 released (pending cleanup completion)
