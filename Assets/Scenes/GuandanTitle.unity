@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &809832136
+--- !u!1 &165796196
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,8 +127,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 809832138}
-  - component: {fileID: 809832137}
+  - component: {fileID: 165796198}
+  - component: {fileID: 165796197}
   m_Layer: 0
   m_Name: "00_TitleStage \xB7 \u72EC\u7ACB\u4E0D\u900F\u660E\u5C01\u9762"
   m_TagString: Untagged
@@ -136,13 +136,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &809832137
+--- !u!114 &165796197
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 809832136}
+  m_GameObject: {fileID: 165796196}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fbe0308f5592342859b37075353f3b1d, type: 3}
@@ -151,13 +151,13 @@ MonoBehaviour:
   designEyePosition: {x: 0, y: 1.72, z: -4.25}
   designFocusPosition: {x: 0, y: 1.62, z: 0}
   designEyeHeight: 1.6
---- !u!4 &809832138
+--- !u!4 &165796198
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 809832136}
+  m_GameObject: {fileID: 165796196}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -170,4 +170,4 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 809832138}
+  - {fileID: 165796198}

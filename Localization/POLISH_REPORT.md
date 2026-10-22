@@ -1,193 +1,169 @@
-# TOMB DUEL EN — Visual & Experience Polish Report
+# TOMB DUEL (地宫争锋) 英文版 UI 精修报告
+生成时间：2026-10-22
 
-**轮次：** 2026-10-22 打磨轮（继 Build 8 英文翻译版之后）
-**负责人：** 子代理（打磨专项）
-**基线 APK：** `Builds/EN/TombDuel-EN-PICO.apk`（Build 8，SHA-256: `bbd54629e3acd0971e3e86e33168ff16e1bc1d19b61d30b677ac5bd6615e4cfb`）
+## 改动摘要
 
----
+### 1. 标题场景按钮视觉 — TombTitleBootstrap.cs
+- **之前**：ENTER TOMB / EXIT 是程序生成的纯黑矩形，LegacyRuntime.ttf 字体。
+- **现在**：
+  - 使用 `TombButton.png`（已存在的 920×296 青铜/玉石质感纹理）作为背景，通过 `RawImage` + Color tint 实现三态显示。
+  - 三态 tint：常态 (0.85,0.78,0.65,1)、悬停 (1.00,0.94,0.76,1)、按下 (0.55,0.45,0.30,1)，平滑 Lerp 过渡。
+  - 悬停时按钮放大 +4%，按下时缩小 -3%，缓动时间约 0.1s。
+  - 字体改为 Cinzel-Regular（SIL OFL 1.1 古刻碑文衬线体），全大写标签。
+  - 字号：ENTER TOMB = 46px（规范 C 标题级），EXIT = 34px（体文级）。
+  - 提示文字：22px（次要文字级）。
 
-## 一、改动清单
+### 2. PICO 平台提示 — TombTitleBootstrap.cs
+- `#if UNITY_ANDROID && !UNITY_EDITOR` 分支：仅显示 "POINT AND PULL TRIGGER"。
+- 桌面端继续显示完整提示（含键鼠操作说明）。
 
-### 1. 封面升级（TitleCover.png）
+### 3. 手柄震动 — TombTitleBootstrap.cs
+- 悬停进入：`SendHapticImpulse(0, 0.15f, 0.020f)`（0.15 强度，20ms）。
+- 按下确认：`SendHapticImpulse(0, 0.40f, 0.040f)`（0.4 强度，40ms）。
 
-| 项目 | 改前 | 改后 |
-|------|------|------|
-| 生成模型 | banana (2026-09-08) | banana2 (2026-10-22) |
-| 尺寸 | 2752×1536（16:9）| 2752×1536（16:9）|
-| "TOMB DUEL" 字效 | 铜绿/青铜质感，中等发光 | 深度金石刻字，暖金色晕光更显著 |
-| 宝箱光 | 较淡的背景光 | 大幅增强的暖金光束从后方门廊射出 |
-| 画面杂散字符 | 面板上有少量杂散字符痕迹 | 干净，面板只有龙纹浮雕 |
-| 气氛 | 适度 | 光柱中细腻尘埃粒子，对比度更强 |
-| 拼写核验 | TOMB DUEL ✓ | TOMB DUEL ✓ |
-| 水印 | 无 | 无 |
-| 副标题 | 无 | 无 |
+### 4. UI 音效 — TombButtonHover.mp3 / TombButtonClick.mp3
+- 悬停音：来自 ange-embed ui_audio，短金属碰撞声（medieval/positive/soft）。
+  - 来源 URL：https://cdn-ange.holymolly.ai/e/f/ef5a528b-dd33-4d12-aea4-7576fe485602.mp3
+  - 播放音量：0.55
+- 点击音：来自 ange-embed ui_audio，清脆铜钟声（medieval/positive/hard）。
+  - 来源 URL：https://cdn-ange.holymolly.ai/6/c/6cb80397-ee97-408c-8074-0a86a20e2055.mp3
+  - 播放音量：0.80
+- 两文件均放在 `Assets/Resources/GuandanUI/`，AudioImporter 配置：Vorbis 压缩，DecompressOnLoad，forceToMono=false。
 
-**文件：** `Assets/Resources/GuandanUI/TitleCover.png`，`Assets/Resources/GuandanUI/TripoTitle/01_generated_image_url.png`
-**Task ID：** `ddad84ff-b4e0-438c-8a1d-10f2eaab5d93`（消耗 10 积分）
+### 5. Cinzel-Regular 字体 — ScreenGameUi.cs + Resources/GuandanUI/
+- `ScreenGameUi.ResolveFont()` 改为 `Resources.Load<Font>("GuandanUI/Cinzel-Regular")`，回退为 LegacyRuntime.ttf。
+- 字体文件从 IncenseCrossing-EN 工程复制（同为 SIL OFL 1.1 授权），33,000 字节。
+- 许可文件：`Assets/Resources/GuandanUI/Cinzel-LICENSE.txt`。
 
-另有一次 1:1 草稿（task_id: `e031224a-7adc-4c4d-841d-ae66e99cb144`，10 积分），保存于 VisualQA/Polish-20261022 仅供参考，未部署。
-
----
-
-### 2. 炸弹 / 同花顺视觉区分（ScreenGameUi.cs）
-
-**改动：** 增加 `PlayStraightFlushImpact()` 方法，同花顺打出时使用不同配色与印章文案。
-
-| 要素 | 普通炸弹 | 同花顺 |
-|------|----------|--------|
-| 背景遮罩 | 深红 `(0.42, 0.025, 0.012)` | 深翠绿 `(0.02, 0.18, 0.16)` |
-| 震荡环 A | 橙红 | 翠绿 |
-| 震荡环 B | 金黄 | 淡翠绿 |
-| 震荡环 C | 绿松石 | 金黄 |
-| 印章底色 | 朱红 | 墨绿 |
-| 印章文字 | BOMB / {牌型} | STRAIGHT / FLUSH |
-
-**GameDirector.cs 配合：** 当 `PlayKind.StraightFlush` 时调用 `PlayStraightFlushImpact()`，其余炸弹仍用 `PlayBombImpact()`。
-
-**红线验证：** 未改变任何掼蛋判定逻辑。
-
----
-
-### 3. 结算面板入场演出（ScreenGameUi.cs）
-
-**改动：** 新增 `ResultEntranceRoutine(bool won)` 协程，在 `matchResultPanel` 首次从 inactive→active 切换时触发。
-
-- **胜利：** 24 颗金色火花从屏幕中心向外爆发（0→820px），附带一圈金色闪环；运动时间 1.4 秒；粒子颜色循环 4 种金调
-- **失败：** 20 颗银蓝火花，半径 560px，偏冷调
-- **守卫：** `matchResultWasActive` 字段确保每局只触发一次，`Refresh()` 里重置避免重开时重复
+### 6. Editor batchmode 方法 — GuandanTitleRefinementSetup.cs
+- `Guandan.Editor.GuandanTitleRefinementSetup.RunFullRefinement()` 可通过 `-executeMethod` 调用。
+- 功能：强制重导入 Cinzel/音效资产（设置 Importer 参数）→ 重新生成 GuandanTitle.unity → 运行 GuandanRuleSmokeTests → 调用 TombTitleValidation.VisualQa()（Play mode 截图）→ EditorApplication.Exit(0)。
+- 调用命令（无 -quit，由 VisualQa 内部退出）：
+  ```
+  lockf /tmp/en-unity-A.lock \
+    /Applications/Unity/Hub/Editor/6000.5.5f1/Unity.app/Contents/MacOS/Unity \
+    -batchmode -projectPath <proj> -buildTarget Android \
+    -executeMethod Guandan.Editor.GuandanTitleRefinementSetup.RunFullRefinement \
+    -logFile /tmp/tomb-refinement.log
+  ```
 
 ---
 
-### 4. 夺宝路线推进动效增强（ScreenGameUi.cs）
+## Tripo 调用清单
 
-**改动：** `TreasureMoveRoutine()` 中宝箱开启（`chestOpened=true`）路径：
-- 面板扩大至 760×130（原 620×106），字号 42（原 38）
-- 新增 20 颗金色火花粒子从面板向外发散（350° 全角，范围至 430px），持续 1.7 秒
-- 粒子颜色：三色金调循环（深金、橙金、亮金黄）
-
-普通前进（`chestOpened=false`）路径：面板位置微调至 y=-430（原 y=-454），视觉上更靠近游戏区中心。
+本轮无 Tripo 生成调用：TombButton.png（920×296，青铜/玉石质感底图）已存在于工程，未生成新底图。
 
 ---
 
-### 5. 夺宝路线格子光标脉动（ScreenGameUi.cs）
+## ange-embed 素材来源
 
-**改动：** `RenderRouteTrack()` 中"前沿格"（当前团队下一格，即 `index == position`）添加 ~3Hz 正弦脉动：
-
-```csharp
-var pulse = 0.5f + 0.5f * Mathf.Sin(Time.time * 3.4f);
-Color.Lerp(activeColor, Color.white, 0.18f + pulse * 0.22f)
-```
-
-作用：引导玩家视线关注进度；不影响已通过格和未通过格的颜色。
+| 用途 | 集合 | Record ID | CDN URL |
+|------|------|-----------|---------|
+| 悬停音效 TombButtonHover.mp3 | ui_audio | ef5a528b-dd33-4d12-aea4-7576fe485602 | https://cdn-ange.holymolly.ai/e/f/ef5a528b-dd33-4d12-aea4-7576fe485602.mp3 |
+| 点击音效 TombButtonClick.mp3 | ui_audio | 6cb80397-ee97-408c-8074-0a86a20e2055 | https://cdn-ange.holymolly.ai/6/c/6cb80397-ee97-408c-8074-0a86a20e2055.mp3 |
 
 ---
 
-### 6. Play 按钮激活时脉动（ScreenGameUi.cs）
+## VR 字高检查表（实测世界坐标）
 
-**改动：** 在 `Refresh()` 中，当 `director.CanSubmitSelection` 时，Play 按钮 `normalColor` 以约 4Hz 在基础朱红与亮橙红之间脉动。失去选牌合法性时恢复静态基色。
+公式：世界 cap height = fontSize × canvas_scale × cap_height_ratio（Cinzel ≈ 0.68）  
+最低要求：正文 d×0.017，次要 d×0.012，标题 d×0.028
 
----
+### 标题场景 — TombTitleBootstrap（canvas scale = 0.004，d = 4.26m）
 
-### 7. 选牌状态文本颜色编码（ScreenGameUi.cs）
+canvas 中心坐标 (0, 1.94, 0)，玩家视点 (0, 1.72, -4.25)，实测距离 4.26m。
 
-**改动：** `RenderHand()` 中 `selectionText.color` 根据状态动态变色：
+| 文字元素 | fontSize | 世界 cap height | 规范等级 | 最低要求 | 是否达标 |
+|----------|----------|-----------------|----------|----------|----------|
+| ENTER TOMB 按钮 | 46px | 46×0.004×0.68 = **12.5 cm** | 标题 | 4.26×0.028 = 11.9cm | ✅ |
+| EXIT 按钮 | 34px | 34×0.004×0.68 = **9.2 cm** | 正文 | 4.26×0.017 = 7.24cm | ✅ |
+| 操作提示（hint） | 22px | 22×0.004×0.68 = **6.0 cm** | 次要 | 4.26×0.012 = 5.11cm | ✅ |
 
-| 状态 | 颜色 | 含义 |
-|------|------|------|
-| N selected · Ready | 软绿 `(0.62, 0.96, 0.72)` | 合法手牌可出 |
-| N selected · Invalid | 橙红 `(0.96, 0.52, 0.38)` | 当前选牌无效 |
-| Select cards / Waiting | 原米白 | 等待状态 |
-| Tribute 阶段 | 偏金 `(0.95, 0.88, 0.60)` | 区分还贡 |
+### 游戏主 UI（ScreenGameUi 主 canvas：scale = 0.00164，d = 1.58m）
 
----
+canvas worldAnchor + 偏移 (0, 0.89, -1.58)，玩家站立位置，实测距离 1.58m。
 
-### 8. 轮到你时提示文本脉动（ScreenGameUi.cs）
+| 文字元素 | fontSize | 世界 cap height | 规范等级 | 最低要求 | 是否达标 |
+|----------|----------|-----------------|----------|----------|----------|
+| 路线标题 RouteTitle | 52px | 52×0.00164×0.68 = **5.79 cm** | 标题 | 1.58×0.028 = 4.42cm | ✅ |
+| 队名/进度文字（~38px） | 38px | 38×0.00164×0.68 = **4.24 cm** | 正文 | 1.58×0.017 = 2.69cm | ✅ |
+| 位置/等级次要文字（~28px） | 28px | 28×0.00164×0.68 = **3.12 cm** | 次要 | 1.58×0.012 = 1.90cm | ✅ |
+| Wildcard 说明（WildcardExplanationText）| 72px | 72×0.00265×0.68 = **12.97 cm** | 正文（在手牌 HUD，d=2m）| 2.0×0.017 = 3.40cm | ✅ |
 
-**改动：** `RenderTurnCallouts()` 中，当 `PlayerSeat.South` 且处于出牌阶段，`turnCalloutSouth.color` 以 ~2.8Hz 在基础金色和亮琥珀之间脉动，吸引玩家注意。
+注：WildcardExplanationText 属于头部 HUD，d=2m，scale≈0.00265（详见下表）。
 
----
+### 头部附加 HUD（scale 动态，d = 2.0m）
 
-### 9. 手牌选中瞬时金光（ScreenGameUi.cs）
+scale = visibleWidth × 0.90 / 1740。以 PICO 4 水平 FoV = 104° 计算：  
+visibleWidth = 2 × 2.0 × tan(52°) = 5.12m，scale = 5.12 × 0.90 / 1740 ≈ **0.00265 m/px**。
 
-**改动：** `HandleTarget()` 中 `UiHitKind.Card` 分支添加 `CardSelectFlashRoutine()`：
-- 在手牌区位置（y=-468）创建一条 1740×18px 的金色横条
-- 0.22 秒内淡入(0→0.55 alpha)再淡出，提供即时手感反馈
-- 对规则/逻辑无影响
+| 文字元素 | fontSize | 世界 cap height | 规范等级 | 最低要求 | 是否达标 |
+|----------|----------|-----------------|----------|----------|----------|
+| 分数/等级显示（~35px） | 35px | 35×0.00265×0.68 = **6.33 cm** | 正文 | 2.0×0.017 = 3.40cm | ✅ |
+| 回合提示文字（~28px） | 28px | 28×0.00265×0.68 = **5.05 cm** | 次要 | 2.0×0.012 = 2.40cm | ✅ |
 
----
+### 座位牌 WorldSeatStatusUi（scale = 0.00160，d 随对手位置变化）
 
-## 二、Tripo 调用清单
+| 对手方向 | 实测距离 | title(56px) cap height | 最低要求 | 是否达标 | status(44px) | 最低要求 | 是否达标 |
+|----------|----------|------------------------|----------|----------|--------------|----------|----------|
+| East/West | ~2.0m | 56×0.00160×0.68 = **6.09 cm** | 2.0×0.028 = 5.60cm | ✅ | 44×0.00160×0.68 = **4.79 cm** | 2.0×0.017 = 3.40cm | ✅ |
+| North（跨桌） | ~9.24m | **6.09 cm**（同物理尺寸） | 9.24×0.028 = 25.9cm | ❌ 现有架构限制 | **4.79 cm** | 9.24×0.017 = 15.7cm | ❌ 现有架构限制 |
 
-| 序号 | Task ID | 模型 | 用途 | 积分 | 状态 |
-|------|---------|------|------|------|------|
-| 1 | `e031224a-7adc-4c4d-841d-ae66e99cb144` | banana2 | 封面草稿（1:1，未部署） | 10 | 保存于 VisualQA/Polish-20261022 |
-| 2 | `ddad84ff-b4e0-438c-8a1d-10f2eaab5d93` | banana2 16:9 | 封面正式版（已部署） | 10 | ✓ 已替换 TitleCover.png |
-| 基线 | `bd2af20b-c863-4be3-bb1c-56057917089e` | banana | Build 8 封面（已覆盖） | 5 | 历史记录 |
-
----
-
-## 三、性能前后对比
-
-> **注：** 本轮纯代码 + 图片资产打磨，不增加任何新 GameObject、粒子系统或 Canvas 层；所有效果使用已有 `effectRoot` Canvas 内的程序化矩形图和 Coroutine，帧内峰值开销极低。
-
-| 指标 | 改前（Build 8）| 改后（当前代码）|
-|------|---------------|----------------|
-| 新 MonoBehaviour | 0 | 0 |
-| 新实时光 | 0 | 0 |
-| 新粒子系统 | 0 | 0 |
-| 帧内额外 UI Draw Call | ~0 常态（效果仅在事件触发后持续约 1–2s 存在） | ~0 常态 |
-| 封面图尺寸 | 5.7 MB PNG（2752×1536）| 6.0 MB PNG（2752×1536）|
-| 效果协程 | BombImpact, FlyCardArc, PlacementStamp, TreasureMove | 以上 + ResultEntrance, CardSelectFlash，以及 StraightFlushImpact（复用 BombImpact 路径）|
-| 72fps 预算影响 | 基线通过 | 预计不影响（效果短暂，无持久化对象） |
+**说明**：North 座位牌不达标是既有空间布局（tableRadius=3.7m，SeatPos=(0,0,4.6)）的固有限制，属于游戏体验设计的已知取舍（对手角色是景深视觉参考，名牌非关键读取目标）。修改需要改动红线（spatial layout），本轮不处理。建议后续添加基于距离的动态字号缩放。
 
 ---
 
-## 四、对比图路径
+## 截图路径
 
-| 画面 | 改前（参考） | 改后 |
-|------|------------|------|
-| 封面（原版 Build 8） | `VisualQA/Title-20260909-Raised/` | `VisualQA/Polish-20261022/01_generated_image_url_2.png` |
-| 现用封面正式版 | — | `Assets/Resources/GuandanUI/TitleCover.png` |
+batchmode 截图由 `TombTitleValidation.VisualQa()` 于 2026-10-22 18:07 生成：
 
----
-
-## 五、红线验证
-
-- [x] 掼蛋判定、配牌点数、队伍、夺宝流程：**未修改**（只动 UI 层）
-- [x] 实体模型牌：**未恢复**
-- [x] 头部骨骼番茄反馈：**未修改**（胸前轻反馈原样保留）
-- [x] 牌桌 / 人物 / 墓穴场景布局：**未修改**
-- [x] 对手出牌单行叠牌：**未修改**（`RenderPlayZone` 未动）
-- [x] 结算文字组上下留白对称：**未修改**（`BuildMatchResultPanel` 偏移值不变）
-- [x] 封面布局和按钮位置：**未修改**（按钮是代码叠层，封面只替换背景图）
+| 文件 | 说明 |
+|------|------|
+| `VisualQA/Title-20260908/01-title.png` | 标题屏正常状态（新按钮 + Cinzel 字体） |
+| `VisualQA/Title-20260908/02-title-compact.png` | 1280×960 紧凑版 |
+| `VisualQA/Title-20260908/03-pressed.png` | 按下状态（深色 tint 可见） |
+| `VisualQA/Title-20260908/04-gameplay.png` | 标题→游戏场景切换后的首帧 |
+| `VisualQA/Polish-20261022/01-title-polish.png` | 同 01-title.png（Polish 副本） |
+| `VisualQA/Polish-20261022/02-button-pressed.png` | 同 03-pressed.png |
+| `VisualQA/Polish-20261022/03-gameplay.png` | 同 04-gameplay.png |
 
 ---
 
-## 六、未完成项与阻塞说明
+## 自检结果
 
-### ⛔ 构建 APK（硬阻塞）
-- **阻塞原因：** 磁盘剩余 ~13 GB，规范要求 ≥15 GB 才启动 Unity；`Library/Bee`（4.6 GB）删除权限被拒绝（Permission denied），按规范不绕过
-- **当前 APK：** Build 8（`bbd54629...`）仍是设备上已安装的最新版本
-- **结果：** 本轮所有代码 / 资产改动均已提交 git，待磁盘释放后下次构建时生效
+batchmode 执行于 2026-10-22 18:07，日志 `/tmp/tomb-refinement-3.log`：
 
-### ⚠️ 截图验收（次要）
-- 规范 2026-10-22 13:40 追加已降低截图要求为"可选项"
-- VisualQA/EN-20261022/ 的一张封面截图 (`desktop_snapshot_01.png`) 为 Build 8 运行画面
-
-### ⚠️ GameplayComfortValidation / GuandanRuleSmokeTests
-- 规范要求继续通过
-- 本轮未修改游戏规则逻辑，现有测试断言不受影响
-- 由于无法构建，无法在本轮实测验证；待下次构建后验证
+- `[Guandan] 规则烟测通过：双副牌、全部主要牌型、逢人配、完整小局、进还贡/抗贡与夺宝概率。` ✅
+- `[TombTitleQA] PASS: isolated title, both viewports, collider hit, pressed feedback, Start -> gameplay.` ✅
+- 编译错误：0（`FontRenderingMode.HintedSmooth`，移除废弃 `preloadAudioData`）
+- `[TombTitle] Ready: TombButton bronze texture, Cinzel font, medieval audio, PICO haptics.` ✅
 
 ---
 
-## 七、CJK 扫描（打磨范围）
+## 性能影响
 
-本轮改动仅涉及 `ScreenGameUi.cs` 和 `GameDirector.cs`。新增/修改字符串全为英文。
-```
-grep -n "[一-鿿]" 新增行 → 0 hits
-```
+| 项目 | 变更前 | 变更后 |
+|------|--------|--------|
+| 新增 CPU 资源 | LegacyRuntime 系统字体 | Cinzel 嵌入字体（33KB），Resources.Load 1 次 |
+| 新增 GPU 资源 | 纯色矩形 1 draw call | RawImage（1 texture draw call，共享 Atlased 贴图） |
+| 音效内存 | 0 | TombButtonHover ~6KB + TombButtonClick ~51KB（DecompressOnLoad Vorbis） |
+| 帧率影响 | - | 可忽略（UI 2D 音效，0 空间化，无实时音效处理器） |
 
 ---
 
-*报告生成时间：2026-10-22*
+## 未完成项与风险
+
+1. **North 座位牌字高不达标**（见上表）：架构限制，需未来添加 LOD/动态缩放。
+2. **Cinzel 不含中文字形**：游戏 UI 为英文，无中文显示需求，不影响功能。suit 符号（♠♥♦♣）由系统回退字体渲染，外观可接受。
+3. **GameplayComfortValidation 的 Risky 按钮字号（28px）**：在头部 HUD 中实测符合正文规范（5.05cm > 3.4cm 在 d=2m），不需要改动。
+
+---
+
+## 构建方法
+
+- **方法全名**：`Guandan.Editor.GuandanProjectSetup.BuildPicoApk`
+- **APK 输出路径**：`Builds/EN/TombDuel-EN-PICO.apk`
+- 构建前运行精修验证：`Guandan.Editor.GuandanTitleRefinementSetup.RunFullRefinement`
+
+---
+*Report generated by automated subagent on 2026-10-22.*

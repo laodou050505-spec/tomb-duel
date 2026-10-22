@@ -1868,9 +1868,9 @@ namespace Guandan.UI
         internal static Font ResolveFont()
         {
             if (uiFont != null) return uiFont;
-            uiFont = Font.CreateDynamicFontFromOSFont(
-                new[] { "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", "Arial" },
-                24);
+            // Cinzel-Regular: SIL OFL serif matching the bronze tomb aesthetic.
+            // Loaded first so game UI matches the title screen font.
+            uiFont = Resources.Load<Font>("GuandanUI/Cinzel-Regular");
             if (uiFont == null) uiFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             return uiFont;
         }

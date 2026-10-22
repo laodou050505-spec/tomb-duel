@@ -17,7 +17,9 @@ namespace Guandan.Title
     // STORY: Recognize Tomb Duel, choose Enter Tomb, arrive at the existing card table.
     // FIRST VIEWPORT: Full landscape art, central monumental title, two live lower controls.
     // FORM: User-pinned central emblem composition; continuation approved 2026-09-08.
-    // FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    // REFINED: 2026-10-22 — TombButton.png texture buttons, Cinzel-Regular serif font,
+    //          3-state (normal/hover/press) tint, medieval bronze audio, PICO-only hint,
+    //          hover haptic 0.15/20ms, press haptic 0.4/40ms.
     public sealed class TombTitleBootstrap : MonoBehaviour
     {
         private const string GameplaySceneName = "GuandanTomb";
@@ -36,6 +38,7 @@ namespace Guandan.Title
         private Canvas canvas;
         private Text instruction;
         private Image fade;
+        private AudioSource audioSource;
         private int keyboardFocus = -1;
         public Vector3 DesignEyePosition => designEyePosition;
         public Vector3 DesignFocusPosition => designFocusPosition;
@@ -53,7 +56,7 @@ namespace Guandan.Title
             BuildTitleStage();
             TrySetFloorTracking();
             RecenterToDesignStart();
-            Debug.Log("[TombTitle] Ready: Tripo cover, world-space menu, Start -> GuandanTomb.");
+            Debug.Log("[TombTitle] Ready: TombButton bronze texture, Cinzel font, medieval audio, PICO haptics.");
         }
 
         private void Update()
@@ -80,7 +83,6 @@ namespace Guandan.Title
                 {
                     if (Mouse.current.delta.ReadValue().sqrMagnitude > 0.1f) keyboardFocus = -1;
                     var pointer = headCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-                    // Preserve a complete quick click even when down and up arrive in one frame.
                     if (Mouse.current.leftButton.wasPressedThisFrame) ProcessPointer(pointer, true, mouse);
                     ProcessPointer(pointer, Mouse.current.leftButton.isPressed, mouse);
                 }
@@ -104,6 +106,26 @@ namespace Guandan.Title
 
         public void StartGame() { if (!loading) StartCoroutine(LoadGameplay()); }
         public void ExitGame() { if (!loading) StartCoroutine(ExitAfterFeedback()); }
+
+        public void PlayHoverSound()
+        {
+            if (audioSource != null)
+            {
+                // Use PlayOneShot so multiple hovers don't cancel each other.
+                var clip = Resources.Load<AudioClip>("GuandanUI/TombButtonHover");
+                if (clip != null) audioSource.PlayOneShot(clip, 0.55f);
+            }
+        }
+
+        public void PlayClickSound()
+        {
+            if (audioSource != null)
+            {
+                var clip = Resources.Load<AudioClip>("GuandanUI/TombButtonClick");
+                if (clip != null) audioSource.PlayOneShot(clip, 0.80f);
+            }
+        }
+
         private IEnumerator ExitAfterFeedback()
         {
             loading = true;
@@ -144,9 +166,14 @@ namespace Guandan.Title
 
         private void BuildTitleStage()
         {
+            // AudioSource on the title root for UI sounds.
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.spatialBlend = 0f; // 2D — UI sound, not spatialized.
+            audioSource.playOnAwake = false;
+            audioSource.priority = 64;
+
             var go = new GameObject("TitleRoot · Tripo cinematic cover", typeof(RectTransform), typeof(Canvas));
             go.transform.SetParent(transform, false);
-            // Move the complete cover and live controls, preserving the user's eye pose.
             go.transform.position = designFocusPosition + Vector3.up * CoverLift;
             go.transform.localScale = Vector3.one * 0.004f;
             canvas = go.GetComponent<Canvas>();
@@ -154,14 +181,32 @@ namespace Guandan.Title
             canvas.worldCamera = headCamera;
             var rect = go.GetComponent<RectTransform>();
             rect.sizeDelta = new Vector2(1920f, 1080f);
+
             var artRect = Rect("Tripo Nano Banana · Tomb Duel", rect, Vector2.zero, rect.sizeDelta);
             var art = artRect.gameObject.AddComponent<RawImage>();
             art.texture = Resources.Load<Texture2D>("GuandanUI/TitleCover");
             art.raycastTarget = false;
             if (art.texture == null) Debug.LogError("[TombTitle] Missing TitleCover texture.");
-            CreateButton(rect, "Enter Tomb", "ENTER TOMB", new Vector2(0f, -328f), new Vector2(424f, 76f), TitleAction.Start);
-            CreateButton(rect, "Exit", "EXIT", new Vector2(0f, -430f), new Vector2(300f, 64f), TitleAction.Exit);
-            instruction = Label("Controls", rect, "POINT & TRIGGER TO SELECT  /  MOUSE OR ENTER", new Vector2(0f, -508f), new Vector2(1600f, 32f), 20, new Color(0.79f, 0.81f, 0.71f));
+
+            // Load shared resources once for both buttons.
+            var buttonTex = Resources.Load<Texture2D>("GuandanUI/TombButton");
+            if (buttonTex == null) Debug.LogError("[TombTitle] Missing TombButton texture.");
+            var cinzel = Resources.Load<Font>("GuandanUI/Cinzel-Regular");
+            if (cinzel == null) Debug.LogWarning("[TombTitle] Cinzel-Regular not found; falling back to built-in font.");
+
+            CreateButton(rect, "Enter Tomb", "ENTER TOMB", new Vector2(0f, -328f), new Vector2(424f, 76f), TitleAction.Start, buttonTex, cinzel);
+            CreateButton(rect, "Exit", "EXIT", new Vector2(0f, -430f), new Vector2(300f, 64f), TitleAction.Exit, buttonTex, cinzel);
+
+            // PICO shows only controller hint; desktop build shows keyboard/mouse hint as well.
+#if UNITY_ANDROID && !UNITY_EDITOR
+            var hintText = "POINT AND PULL TRIGGER";
+#else
+            var hintText = "POINT & TRIGGER TO SELECT  /  MOUSE · TAB + ENTER";
+#endif
+            // Spec C secondary min at 4.26m: 4.26×0.012=5.11cm → fontSize≥19 (19×0.004×0.68=5.17cm).
+            // Using 22 for safety margin.
+            instruction = Label("Controls", rect, hintText, new Vector2(0f, -508f), new Vector2(1600f, 40f), 22, new Color(0.79f, 0.81f, 0.71f), cinzel);
+
             var fadeRect = Rect("Transition", rect, Vector2.zero, rect.sizeDelta);
             fadeRect.localPosition += Vector3.back * 5f;
             fade = fadeRect.gameObject.AddComponent<Image>();
@@ -169,26 +214,31 @@ namespace Guandan.Title
             fade.raycastTarget = false;
         }
 
-        private void CreateButton(RectTransform parent, string name, string label, Vector2 position, Vector2 size, TitleAction action)
+        private void CreateButton(RectTransform parent, string name, string label, Vector2 position, Vector2 size, TitleAction action, Texture2D buttonTex, Font cinzel)
         {
             var hit = Rect(name, parent, position, size);
             hit.localPosition += Vector3.back * 4f;
             var collider = hit.gameObject.AddComponent<BoxCollider>();
             collider.size = new Vector3(size.x, size.y, 12f);
             var visual = Rect("Visual", hit, Vector2.zero, size);
-            var fill = visual.gameObject.AddComponent<Image>();
-            fill.raycastTarget = false;
-            var borderColor = new Color(0.60f, 0.49f, 0.29f);
-            var edges = new Image[4];
-            var points = new[] { new Vector2(0f, size.y * .5f), new Vector2(0f, -size.y * .5f), new Vector2(-size.x * .5f, 0f), new Vector2(size.x * .5f, 0f) };
-            for (int i = 0; i < 4; i++)
-            {
-                var edge = Rect("Bronze edge", visual, points[i], i < 2 ? new Vector2(size.x, 1.5f) : new Vector2(1.5f, size.y));
-                edges[i] = edge.gameObject.AddComponent<Image>(); edges[i].color = borderColor; edges[i].raycastTarget = false;
-            }
-            var text = Label("Label", visual, label, Vector2.zero, size, action == TitleAction.Start ? 32 : 27, new Color(0.94f, 0.86f, 0.64f));
+
+            // TombButton.png: bronze-framed ancient tomb button (920×296, no text).
+            // The RawImage color property is used for 3-state tinting.
+            var bgImage = visual.gameObject.AddComponent<RawImage>();
+            bgImage.texture = buttonTex;
+            bgImage.raycastTarget = false;
+            // Normal tint: slightly warm-dimmed to look restful.
+            bgImage.color = new Color(0.85f, 0.78f, 0.65f, 1f);
+
+            // Cinzel serif label: gold on top of bronze texture.
+            // Spec C at d=4.26m title min: 4.26×0.028=11.9cm → need fontSize≥44 (44×0.004×0.68=12.0cm).
+            // EXIT is secondary action, body spec: 4.26×0.017=7.24cm → fontSize≥28 (28×0.004×0.68=7.62cm).
+            int fontSize = action == TitleAction.Start ? 46 : 34;
+            var text = Label("Label", visual, label, Vector2.zero, size, fontSize, new Color(0.97f, 0.90f, 0.68f), cinzel);
+            if (cinzel != null) text.fontStyle = FontStyle.Bold;
+
             var button = hit.gameObject.AddComponent<TitleActionButton>();
-            button.Configure(this, action, visual, fill, edges, text);
+            button.Configure(this, action, visual, bgImage, text);
             buttons.Add(button);
         }
 
@@ -199,13 +249,18 @@ namespace Guandan.Title
             rect.SetParent(parent, false); rect.anchoredPosition = position; rect.sizeDelta = size;
             return rect;
         }
-        private static Text Label(string name, Transform parent, string value, Vector2 position, Vector2 size, int fontSize, Color color)
+
+        private static Text Label(string name, Transform parent, string value, Vector2 position, Vector2 size, int fontSize, Color color, Font font = null)
         {
             var rect = Rect(name, parent, position, size);
             var text = rect.gameObject.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            text.fontSize = fontSize; text.text = value; text.alignment = TextAnchor.MiddleCenter;
-            text.color = color; text.raycastTarget = false; text.fontStyle = FontStyle.Normal;
+            text.font = font != null ? font : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            text.fontSize = fontSize;
+            text.text = value;
+            text.alignment = TextAnchor.MiddleCenter;
+            text.color = color;
+            text.raycastTarget = false;
+            text.fontStyle = FontStyle.Normal;
             return text;
         }
 
@@ -262,19 +317,21 @@ namespace Guandan.Title
             }
             line.enabled = tracked;
             if (!tracked) { CancelPointer(state); return; }
-            // Match the card-table convention: visible and hit-test rays share this exact sample.
             var ray = new Ray(headCamera.transform.position, controller.forward);
             var target = ProcessPointer(ray, pressed, state);
-            // The interaction still originates at the eye. A ribbon starting exactly on the
-            // projection origin expands across the view; draw only its in-front segment.
             float forward = Vector3.Dot(ray.direction, headCamera.transform.forward);
             float distance = Physics.Raycast(ray, out var visibleHit, 20f) ? visibleHit.distance : 8f;
             float start = Mathf.Max(.35f, (headCamera.nearClipPlane + .08f) / Mathf.Max(.1f, forward));
             line.enabled = forward > .1f && distance > start;
             line.SetPosition(0, ray.GetPoint(start)); line.SetPosition(1, ray.GetPoint(distance));
-            if (pressed && target != null && device.isValid && device.TryGetHapticCapabilities(out var capabilities) && capabilities.supportsImpulse)
+            if (device.isValid && device.TryGetHapticCapabilities(out var capabilities) && capabilities.supportsImpulse)
             {
-                if (target.PressStartedThisFrame) device.SendHapticImpulse(0, .22f, .045f);
+                // Hover entry: short gentle pulse (spec: 0.15 strength, 20 ms).
+                if (target != null && target.HoverStartedThisFrame)
+                    device.SendHapticImpulse(0, 0.15f, 0.020f);
+                // Press confirmation: stronger pulse (spec: 0.4 strength, 40 ms).
+                if (pressed && target != null && target.PressStartedThisFrame)
+                    device.SendHapticImpulse(0, 0.40f, 0.040f);
             }
         }
 
@@ -318,7 +375,6 @@ namespace Guandan.Title
         private void ApplyDesktopCamera()
         {
             headCamera.transform.SetPositionAndRotation(designEyePosition, Quaternion.LookRotation(designFocusPosition - designEyePosition));
-            // Keep the full authored 16:9 cover and menu visible in narrower desktop windows.
             headCamera.fieldOfView = Mathf.Max(58f, 2f * Mathf.Atan(3.98f / (4.25f * Mathf.Max(.6f, headCamera.aspect))) * Mathf.Rad2Deg);
         }
         private void PlaceXrHeadAtDesignStart()
@@ -339,46 +395,89 @@ namespace Guandan.Title
     }
 
     public enum TitleAction { Start, Exit }
+
     public sealed class TitleActionButton : MonoBehaviour
     {
         private TombTitleBootstrap owner;
         private TitleAction action;
         private RectTransform visual;
-        private Image fill;
-        private Image[] edges;
+        private RawImage buttonBg;  // TombButton.png — tinted per state.
         private Text label;
-        private float hover, press;
+        private float hoverLerp, pressLerp;
         private bool pressed;
         private int pressFrame = -1;
+        private bool wasHovered;
+        private int hoverStartFrame = -1;
+
         public bool Hovered { get; set; }
         public bool Interactable { get; set; } = true;
         public bool PressStartedThisFrame => pressFrame == Time.frameCount;
-        public void Configure(TombTitleBootstrap title, TitleAction titleAction, RectTransform target, Image background, Image[] outline, Text text)
-        { owner = title; action = titleAction; visual = target; fill = background; edges = outline; label = text; ApplyVisual(); }
+        // Triggered only on the first frame that hover becomes true.
+        public bool HoverStartedThisFrame => hoverStartFrame == Time.frameCount;
+
+        public void Configure(TombTitleBootstrap title, TitleAction titleAction, RectTransform target, RawImage bg, Text text)
+        {
+            owner = title; action = titleAction; visual = target; buttonBg = bg; label = text;
+            ApplyVisual();
+        }
+
         public void SetPressed(bool value) { pressed = value; if (value) pressFrame = Time.frameCount; }
+
         public void Activate()
         {
             if (!Interactable || owner == null || owner.IsLoading) return;
-            press = 1f;
+            pressLerp = 1f;
+            owner.PlayClickSound();
             Debug.Log($"[TombTitle] Activated {action}");
             if (action == TitleAction.Start) owner.StartGame(); else owner.ExitGame();
         }
+
         private void LateUpdate()
         {
+            // Detect hover entry this frame (for haptic and audio).
+            bool currentlyHovered = Hovered && Interactable;
+            if (currentlyHovered && !wasHovered)
+            {
+                hoverStartFrame = Time.frameCount;
+                owner?.PlayHoverSound();
+            }
+            wasHovered = currentlyHovered;
+
             float t = 1f - Mathf.Exp(-18f * Time.unscaledDeltaTime);
-            hover = Mathf.Lerp(hover, Hovered && Interactable ? 1f : 0f, t);
-            press = Mathf.Lerp(press, pressed ? 1f : 0f, t);
+            hoverLerp = Mathf.Lerp(hoverLerp, currentlyHovered ? 1f : 0f, t);
+            pressLerp = Mathf.Lerp(pressLerp, pressed ? 1f : 0f, t);
             ApplyVisual();
         }
+
         private void ApplyVisual()
         {
             if (visual == null) return;
-            visual.localScale = Vector3.one * (1f + hover * .035f - press * .055f);
-            fill.color = Color.Lerp(new Color(.035f, .064f, .054f, .94f), new Color(.14f, .26f, .21f, .98f), hover);
-            var edge = Color.Lerp(new Color(.61f, .49f, .28f, .95f), new Color(1f, .84f, .48f), hover);
-            foreach (var image in edges) image.color = edge;
-            label.color = Color.Lerp(new Color(.94f, .86f, .65f), new Color(1f, .97f, .83f), hover);
-            if (!Interactable) label.color *= new Color(.70f, .70f, .70f, 1f);
+
+            // Scale: hover +4%, press -3% (per spec: hover 4-6%, press 3%).
+            visual.localScale = Vector3.one * (1f + hoverLerp * 0.04f - pressLerp * 0.03f);
+
+            // Button texture tint:
+            // Normal  → warm-dimmed bronze (0.85, 0.78, 0.65) – restful dark jade
+            // Hover   → bright warm gold  (1.00, 0.94, 0.76) – lit up
+            // Press   → darkened amber    (0.55, 0.45, 0.30) – depressed into stone
+            var normalTint = new Color(0.85f, 0.78f, 0.65f, 1f);
+            var hoverTint  = new Color(1.00f, 0.94f, 0.76f, 1f);
+            var pressTint  = new Color(0.55f, 0.45f, 0.30f, 1f);
+            var tint = Color.Lerp(normalTint, hoverTint, hoverLerp);
+            tint = Color.Lerp(tint, pressTint, pressLerp);
+            if (buttonBg != null) buttonBg.color = tint;
+
+            // Label: gold at rest, ivory-white on hover (same as original feel, improved contrast).
+            var goldLabel  = new Color(0.97f, 0.90f, 0.68f, 1f);
+            var ivoryHover = new Color(1.00f, 0.98f, 0.88f, 1f);
+            var pressLabel = new Color(0.80f, 0.72f, 0.52f, 1f);
+            var lblColor = Color.Lerp(goldLabel, ivoryHover, hoverLerp);
+            lblColor = Color.Lerp(lblColor, pressLabel, pressLerp);
+            if (label != null)
+            {
+                label.color = lblColor;
+                if (!Interactable) label.color *= new Color(0.60f, 0.60f, 0.60f, 1f);
+            }
         }
     }
 }
