@@ -79,8 +79,8 @@ namespace Guandan.Game
         private bool raceResolved;
         private bool muted;
         private int dealVisibleCount;
-        private string presentationMessage = "等待抽签";
-        private string lotteryStatusMessage = "选择一支竹签";
+        private string presentationMessage = "Awaiting draw";
+        private string lotteryStatusMessage = "Draw a lot";
         private string routeResultMessage = string.Empty;
         private string message = string.Empty;
         private readonly string[] lotteryRevealLabels = new string[3];
@@ -136,13 +136,13 @@ namespace Guandan.Game
         {
             if (index < 0 || index >= lotteryRevealLabels.Length) return string.Empty;
             return string.IsNullOrEmpty(lotteryRevealLabels[index])
-                ? $"{new[] { "甲", "乙", "丙" }[index]}签\n点击抽取"
+                ? $"Lot {new[] { "A", "B", "C" }[index]}\nClick to Draw"
                 : lotteryRevealLabels[index];
         }
 
         public PlayerProfile GetProfile(PlayerSeat seat)
         {
-            if (seat == PlayerSeat.South) return new PlayerProfile("你", "真人发掘领队", "与你的队友一起完成牌局并打开中央宝箱。", "稳住牌权，先看清桌面。", new[] { "真人", "发掘领队" }, 0f, 0f, 0f, 0f);
+            if (seat == PlayerSeat.South) return new PlayerProfile("You", "Human Excavation Leader", "Complete the card hands with your teammate and unlock the central treasure chest.", "Hold the lead; read the table first.", new[] { "Human", "Leader" }, 0f, 0f, 0f, 0f);
             if (lotteryProfiles == null || lotteryProfiles.Length < 3) lotteryProfiles = CreateLotteryProfiles(NextSeed());
             return seat switch
             {
@@ -227,7 +227,7 @@ namespace Guandan.Game
         {
             muted = !muted;
             if (gameAudio != null) gameAudio.Muted = muted;
-            ShowMessage(muted ? "声音已关闭" : "声音已打开");
+            ShowMessage(muted ? "Sound off" : "Sound on");
             screenUi?.Refresh();
         }
 
@@ -241,7 +241,7 @@ namespace Guandan.Game
         {
             lotteryBusy = true;
             presentationLocked = true;
-            lotteryStatusMessage = "竹签正在逐支显字…";
+            lotteryStatusMessage = "Revealing lots…";
             Array.Clear(lotteryRevealLabels, 0, lotteryRevealLabels.Length);
             var drawn = lotteryProfiles.ToArray();
             var chosen = drawn[selectedIndex];
@@ -255,23 +255,23 @@ namespace Guandan.Game
             foreach (var slot in revealOrder)
             {
                 var role = slot == selectedIndex
-                    ? "北家 · 队友"
-                    : slot == Array.IndexOf(drawn, opponents[0]) ? "东家 · 对手" : "西家 · 对手";
-                lotteryRevealLabels[slot] = $"{new[] { "甲", "乙", "丙" }[slot]}签\n{drawn[slot].Name}\n{role}";
+                    ? "North · Partner"
+                    : slot == Array.IndexOf(drawn, opponents[0]) ? "East · Opponent" : "West · Opponent";
+                lotteryRevealLabels[slot] = $"Lot {new[] { "A", "B", "C" }[slot]}\n{drawn[slot].Name}\n{role}";
                 gameAudio?.Card();
                 RefreshWorldLottery();
                 screenUi?.Refresh();
                 yield return new WaitForSeconds(0.48f);
             }
 
-            lotteryStatusMessage = $"你与 {chosen.Name} 同队，对阵 {opponents[0].Name}、{opponents[1].Name}";
+            lotteryStatusMessage = $"You and {chosen.Name} are partners — vs. {opponents[0].Name} & {opponents[1].Name}";
             RefreshWorldLottery();
             screenUi?.Refresh();
             yield return new WaitForSeconds(0.65f);
             lotteryChosen = true;
             lotteryBusy = false;
             lotteryRoutine = null;
-            ShowMessage($"{chosen.Name}成为你的队友，其余两人加入对手队");
+            ShowMessage($"{chosen.Name} is your teammate — the others join the opposing team.");
             StartMatchWithPresentation();
         }
 
@@ -301,18 +301,18 @@ namespace Guandan.Game
         {
             presentationLocked = true;
             dealVisibleCount = 0;
-            presentationMessage = "四家循环发牌 · 0 / 27";
+            presentationMessage = "Dealing · 0 / 27";
             Refresh();
             for (var count = 1; count <= 27; count++)
             {
                 dealVisibleCount = count;
-                presentationMessage = $"四家循环发牌 · {count} / 27";
+                presentationMessage = $"Dealing · {count} / 27";
                 if ((count - 1) % 4 == 0) gameAudio?.Deal();
                 Refresh();
                 yield return new WaitForSeconds(0.055f);
             }
             var level = GuandanMatchEngine.RankLabel(match.LevelRank);
-            presentationMessage = $"第 {match.HandNumber} 小局 · 打 {level}\n红桃 {level} 为逢人配";
+            presentationMessage = $"Round {match.HandNumber} · Trump Rank {level}\n\u2665 {level} is the Wild Card";
             Refresh();
             gameAudio?.Reward();
             yield return new WaitForSeconds(0.65f);
@@ -382,7 +382,7 @@ namespace Guandan.Game
                 else
                 {
                     presentationLocked = true;
-                    presentationMessage = "选择一支竹签开始发牌";
+                    presentationMessage = "Draw a lot to begin dealing";
                     Refresh();
                 }
             }
@@ -414,7 +414,7 @@ namespace Guandan.Game
             if (Keyboard.current != null)
             {
                 if (Keyboard.current.f8Key.wasPressedThisFrame) DebugPlayWeakest();
-                else if (Keyboard.current.bKey.wasPressedThisFrame) screenUi?.PlayBombImpact("同花顺 · 演出预览");
+                else if (Keyboard.current.bKey.wasPressedThisFrame) screenUi?.PlayBombImpact("Straight Flush · Demo");
                 else if (Keyboard.current.tKey.wasPressedThisFrame)
                 {
                     var card = match.GetHand(PlayerSeat.South).FirstOrDefault();
@@ -635,12 +635,12 @@ namespace Guandan.Game
                     gameplayBindings?.RerollAvatars(NextSeed());
                     lotteryChosen = false;
                     lotteryBusy = false;
-                    lotteryStatusMessage = "选择一支竹签";
+                    lotteryStatusMessage = "Draw a lot";
                     Array.Clear(lotteryRevealLabels, 0, lotteryRevealLabels.Length);
                     presentationLocked = true;
                     raceOpen = false;
                     raceResolved = false;
-                    presentationMessage = "选择一支竹签开始发牌";
+                    presentationMessage = "Draw a lot to begin dealing";
                     selectedIds.Clear();
                     hintedIds.Clear();
                     seatPlayLabels.Clear();
@@ -659,7 +659,7 @@ namespace Guandan.Game
             {
                 if (!match.GetLegalReturnCards(PlayerSeat.South).Any(card => card.Id == view.Card.Id))
                 {
-                    ShowMessage("这张牌不符合还贡条件");
+                    ShowMessage("That card cannot be used for Return Tribute.");
                     return;
                 }
                 selectedIds.Clear();
@@ -689,8 +689,8 @@ namespace Guandan.Game
             if (!lotteryChosen || raceOpen || match == null || match.Phase == MatchPhase.MatchComplete) return;
             var profile = GetProfile(target);
             var text = type == SocialPropType.Flower
-                ? $"鲜花送给{profile.Name}。{profile.Reaction}"
-                : $"西红柿飞向{profile.Name}。{profile.Reaction}";
+                ? $"Flower for {profile.Name}! {profile.Reaction}"
+                : $"Tomato at {profile.Name}! {profile.Reaction}";
             if (type == SocialPropType.Flower) gameAudio?.Flower(); else gameAudio?.Tomato();
             gameplayBindings?.PlaySocialReaction(target, type, impactPoint);
             ShowMessage(text);
@@ -711,12 +711,12 @@ namespace Guandan.Game
             if (match == null || aiRoutine == null || match.ActiveSeat == PlayerSeat.South)
             {
                 gameAudio?.Bell();
-                ShowMessage("钟声在墓室里回荡，等待下一位牌手。");
+                ShowMessage("The bell echoes in the tomb — waiting for the next player.");
                 return;
             }
             aiPromptRequested = true;
             gameAudio?.Bell();
-            ShowMessage($"钟声提醒{GuandanMatchEngine.SeatLabel(thinkingSeat)}尽快出牌。");
+            ShowMessage($"The bell urges {GuandanMatchEngine.SeatLabel(thinkingSeat)} to play.");
         }
 
         public void PlayBellFeedback(Vector3 position)
@@ -749,7 +749,7 @@ namespace Guandan.Game
             var camera = Camera.main;
             if (camera == null) return;
             FindFirstObjectByType<Guandan.XR.GuandanXRBootstrap>()?.RecenterToDesignStart();
-            ShowMessage(treasureViewActive ? "视角已回到夺宝台起点" : "视角已回到南家桌边起点");
+            ShowMessage(treasureViewActive ? "View returned to Race start" : "View returned to table");
         }
 
         private IEnumerator RunAiTurn(PlayerSeat seat)
@@ -835,7 +835,7 @@ namespace Guandan.Game
                     .FirstOrDefault(card => selectedIds.Contains(card.Id));
                 if (returnCard == null || selectedIds.Count != 1)
                 {
-                    ShowMessage("请选择一张合法手牌还贡");
+                    ShowMessage("Select one legal card to return as tribute.");
                     return;
                 }
                 match.ReturnTribute(PlayerSeat.South, returnCard);
@@ -849,7 +849,7 @@ namespace Guandan.Game
             var candidates = GuandanRuleEngine.FindPatternsForSelection(selected, match.LevelRank, match.CurrentPlay);
             if (candidates.Count == 0)
             {
-                ShowMessage("这组牌不能压过桌面牌型");
+                ShowMessage("Those cards cannot beat the current play.");
                 return;
             }
             if (candidates.Count > 1 && screenUi != null)
@@ -880,7 +880,7 @@ namespace Guandan.Game
             var candidate = MinimumBeatCandidate();
             UpdateAutomaticHint();
             foreach (var view in handViews) view.SetHighlighted(candidate != null && candidate.Cards.Any(card => card.Id == view.Card.Id));
-            ShowMessage(candidate == null ? "当前没有可压牌" : $"朱砂提示：{candidate.Label}");
+            ShowMessage(candidate == null ? "No cards can beat the current play." : $"Hint: {candidate.Label}");
             screenUi?.Refresh();
         }
 
@@ -930,7 +930,7 @@ namespace Guandan.Game
             var team = match.LastHandResult.WinningTeam;
             var previousPosition = race.GetPosition(team);
             var result = race.Move(team, match.LastHandResult.BaseSteps, route, raceRandom.NextDouble());
-            routeResultMessage = $"{result.Label} · {(team == 0 ? "青队" : "朱队")}到达第 {result.Position} 格";
+            routeResultMessage = $"{result.Label} · {(team == 0 ? \"Jade Team\" : \"Red Team\")} reaches tile {result.Position}";
             raceResolved = true;
             ShowMessage(routeResultMessage);
             RefreshRaceLabel();
@@ -942,7 +942,7 @@ namespace Guandan.Game
                 gameAudio?.Chest();
                 match.MarkMatchComplete();
                 continueButton?.SetAvailable(false);
-                routeResultMessage = $"{(race.WinningTeam == 0 ? "青队" : "朱队")}率先打开中央宝箱";
+                routeResultMessage = $"{(race.WinningTeam == 0 ? \"Jade Team\" : \"Red Team\")} opens the central chest first!";
                 ShowMessage(routeResultMessage);
             }
             else
@@ -990,7 +990,7 @@ namespace Guandan.Game
                     break;
                 case MatchEventType.CardsPlayed:
                     var cardNames = gameEvent.Play == null ? string.Empty : string.Join(" ", gameEvent.Play.Cards.Select(card => card.ShortLabel));
-                    seatPlayLabels[gameEvent.Seat] = $"{GuandanMatchEngine.SeatLabel(gameEvent.Seat)} · {gameEvent.Play?.Label ?? "出牌"}\n{cardNames}";
+                    seatPlayLabels[gameEvent.Seat] = $"{GuandanMatchEngine.SeatLabel(gameEvent.Seat)} · {gameEvent.Play?.Label ?? "Played"}\n{cardNames}";
                     seatPlayPatterns[gameEvent.Seat] = gameEvent.Play;
                     if (gameEvent.Play?.IsBomb == true)
                     {
@@ -1002,7 +1002,7 @@ namespace Guandan.Game
                     break;
                 case MatchEventType.Passed:
                     seatPlayPatterns.Remove(gameEvent.Seat);
-                    seatPlayLabels[gameEvent.Seat] = $"{GuandanMatchEngine.SeatLabel(gameEvent.Seat)}\n过牌";
+                    seatPlayLabels[gameEvent.Seat] = $"{GuandanMatchEngine.SeatLabel(gameEvent.Seat)}\nPassed";
                     gameAudio?.Pass();
                     ShowMessage(gameEvent.Message);
                     break;
@@ -1161,7 +1161,7 @@ namespace Guandan.Game
         private void BuildSeatLabels()
         {
             if (seatLabels.Count > 0) return;
-            var names = new[] { "你 · 南家", "东家", "队友 · 北家", "西家" };
+            var names = new[] { "You · South", "East", "Partner · North", "West" };
             for (var i = 0; i < 4; i++)
             {
                 var anchor = seatAnchors != null && seatAnchors.Length > i ? seatAnchors[i] : null;
@@ -1191,18 +1191,18 @@ namespace Guandan.Game
             if (uiAnchor == null) return;
             // These are physical tabletop markers, never camera-attached UI.  A player can
             // walk around the table and operate them from a controller ray or direct desktop ray.
-            phaseLabel = EnsureText("Phase", "墓室牌局", uiAnchor, new Vector3(0f, 0.10f, 0f), 0.026f);
-            messageLabel = EnsureText("Message", "准备发牌", uiAnchor, new Vector3(0f, 0.06f, -0.28f), 0.018f);
-            raceLabel = EnsureText("Race", $"夺宝 · 青 0 / {TreasureRace.TrackLength} 朱 0 / {TreasureRace.TrackLength}", uiAnchor, new Vector3(0f, 0.025f, -0.54f), 0.016f);
-            playButton = EnsureButton("PlayButton", "出牌", GameAction.Play, uiAnchor, new Vector3(-1.28f, 0f, -0.92f));
-            passButton = EnsureButton("PassButton", "不出", GameAction.Pass, uiAnchor, new Vector3(-0.43f, 0f, -0.92f));
-            hintButton = EnsureButton("HintButton", "提示", GameAction.Hint, uiAnchor, new Vector3(0.43f, 0f, -0.92f));
-            continueButton = EnsureButton("ContinueButton", "继续牌局", GameAction.ContinueHand, uiAnchor, new Vector3(1.28f, 0f, -0.92f));
+            phaseLabel = EnsureText("Phase", "Tomb Card Table", uiAnchor, new Vector3(0f, 0.10f, 0f), 0.026f);
+            messageLabel = EnsureText("Message", "Ready to Deal", uiAnchor, new Vector3(0f, 0.06f, -0.28f), 0.018f);
+            raceLabel = EnsureText("Race", $"Race · Jade 0 / {TreasureRace.TrackLength}   Red 0 / {TreasureRace.TrackLength}", uiAnchor, new Vector3(0f, 0.025f, -0.54f), 0.016f);
+            playButton = EnsureButton("PlayButton", "Play", GameAction.Play, uiAnchor, new Vector3(-1.28f, 0f, -0.92f));
+            passButton = EnsureButton("PassButton", "Pass", GameAction.Pass, uiAnchor, new Vector3(-0.43f, 0f, -0.92f));
+            hintButton = EnsureButton("HintButton", "Hint", GameAction.Hint, uiAnchor, new Vector3(0.43f, 0f, -0.92f));
+            continueButton = EnsureButton("ContinueButton", "Next Round", GameAction.ContinueHand, uiAnchor, new Vector3(1.28f, 0f, -0.92f));
             // A real tomb-floor console transports the view to the authored race track.
             // Route choices sit beside that track; neither uses a camera canvas.
-            enterTreasureButton = EnsureButton("EnterTreasure", "前往夺宝台", GameAction.EnterTreasure, treasureTrackAnchor, new Vector3(0f, 0.08f, 0f));
-            steadyButton = EnsureButton("SteadyRoute", "稳当探方", GameAction.SteadyRoute, treasureTrackAnchor, new Vector3(-2.0f, 0.08f, 17.0f));
-            riskyButton = EnsureButton("RiskyRoute", "激进探方", GameAction.RiskyRoute, treasureTrackAnchor, new Vector3(2.0f, 0.08f, 17.0f));
+            enterTreasureButton = EnsureButton("EnterTreasure", "Go to Race", GameAction.EnterTreasure, treasureTrackAnchor, new Vector3(0f, 0.08f, 0f));
+            steadyButton = EnsureButton("SteadyRoute", "Steady", GameAction.SteadyRoute, treasureTrackAnchor, new Vector3(-2.0f, 0.08f, 17.0f));
+            riskyButton = EnsureButton("RiskyRoute", "Risky", GameAction.RiskyRoute, treasureTrackAnchor, new Vector3(2.0f, 0.08f, 17.0f));
             BuildWorldLottery();
             steadyButton.SetAvailable(false);
             riskyButton.SetAvailable(false);
@@ -1358,7 +1358,7 @@ namespace Guandan.Game
                 {
                     if (match.FinishOrder[index] == seat) { place = index; break; }
                 }
-                var suffix = place >= 0 ? $" · 第 {place + 1} 名" : count > 10 ? " · ?张" : $" · {count}张";
+                var suffix = place >= 0 ? $" · #{place + 1}" : count > 10 ? " · ?" : $" · {count}";
                 text.text = GuandanMatchEngine.SeatLabel(seat) + suffix;
             }
         }
@@ -1366,7 +1366,7 @@ namespace Guandan.Game
         private void RefreshRaceLabel()
         {
             if (raceLabel == null || race == null) return;
-            raceLabel.text = $"夺宝 · 青 {race.GetPosition(0)} / {TreasureRace.TrackLength}    朱 {race.GetPosition(1)} / {TreasureRace.TrackLength}";
+            raceLabel.text = $"Race · Jade {race.GetPosition(0)} / {TreasureRace.TrackLength}   Red {race.GetPosition(1)} / {TreasureRace.TrackLength}";
             treasurePresenter?.UpdateFlagScores(
                 match != null ? match.GetTeamLevel(0) : 2,
                 match != null ? match.GetTeamLevel(1) : 2,
@@ -1400,11 +1400,11 @@ namespace Guandan.Game
             {
                 phaseLabel.text = match.Phase switch
                 {
-                    MatchPhase.TributeReturn => "还贡 · 请选择一张牌",
-                    MatchPhase.Playing => $"掼蛋 · 级牌 {GuandanMatchEngine.RankLabel(match.LevelRank)} · {GuandanMatchEngine.SeatLabel(match.ActiveSeat)}行动",
-                    MatchPhase.HandComplete => "夺宝 · 选择探方路线",
-                    MatchPhase.MatchComplete => "地宫宝箱已开启",
-                    _ => "墓室牌局",
+                    MatchPhase.TributeReturn => "Return Tribute · Choose a card",
+                    MatchPhase.Playing => $"Guandan · Trump {GuandanMatchEngine.RankLabel(match.LevelRank)} · {GuandanMatchEngine.SeatLabel(match.ActiveSeat)}'s turn",
+                    MatchPhase.HandComplete => "Treasure Race · Choose route",
+                    MatchPhase.MatchComplete => "Tomb Chest Opened",
+                    _ => "Tomb Card Table",
                 };
             }
         }
@@ -1511,12 +1511,12 @@ namespace Guandan.Game
         {
             var pool = new[]
             {
-                new PlayerProfile("沈砚", "谨慎的计算派", "习惯先看搭档的牌路，能稳就不冒险。复杂局面会思考很久，但很少冲动出炸。", "会轻轻敲桌，再把牌推到中央。", new[] { "沉稳", "重配合", "偏稳当" }, 0.14f, 0.12f, 1.6f, 5.2f),
-                new PlayerProfile("唐果", "爱冒险的气氛组", "出牌节奏快，落后时尤其喜欢赌一把。收到鲜花会认真接住。", "会先看向宝箱，再迅速拍下手里的牌。", new[] { "活泼", "敢冒险", "爱鲜花" }, 0.76f, 0.42f, 0.65f, 2.0f),
-                new PlayerProfile("秦峥", "强硬的压制派", "喜欢抢回牌权，炸弹出手干脆。赢下一轮后会向对面扬眉。", "被西红柿砸中后，大概率会立刻扔回来。", new[] { "强硬", "好胜", "爱压制" }, 0.58f, 0.70f, 0.9f, 3.1f),
-                new PlayerProfile("苏禾", "温和的协作派", "会主动给搭档留出牌权，不轻易盖住队友。", "收到鲜花时会别在衣襟上，保持到本小局结束。", new[] { "温和", "顾搭档", "有耐心" }, 0.28f, 0.18f, 1.2f, 4.3f),
-                new PlayerProfile("罗放", "爱热闹的挑衅派", "牌桌动作很多，喜欢用表情扰乱气氛，但真正出牌并不莽撞。", "最容易躲西红柿，也最容易捡起来扔回去。", new[] { "幽默", "爱互动", "会反击" }, 0.52f, 0.34f, 0.75f, 2.7f),
-                new PlayerProfile("叶岚", "沉默的快打派", "喜欢尽快清理手牌，局势明朗时会突然提速。", "很少说话，但会用一张漂亮的顺子回应。", new[] { "安静", "快打", "看残局" }, 0.44f, 0.26f, 0.55f, 1.8f),
+                new PlayerProfile("Shen Yan", "The Careful Calculator", "Reads the partner's style first; avoids risk when stable. Thinks long in complex positions, but rarely blitzes with a Bomb.", "Gently taps the table, then slides cards to center.", new[] { "Composed", "Team-focused", "Conservative" }, 0.14f, 0.12f, 1.6f, 5.2f),
+                new PlayerProfile("Tang Guo", "The Thrill-Seeker", "Fast-paced; loves to gamble when behind. Catches flowers thrown at them with flair.", "Glances at the treasure chest, then slaps cards down fast.", new[] { "Lively", "Risk-taker", "Flower lover" }, 0.76f, 0.42f, 0.65f, 2.0f),
+                new PlayerProfile("Qin Zheng", "The Dominant Aggressor", "Loves reclaiming the lead; Bombs come out decisively. Raises an eyebrow at opponents after winning a trick.", "Hit by a tomato? Almost certainly throws one right back.", new[] { "Firm", "Competitive", "Domineering" }, 0.58f, 0.70f, 0.9f, 3.1f),
+                new PlayerProfile("Su He", "The Gentle Cooperator", "Willingly yields the lead to a partner; never buries a teammate's play.", "Pins a flower to their lapel and keeps it through the round.", new[] { "Gentle", "Partner-minded", "Patient" }, 0.28f, 0.18f, 1.2f, 4.3f),
+                new PlayerProfile("Luo Fang", "The Playful Provocateur", "Many table gestures; likes stirring the atmosphere with expressions — but never plays recklessly.", "Easiest to dodge tomatoes, and most likely to pick one up and return fire.", new[] { "Humorous", "Interactive", "Retaliatory" }, 0.52f, 0.34f, 0.75f, 2.7f),
+                new PlayerProfile("Ye Lan", "The Silent Speed Player", "Aims to clear the hand quickly; accelerates suddenly when the game is clear.", "Rarely speaks, but answers with a beautiful Straight.", new[] { "Quiet", "Fast-player", "Endgame reader" }, 0.44f, 0.26f, 0.55f, 1.8f),
             };
             var random = new System.Random(sourceSeed);
             for (var i = pool.Length - 1; i > 0; i--)

@@ -72,17 +72,17 @@ namespace Guandan.Game
 
         public string Label => Kind switch
         {
-            PlayKind.Single => "单张",
-            PlayKind.Pair => "对子",
-            PlayKind.Triple => "三张",
-            PlayKind.FullHouse => "三带二",
-            PlayKind.Straight => "顺子",
-            PlayKind.ConsecutivePairs => "连对",
-            PlayKind.SteelPlate => "钢板",
-            PlayKind.Bomb => $"{Cards.Count}张炸弹",
-            PlayKind.StraightFlush => "同花顺",
-            PlayKind.JokerBomb => "四王炸",
-            _ => "无效牌型",
+            PlayKind.Single => "Single",
+            PlayKind.Pair => "Pair",
+            PlayKind.Triple => "Triple",
+            PlayKind.FullHouse => "Full House",
+            PlayKind.Straight => "Straight",
+            PlayKind.ConsecutivePairs => "Consecutive Pairs",
+            PlayKind.SteelPlate => "Steel Plate",
+            PlayKind.Bomb => $"{Cards.Count}-card Bomb",
+            PlayKind.StraightFlush => "Straight Flush",
+            PlayKind.JokerBomb => "Joker Bomb",
+            _ => "Invalid",
         };
     }
 }

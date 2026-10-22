@@ -5,7 +5,7 @@ namespace Guandan.EditorTools
 {
     public static class GuandanUiTextureSetup
     {
-        [MenuItem("掼蛋/刷新 UI 面板纹理")]
+        [MenuItem("TombDuel/Refresh UI Panel Textures")]
         public static void RefreshUiTextures()
         {
             Configure("Assets/Resources/GuandanUI/TombPanel.png", new Vector4(185f, 185f, 185f, 185f));

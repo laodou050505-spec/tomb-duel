@@ -239,8 +239,8 @@ namespace Guandan.UI
             var count = match.GetHand(seat).Count;
             var finishedIndex = match.FinishOrder.ToList().IndexOf(seat);
             var countText = finishedIndex >= 0
-                ? $"第 {finishedIndex + 1} 名"
-                : count > 10 ? "?张" : $"{count}张";
+                ? $"#{finishedIndex + 1}"
+                : count > 10 ? "?" : $"{count}";
             titleText.text = $"{GuandanMatchEngine.SeatLabel(seat)} · {profile.Name}  {countText}";
 
             var play = director.GetSeatPlayLabel(seat);
@@ -251,15 +251,15 @@ namespace Guandan.UI
                 var separator = action.LastIndexOf('·');
                 if (separator >= 0 && separator + 1 < action.Length)
                     action = action[(separator + 1)..].Trim();
-                statusText.text = $"当前 · {action}";
+                statusText.text = $"Now: {action}";
             }
             else if (match.ActiveSeat == seat && !director.IsPresentationLocked)
             {
-                statusText.text = match.Phase == MatchPhase.TributeReturn ? "正在还贡…" : "思考中…";
+                statusText.text = match.Phase == MatchPhase.TributeReturn ? "Returning tribute…" : "Thinking…";
             }
             else
             {
-                statusText.text = "等待行动";
+                statusText.text = "Waiting…";
             }
 
             var teamColor = seat == PlayerSeat.North

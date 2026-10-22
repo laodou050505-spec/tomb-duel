@@ -286,7 +286,7 @@ namespace Guandan.Scene
             text.fontStyle = FontStyle.Bold;
             text.color = new Color(1f, 0.88f, 0.56f, 1f);
             text.raycastTarget = false;
-            text.text = team == 0 ? "青队\n打 2\n\n0 / 12 格" : "朱队\n打 2\n\n0 / 12 格";
+            text.text = team == 0 ? "Jade\nRank 2\n\n0 / 12" : "Red\nRank 2\n\n0 / 12";
             var shadow = textObject.GetComponent<Shadow>();
             shadow.effectColor = new Color(0f, 0f, 0f, 0.72f);
             shadow.effectDistance = new Vector2(3f, -3f);
@@ -297,9 +297,9 @@ namespace Guandan.Scene
         {
             if (flagScoreTexts == null) return;
             if (flagScoreTexts.Length > 0 && flagScoreTexts[0] != null)
-                flagScoreTexts[0].text = $"青队\n打 {GuandanMatchEngine.RankLabel(blueLevel)}\n\n{bluePosition} / {TreasureRace.TrackLength} 格";
+                flagScoreTexts[0].text = $"Jade\nRank {GuandanMatchEngine.RankLabel(blueLevel)}\n\n{bluePosition} / {TreasureRace.TrackLength}";
             if (flagScoreTexts.Length > 1 && flagScoreTexts[1] != null)
-                flagScoreTexts[1].text = $"朱队\n打 {GuandanMatchEngine.RankLabel(redLevel)}\n\n{redPosition} / {TreasureRace.TrackLength} 格";
+                flagScoreTexts[1].text = $"Red\nRank {GuandanMatchEngine.RankLabel(redLevel)}\n\n{redPosition} / {TreasureRace.TrackLength}";
         }
 
         private void BindChestTreasureGlow()

@@ -273,8 +273,8 @@ namespace Guandan.UI
 
             if (!director.LotteryChosen)
             {
-                titleText.text = "先抽同行人";
-                progressText.text = "三支身份签中，一支成为队友，其余两支成为对手";
+                titleText.text = "Draw a Lot";
+                progressText.text = "One lot becomes your partner. The other two become opponents.";
                 turnText.text = director.LotteryStatusMessage;
                 lotteryResultText.text = director.LotteryStatusMessage;
                 for (var i = 0; i < lotteryButtons.Length; i++)
@@ -288,29 +288,29 @@ namespace Guandan.UI
 
             if (match == null) return;
             UpdateWorldCanvasPose();
-            titleText.text = $"掼蛋夺宝 · 第 {match.HandNumber} 小局";
-            blueLevelText.text = $"青队 · 打 {GuandanMatchEngine.RankLabel(match.GetTeamLevel(0))}";
-            redLevelText.text = $"朱队 · 打 {GuandanMatchEngine.RankLabel(match.GetTeamLevel(1))}";
+            titleText.text = $"TOMB DUEL · Round {match.HandNumber}";
+            blueLevelText.text = $"Jade · Rank {GuandanMatchEngine.RankLabel(match.GetTeamLevel(0))}";
+            redLevelText.text = $"Red · Rank {GuandanMatchEngine.RankLabel(match.GetTeamLevel(1))}";
             bluePositionText.text = $"{director.Race.GetPosition(0)} / {TreasureRace.TrackLength}";
             redPositionText.text = $"{director.Race.GetPosition(1)} / {TreasureRace.TrackLength}";
             RenderRouteTrack(headerBlueCells, director.Race.GetPosition(0), new Color(0.20f, 0.66f, 0.58f));
             RenderRouteTrack(headerRedCells, director.Race.GetPosition(1), new Color(0.78f, 0.24f, 0.16f));
-            progressText.text = $"本局级牌 {GuandanMatchEngine.RankLabel(match.LevelRank)}";
+            progressText.text = $"Trump Rank: {GuandanMatchEngine.RankLabel(match.LevelRank)}";
             turnText.text = match.Phase switch
             {
-                MatchPhase.TributePayment => "正在进贡…",
-                MatchPhase.TributeAssignment => "正在确认进贡归属…",
-                MatchPhase.TributeReturn => match.ActiveSeat == PlayerSeat.South ? "请选择一张牌还贡" : "正在还贡…",
-                MatchPhase.HandComplete => "本局名次已确认",
-                MatchPhase.MatchComplete => "宝藏出土",
+                MatchPhase.TributePayment => "Tribute in progress…",
+                MatchPhase.TributeAssignment => "Assigning tribute…",
+                MatchPhase.TributeReturn => match.ActiveSeat == PlayerSeat.South ? "Choose return tribute card" : "Returning tribute…",
+                MatchPhase.HandComplete => "Placements confirmed",
+                MatchPhase.MatchComplete => "Treasure Unearthed",
                 _ => director.IsPresentationLocked ? director.PresentationMessage : string.Empty,
             };
             messageText.text = director.Message;
-            SetButtonText("Sound", director.Muted ? "静音" : "声音");
+            SetButtonText("Sound", director.Muted ? "Muted" : "Sound");
             var humanTurn = !director.IsPresentationLocked && match.Phase == MatchPhase.Playing && match.ActiveSeat == PlayerSeat.South;
             playButtonUi.interactable = director.CanSubmitSelection;
             passButtonUi.interactable = humanTurn && match.CurrentPlay != null;
-            SetButtonText("Play", match.Phase == MatchPhase.TributeReturn ? "还贡" : "出牌");
+            SetButtonText("Play", match.Phase == MatchPhase.TributeReturn ? "Return" : "Play");
             levelAnnouncementPanel.SetActive(director.IsPresentationLocked && director.DealVisibleCount >= 27);
             levelAnnouncementText.text = director.PresentationMessage;
             RenderHand();
@@ -365,12 +365,12 @@ namespace Guandan.UI
 
         public void PlayFlyCardToCenter(Card card, PlayerSeat from)
         {
-            if (built && card != null) StartCoroutine(FlyCardArcRoutine(card, SeatEffectPosition(from), Vector2.zero, "进贡", 0f));
+            if (built && card != null) StartCoroutine(FlyCardArcRoutine(card, SeatEffectPosition(from), Vector2.zero, "Tribute", 0f));
         }
 
         public void PlayFlyCardFromCenter(Card card, PlayerSeat to, float delay)
         {
-            if (built && card != null) StartCoroutine(FlyCardArcRoutine(card, Vector2.zero, SeatEffectPosition(to), "进贡", delay));
+            if (built && card != null) StartCoroutine(FlyCardArcRoutine(card, Vector2.zero, SeatEffectPosition(to), "Tribute", delay));
         }
 
         public void PlayTreasureMove(int team, int from, int to, bool chestOpened)
@@ -561,15 +561,15 @@ namespace Guandan.UI
             var sealOutline = seal.AddComponent<Outline>();
             sealOutline.effectColor = new Color(0.78f, 0.58f, 0.28f, 0.92f);
             sealOutline.effectDistance = new Vector2(1f, -1f);
-            titleText = CreateText("Title", "掼蛋夺宝", headerRect, new Vector2(-620f, 28f), 22, TextAnchor.MiddleLeft, new Color(0.94f, 0.88f, 0.68f));
+            titleText = CreateText("Title", "TOMB DUEL", headerRect, new Vector2(-620f, 28f), 22, TextAnchor.MiddleLeft, new Color(0.94f, 0.88f, 0.68f));
             titleText.rectTransform.sizeDelta = new Vector2(240f, 38f);
-            blueLevelText = CreateText("BlueLevel", "青队 · 打 2", headerRect, new Vector2(-330f, 30f), 25, TextAnchor.MiddleCenter, new Color(0.48f, 0.78f, 0.68f));
-            redLevelText = CreateText("RedLevel", "朱队 · 打 2", headerRect, new Vector2(330f, 30f), 25, TextAnchor.MiddleCenter, new Color(0.88f, 0.46f, 0.36f));
+            blueLevelText = CreateText("BlueLevel", "Jade · Rank 2", headerRect, new Vector2(-330f, 30f), 25, TextAnchor.MiddleCenter, new Color(0.48f, 0.78f, 0.68f));
+            redLevelText = CreateText("RedLevel", "Red · Rank 2", headerRect, new Vector2(330f, 30f), 25, TextAnchor.MiddleCenter, new Color(0.88f, 0.46f, 0.36f));
             headerBlueCells = CreateHeaderTrack("HeaderBlue", headerRect, new Vector2(-330f, -4f), new Color(0.20f, 0.66f, 0.58f));
             headerRedCells = CreateHeaderTrack("HeaderRed", headerRect, new Vector2(330f, -4f), new Color(0.78f, 0.24f, 0.16f));
             bluePositionText = CreateText("BluePosition", $"0 / {TreasureRace.TrackLength}", headerRect, new Vector2(-330f, -39f), 19, TextAnchor.MiddleCenter, new Color(0.75f, 0.82f, 0.75f));
             redPositionText = CreateText("RedPosition", $"0 / {TreasureRace.TrackLength}", headerRect, new Vector2(330f, -39f), 19, TextAnchor.MiddleCenter, new Color(0.82f, 0.76f, 0.70f));
-            progressText = CreateText("Progress", "等待开局", headerRect, new Vector2(0f, 4f), 28, TextAnchor.MiddleCenter, new Color(0.94f, 0.80f, 0.46f));
+            progressText = CreateText("Progress", "Waiting to start", headerRect, new Vector2(0f, 4f), 28, TextAnchor.MiddleCenter, new Color(0.94f, 0.80f, 0.46f));
             progressText.rectTransform.sizeDelta = new Vector2(230f, 62f);
             blueLevelText.rectTransform.sizeDelta = redLevelText.rectTransform.sizeDelta = new Vector2(260f, 34f);
             bluePositionText.rectTransform.sizeDelta = redPositionText.rectTransform.sizeDelta = new Vector2(260f, 28f);
@@ -577,14 +577,14 @@ namespace Guandan.UI
             turnText.rectTransform.sizeDelta = new Vector2(240f, 40f);
             messageText = CreateText("Message", "", headerRect, new Vector2(-620f, -28f), 17, TextAnchor.MiddleCenter, new Color(0.96f, 0.86f, 0.66f));
             messageText.rectTransform.sizeDelta = new Vector2(240f, 40f);
-            CreateButton("Sound", new Vector2(620f, 476f), new Vector2(130f, 48f), "声音", new Color(0.15f, 0.22f, 0.20f), UiHitKind.Action, -1, "sound");
+            CreateButton("Sound", new Vector2(620f, 476f), new Vector2(130f, 48f), "Sound", new Color(0.15f, 0.22f, 0.20f), UiHitKind.Action, -1, "sound");
             UpdateHeadHudPose();
 
             lotteryPanel = CreatePanel("LotteryPanel", root, new Vector2(0f, -26f), new Vector2(1360f, 660f), new Color(0.04f, 0.055f, 0.05f, 0.94f));
             ApplySkin(lotteryPanel.GetComponent<Image>(), tombPanelSprite, Color.white);
-            var lotteryPrompt = CreateText("LotteryPrompt", "先抽同行人", lotteryPanel.transform as RectTransform, new Vector2(0f, 258f), 40, TextAnchor.MiddleCenter, new Color(0.94f, 0.80f, 0.46f));
+            var lotteryPrompt = CreateText("LotteryPrompt", "Draw a Lot", lotteryPanel.transform as RectTransform, new Vector2(0f, 258f), 40, TextAnchor.MiddleCenter, new Color(0.94f, 0.80f, 0.46f));
             lotteryPrompt.rectTransform.sizeDelta = new Vector2(900f, 60f);
-            var lotteryHint = CreateText("LotteryHint", "三支身份签中，一支成为队友，其余两支成为对手", lotteryPanel.transform as RectTransform, new Vector2(0f, 204f), 22, TextAnchor.MiddleCenter, new Color(0.80f, 0.82f, 0.74f));
+            var lotteryHint = CreateText("LotteryHint", "One lot becomes your partner. The other two become opponents.", lotteryPanel.transform as RectTransform, new Vector2(0f, 204f), 22, TextAnchor.MiddleCenter, new Color(0.80f, 0.82f, 0.74f));
             lotteryHint.rectTransform.sizeDelta = new Vector2(1120f, 44f);
             lotteryButtons = new Button[3];
             for (var i = 0; i < lotteryButtons.Length; i++)
@@ -593,7 +593,7 @@ namespace Guandan.UI
                 StyleLotteryCard(button, i);
                 lotteryButtons[i] = button;
             }
-            lotteryResultText = CreateText("LotteryResult", "选择一支竹签", lotteryPanel.transform as RectTransform, new Vector2(0f, -274f), 23, TextAnchor.MiddleCenter, new Color(0.92f, 0.82f, 0.57f));
+            lotteryResultText = CreateText("LotteryResult", "Choose a lot", lotteryPanel.transform as RectTransform, new Vector2(0f, -274f), 23, TextAnchor.MiddleCenter, new Color(0.92f, 0.82f, 0.57f));
             lotteryResultText.rectTransform.sizeDelta = new Vector2(1160f, 64f);
 
             tablePanel = new GameObject("TablePanel");
@@ -626,12 +626,12 @@ namespace Guandan.UI
             }
             handRoot = CreateRect("HandRoot", tableRect, new Vector2(0f, -280f), new Vector2(1740f, 300f));
             handRoot.SetAsLastSibling();
-            passButtonUi = CreateButton("Pass", new Vector2(-118f, -468f), new Vector2(212f, 88f), "过牌", new Color(0.18f, 0.34f, 0.31f), UiHitKind.Action, -1, "pass");
-            playButtonUi = CreateButton("Play", new Vector2(118f, -468f), new Vector2(212f, 88f), "出牌", new Color(0.62f, 0.20f, 0.12f), UiHitKind.Action, -1, "play");
+            passButtonUi = CreateButton("Pass", new Vector2(-118f, -468f), new Vector2(212f, 88f), "Pass", new Color(0.18f, 0.34f, 0.31f), UiHitKind.Action, -1, "pass");
+            playButtonUi = CreateButton("Play", new Vector2(118f, -468f), new Vector2(212f, 88f), "Play", new Color(0.62f, 0.20f, 0.12f), UiHitKind.Action, -1, "play");
 
-            profileNorthUi = CreateButton("ProfileNorth", new Vector2(0f, 286f), new Vector2(278f, 120f), "北家", new Color(0.12f, 0.20f, 0.18f), UiHitKind.Profile, 2, null);
-            profileEastUi = CreateButton("ProfileEast", new Vector2(770f, 184f), new Vector2(255f, 110f), "东家", new Color(0.17f, 0.13f, 0.13f), UiHitKind.Profile, 1, null);
-            profileWestUi = CreateButton("ProfileWest", new Vector2(-770f, 184f), new Vector2(255f, 110f), "西家", new Color(0.17f, 0.13f, 0.13f), UiHitKind.Profile, 3, null);
+            profileNorthUi = CreateButton("ProfileNorth", new Vector2(0f, 286f), new Vector2(278f, 120f), "North", new Color(0.12f, 0.20f, 0.18f), UiHitKind.Profile, 2, null);
+            profileEastUi = CreateButton("ProfileEast", new Vector2(770f, 184f), new Vector2(255f, 110f), "East", new Color(0.17f, 0.13f, 0.13f), UiHitKind.Profile, 1, null);
+            profileWestUi = CreateButton("ProfileWest", new Vector2(-770f, 184f), new Vector2(255f, 110f), "West", new Color(0.17f, 0.13f, 0.13f), UiHitKind.Profile, 3, null);
             turnCalloutNorth = CreateText("TurnNorth", "", tableRect, new Vector2(-390f, 296f), 18, TextAnchor.MiddleCenter, new Color(0.96f, 0.82f, 0.48f));
             turnCalloutEast = CreateText("TurnEast", "", tableRect, new Vector2(770f, 108f), 18, TextAnchor.MiddleCenter, new Color(0.96f, 0.82f, 0.48f));
             turnCalloutWest = CreateText("TurnWest", "", tableRect, new Vector2(-770f, 108f), 18, TextAnchor.MiddleCenter, new Color(0.96f, 0.82f, 0.48f));
@@ -653,19 +653,19 @@ namespace Guandan.UI
             var routeImage = routePanel.GetComponent<Image>();
             ApplySkin(routeImage, tombPanelSprite, Color.white);
             routeImage.color = new Color(1f, 1f, 1f, 0f);
-            routeTitleText = CreateText("RouteTitle", "选择发掘路线", routePanel.transform as RectTransform, new Vector2(0f, 232f), 52, TextAnchor.MiddleCenter, new Color(0.98f, 0.86f, 0.55f));
+            routeTitleText = CreateText("RouteTitle", "Choose Route", routePanel.transform as RectTransform, new Vector2(0f, 232f), 52, TextAnchor.MiddleCenter, new Color(0.98f, 0.86f, 0.55f));
             routeTitleText.fontStyle = FontStyle.Bold;
             routeSummaryText = CreateText("RouteSummary", "", routePanel.transform as RectTransform, new Vector2(0f, 164f), 32, TextAnchor.MiddleCenter, new Color(0.96f, 0.93f, 0.83f));
             routeAdviceText = CreateText("RouteAdvice", "", routePanel.transform as RectTransform, new Vector2(0f, 108f), 30, TextAnchor.MiddleCenter, new Color(0.87f, 0.94f, 0.85f));
             blueRouteCells = CreateRouteTrack("BlueRoute", routePanel.transform, new Vector2(-405f, 42f), new Color(0.20f, 0.66f, 0.58f));
             redRouteCells = CreateRouteTrack("RedRoute", routePanel.transform, new Vector2(405f, 42f), new Color(0.78f, 0.24f, 0.16f));
-            enterTreasureButtonUi = CreateButton("EnterTreasure", new Vector2(0f, -44f), new Vector2(440f, 88f), "进入夺宝场景", new Color(0.70f, 0.42f, 0.16f), UiHitKind.Action, -1, "enter-treasure");
-            steadyButtonUi = CreateButton("Steady", new Vector2(-340f, -104f), new Vector2(620f, 136f), "稳当推进", new Color(0.22f, 0.38f, 0.32f), UiHitKind.Action, -1, "steady");
-            riskyButtonUi = CreateButton("Risky", new Vector2(340f, -104f), new Vector2(620f, 136f), "深入探方", new Color(0.43f, 0.22f, 0.16f), UiHitKind.Action, -1, "risky");
+            enterTreasureButtonUi = CreateButton("EnterTreasure", new Vector2(0f, -44f), new Vector2(440f, 88f), "Enter Treasure Race", new Color(0.70f, 0.42f, 0.16f), UiHitKind.Action, -1, "enter-treasure");
+            steadyButtonUi = CreateButton("Steady", new Vector2(-340f, -104f), new Vector2(620f, 136f), "Steady Advance", new Color(0.22f, 0.38f, 0.32f), UiHitKind.Action, -1, "steady");
+            riskyButtonUi = CreateButton("Risky", new Vector2(340f, -104f), new Vector2(620f, 136f), "Risky Dig", new Color(0.43f, 0.22f, 0.16f), UiHitKind.Action, -1, "risky");
             routeResultText = CreateText("RouteResult", "", routePanel.transform as RectTransform, new Vector2(0f, -226f), 34, TextAnchor.MiddleCenter, new Color(0.98f, 0.86f, 0.55f));
             routeResultText.rectTransform.sizeDelta = new Vector2(1320f, 100f);
-            continueButtonUi = CreateButton("Continue", new Vector2(0f, -324f), new Vector2(500f, 104f), "返回牌桌 · 下一局", new Color(0.18f, 0.28f, 0.25f), UiHitKind.Action, -1, "continue");
-            restartButtonUi = CreateButton("Restart", new Vector2(0f, -324f), new Vector2(460f, 104f), "重新抽签", new Color(0.34f, 0.21f, 0.13f), UiHitKind.Action, -1, "restart");
+            continueButtonUi = CreateButton("Continue", new Vector2(0f, -324f), new Vector2(500f, 104f), "Back to Table · Next Round", new Color(0.18f, 0.28f, 0.25f), UiHitKind.Action, -1, "continue");
+            restartButtonUi = CreateButton("Restart", new Vector2(0f, -324f), new Vector2(460f, 104f), "Draw Again", new Color(0.34f, 0.21f, 0.13f), UiHitKind.Action, -1, "restart");
             BuildMatchResultPanel();
             foreach (var text in new[] { routeTitleText, routeSummaryText, routeAdviceText, routeResultText })
             {
@@ -690,14 +690,14 @@ namespace Guandan.UI
             profileTraitsText.rectTransform.sizeDelta = new Vector2(600f, 72f);
             profileReactionText.rectTransform.sizeDelta = new Vector2(600f, 72f);
 
-            CreateButton("ProfileClose", new Vector2(0f, -240f), new Vector2(220f, 58f), "关闭人物资料", new Color(0.20f, 0.24f, 0.22f), UiHitKind.CloseProfile);
+            CreateButton("ProfileClose", new Vector2(0f, -240f), new Vector2(220f, 58f), "Close", new Color(0.20f, 0.24f, 0.22f), UiHitKind.CloseProfile);
 
             variantPanel = CreatePanel("VariantPanel", root, new Vector2(0f, 25f), new Vector2(760f, 620f), new Color(0.04f, 0.055f, 0.05f, 0.98f));
             ApplySkin(variantPanel.GetComponent<Image>(), tombPanelSprite, Color.white);
-            var variantTitle = CreateText("VariantTitle", "选择逢人配的牌型解释", variantPanel.transform as RectTransform, new Vector2(0f, 245f), 28, TextAnchor.MiddleCenter, new Color(0.94f, 0.80f, 0.46f));
+            var variantTitle = CreateText("VariantTitle", "Choose Wild Card Role", variantPanel.transform as RectTransform, new Vector2(0f, 245f), 28, TextAnchor.MiddleCenter, new Color(0.94f, 0.80f, 0.46f));
             variantTitle.rectTransform.sizeDelta = new Vector2(620f, 60f);
             variantRoot = CreateRect("VariantRoot", variantPanel.transform, new Vector2(0f, 15f), new Vector2(680f, 420f));
-            CreateButton("VariantClose", new Vector2(0f, -255f), new Vector2(210f, 52f), "取消", new Color(0.20f, 0.24f, 0.22f), UiHitKind.Action, -1, "cancel-variant");
+            CreateButton("VariantClose", new Vector2(0f, -255f), new Vector2(210f, 52f), "Cancel", new Color(0.20f, 0.24f, 0.22f), UiHitKind.Action, -1, "cancel-variant");
 
             effectRoot = CreateRect("PlayerFacingEffects", root, Vector2.zero, new Vector2(CanvasWidth, CanvasHeight));
             effectRoot.SetAsLastSibling();
@@ -768,16 +768,16 @@ namespace Guandan.UI
                 if (match.FinishOrder[index] == PlayerSeat.South) placement = index + 1;
             }
             handInfoText.text = placement > 0
-                ? $"你 · 第 {placement} 名"
-                : director.IsPresentationLocked ? $"正在发牌 {visibleCount} / 27" : $"手牌 {allCards.Count}";
+                ? $"You · #{placement}"
+                : director.IsPresentationLocked ? $"Dealing {visibleCount} / 27" : $"Hand: {allCards.Count}";
             if (director.IsPresentationLocked)
-                selectionText.text = director.DealVisibleCount >= 27 ? "正在揭示本局级牌" : "牌正在依次到手";
+                selectionText.text = director.DealVisibleCount >= 27 ? "Revealing trump rank…" : "Cards arriving…";
             else if (match.Phase == MatchPhase.TributeReturn && match.ActiveSeat == PlayerSeat.South)
-                selectionText.text = director.SelectedCount == 1 ? "确认要还出的牌" : "请选择一张牌还贡";
+                selectionText.text = director.SelectedCount == 1 ? "Confirm return tribute card" : "Select a card to return";
             else if (director.SelectedCount > 0)
-                selectionText.text = director.CanSubmitSelection ? $"已选 {director.SelectedCount} 张 · 可以出牌" : $"已选 {director.SelectedCount} 张 · 牌型不成立";
+                selectionText.text = director.CanSubmitSelection ? $"{director.SelectedCount} selected · Ready" : $"{director.SelectedCount} selected · Invalid";
             else
-                selectionText.text = match.Phase == MatchPhase.Playing && match.ActiveSeat == PlayerSeat.South ? "请选择要出的牌" : "等待其他牌手";
+                selectionText.text = match.Phase == MatchPhase.Playing && match.ActiveSeat == PlayerSeat.South ? "Select cards to play" : "Waiting for others";
         }
 
         private const float HandCardWidth = 96f;
@@ -794,9 +794,9 @@ namespace Guandan.UI
         {
             var match = director.Match;
             if (match == null) return;
-            SetButtonText("ProfileNorth", $"北 · {director.GetProfile(PlayerSeat.North).Name}  {SeatCount(PlayerSeat.North)}");
-            SetButtonText("ProfileEast", $"东 · {director.GetProfile(PlayerSeat.East).Name}  {SeatCount(PlayerSeat.East)}");
-            SetButtonText("ProfileWest", $"西 · {director.GetProfile(PlayerSeat.West).Name}  {SeatCount(PlayerSeat.West)}");
+            SetButtonText("ProfileNorth", $"N · {director.GetProfile(PlayerSeat.North).Name}  {SeatCount(PlayerSeat.North)}");
+            SetButtonText("ProfileEast", $"E · {director.GetProfile(PlayerSeat.East).Name}  {SeatCount(PlayerSeat.East)}");
+            SetButtonText("ProfileWest", $"W · {director.GetProfile(PlayerSeat.West).Name}  {SeatCount(PlayerSeat.West)}");
         }
 
         private void RenderTurnCallouts()
@@ -809,10 +809,10 @@ namespace Guandan.UI
             var match = director.Match;
             var value = match.Phase switch
             {
-                MatchPhase.Playing => match.ActiveSeat == PlayerSeat.South ? "轮到你出牌" : "思考中…",
-                MatchPhase.TributePayment => "正在进贡…",
-                MatchPhase.TributeAssignment => "确认进贡归属…",
-                MatchPhase.TributeReturn => match.ActiveSeat == PlayerSeat.South ? "请选择还贡牌" : "正在还贡…",
+                MatchPhase.Playing => match.ActiveSeat == PlayerSeat.South ? "Your turn to play" : "Thinking…",
+                MatchPhase.TributePayment => "Paying tribute…",
+                MatchPhase.TributeAssignment => "Assigning tribute…",
+                MatchPhase.TributeReturn => match.ActiveSeat == PlayerSeat.South ? "Choose return tribute" : "Returning tribute…",
                 _ => string.Empty,
             };
             if (string.IsNullOrEmpty(value)) return;
@@ -896,20 +896,20 @@ namespace Guandan.UI
                 steadyButtonUi.gameObject.SetActive(false); riskyButtonUi.gameObject.SetActive(false);
                 enterTreasureButtonUi.gameObject.SetActive(false); continueButtonUi.gameObject.SetActive(false);
                 restartButtonUi.gameObject.SetActive(ready);
-                if (!ready) routeTitleText.text = "最后一步 · 宝藏即将揭晓";
+                if (!ready) routeTitleText.text = "Final Step · Treasure incoming!";
                 var won = director.Race.WinningTeam == 0;
                 matchResultArt.texture = won ? victoryArt : defeatArt;
-                matchResultTitle.text = won ? "恭喜获胜" : "惜败此局";
+                matchResultTitle.text = won ? "VICTORY!" : "DEFEATED";
                 matchResultTitle.color = won ? new Color(1f, 0.88f, 0.49f) : new Color(0.87f, 0.92f, 0.93f);
                 matchResultDetail.text = won
-                    ? $"你与队友率先取得地宫宝藏\n青队 {director.Race.GetPosition(0)} 格  ·  朱队 {director.Race.GetPosition(1)} 格"
-                    : $"对手率先取得宝藏 · 再战一局\n青队 {director.Race.GetPosition(0)} 格  ·  朱队 {director.Race.GetPosition(1)} 格";
+                    ? $"You and your partner claimed the tomb treasure!\nJade {director.Race.GetPosition(0)}  ·  Red {director.Race.GetPosition(1)} tiles"
+                    : $"Opponents claimed the treasure — play again!\nJade {director.Race.GetPosition(0)}  ·  Red {director.Race.GetPosition(1)} tiles";
                 return;
             }
             var result = director.Match.LastHandResult;
-            var winningTeamName = result.WinningTeam == 0 ? "青队" : "朱队";
-            var firstName = result.FirstSeat == PlayerSeat.South ? "你" : director.GetProfile(result.FirstSeat).Name;
-            routeSummaryText.text = $"本局发掘记录 · {winningTeamName} {FinishCopy(result)} · 基础前进 {result.BaseSteps} 格";
+            var winningTeamName = result.WinningTeam == 0 ? "Jade Team" : "Red Team";
+            var firstName = result.FirstSeat == PlayerSeat.South ? "You" : director.GetProfile(result.FirstSeat).Name;
+            routeSummaryText.text = $"Round · {winningTeamName} {FinishCopy(result)} · Advance {result.BaseSteps} tile{(result.BaseSteps != 1 ? "s" : "")}";
             routeResultText.text = director.RouteResultMessage;
             RenderRouteTrack(blueRouteCells, director.Race.GetPosition(0), new Color(0.20f, 0.66f, 0.58f));
             RenderRouteTrack(redRouteCells, director.Race.GetPosition(1), new Color(0.78f, 0.24f, 0.16f));
@@ -929,27 +929,27 @@ namespace Guandan.UI
             enterTreasureButtonUi.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -44f);
             steadyButtonUi.interactable = humanChoice && viewReady;
             riskyButtonUi.interactable = humanChoice && viewReady;
-            SetButtonText("Steady", $"稳当推进\n确定前进 {result.BaseSteps} 格");
-            SetButtonText("Risky", "深入探方\n翻倍 10% · +1 格 15% · 正常 55%\n少 1 格 12% · 倒退 1 格 8%");
+            SetButtonText("Steady", $"Steady Advance\n+{result.BaseSteps} tile{(result.BaseSteps != 1 ? \"s\" : \"\")}");
+            SetButtonText("Risky", "Risky Dig\n×2 (10%)  +1 (15%)  Normal (55%)\n−1 (12%)  Retreat (8%)");
             if (!director.RaceResolved)
             {
-                routeTitleText.text = viewReady ? (humanChoice ? "选择发掘路线" : $"{firstName}正在选择探方") : "本局结算 · 前往夺宝";
+                routeTitleText.text = viewReady ? (humanChoice ? "Choose Route" : $"{firstName} is choosing…") : "Round done · To Race";
                 routeAdviceText.text = humanChoice
                     ? (viewReady
-                        ? (director.GetProfile(PlayerSeat.North).RiskBias > 0.5f ? "队友建议：可以深入探一步。" : "队友建议：先保住这次发现。")
-                        : "点击上方按钮切换到夺宝路线视角。")
-                    : (viewReady ? $"{director.GetProfile(result.FirstSeat).Title}会结合当前位置决定是否深入。" : "等待切换到夺宝路线视角…");
-                routeResultText.text = humanChoice && viewReady ? string.Empty : (viewReady ? "等待对手队选择…" : string.Empty);
+                        ? (director.GetProfile(PlayerSeat.North).RiskBias > 0.5f ? "Partner: dig one step deeper." : "Partner: secure this advance.")
+                        : "Tap the button above to switch to the Race view.")
+                    : (viewReady ? $"{director.GetProfile(result.FirstSeat).Title} will decide based on position." : "Switching to Race view…");
+                routeResultText.text = humanChoice && viewReady ? string.Empty : (viewReady ? "Waiting for opponents…" : string.Empty);
             }
             else if (director.Race.IsComplete)
             {
-                routeTitleText.text = $"{(director.Race.WinningTeam == 0 ? "青队取得宝藏" : "朱队取得宝藏")}";
-                routeAdviceText.text = "中央出土宝箱已经开启。";
+                routeTitleText.text = $"{(director.Race.WinningTeam == 0 ? "Jade Team Wins!" : "Red Team Wins!")}";
+                routeAdviceText.text = "The central chest has been opened.";
             }
             else
             {
-                routeTitleText.text = "本次推进完成";
-                routeAdviceText.text = "宝箱仍在地宫深处，继续下一局。";
+                routeTitleText.text = "Advance Complete";
+                routeAdviceText.text = "The chest remains in the tomb depths — play on!";
             }
             continueButtonUi.gameObject.SetActive(director.RaceResolved && !director.Race.IsComplete);
             restartButtonUi.gameObject.SetActive(director.RaceResolved && director.Race.IsComplete);
@@ -968,9 +968,9 @@ namespace Guandan.UI
             var partnerIndex = result.Placements.ToList().IndexOf(GuandanMatchEngine.PartnerOf(result.FirstSeat));
             return partnerIndex switch
             {
-                1 => "头游 · 二游",
-                2 => "头游 · 三游",
-                _ => "头游 · 末游",
+                1 => "1st & 2nd",
+                2 => "1st & 3rd",
+                _ => "1st & 4th",
             };
         }
 
@@ -1024,7 +1024,7 @@ namespace Guandan.UI
                     bannerRect.anchorMin=bannerRect.anchorMax=new Vector2(0.5f,1f);
                     bannerRect.anchoredPosition=new Vector2(0f,-height-60f);
                     banner.GetComponent<Image>().raycastTarget=false;
-                    var meaning=CreateText("WildcardExplanationText","配作 "+string.Join("、",meanings),bannerRect,Vector2.zero,72,TextAnchor.MiddleCenter,new Color(1f,0.92f,0.62f));
+                    var meaning=CreateText("WildcardExplanationText","Wild → "+string.Join(", ",meanings),bannerRect,Vector2.zero,72,TextAnchor.MiddleCenter,new Color(1f,0.92f,0.62f));
                     meaning.rectTransform.sizeDelta=new Vector2(736f,108f);
                     meaning.resizeTextForBestFit=false; meaning.fontStyle=FontStyle.Bold;
                     cardRoot.sizeDelta=new Vector2(858f,height+120f);
@@ -1051,7 +1051,7 @@ namespace Guandan.UI
             var width = Mathf.Clamp(exposedWidth - 6f, 30f, size.x * 0.43f);
             var badge = CreatePanel("WildcardBadge", cardRect, new Vector2(-size.x * 0.5f + width * 0.5f + 4f, -size.y * 0.29f), new Vector2(width, size.y * 0.31f), new Color(0.54f, 0.045f, 0.018f, 1f));
             badge.GetComponent<Image>().raycastTarget = false;
-            var copy = used ? $"配\n{GuandanMatchEngine.RankLabel(use.RepresentedRank)}" : "配";
+            var copy = used ? $"Wild\n→{GuandanMatchEngine.RankLabel(use.RepresentedRank)}" : "Wild";
             var label = CreateText("WildcardMeaning", copy, badge.transform, Vector2.zero,
                 Mathf.RoundToInt(Mathf.Min(size.y * 0.145f, width * 0.8f)), TextAnchor.MiddleCenter, new Color(1f, 0.92f, 0.62f));
             label.rectTransform.sizeDelta = new Vector2(width, size.y * 0.31f);
@@ -1138,7 +1138,7 @@ namespace Guandan.UI
         private Image[] CreateRouteTrack(string name, Transform parent, Vector2 position, Color activeColor)
         {
             var track = CreateRect(name, parent, position, new Vector2(760f, 52f));
-            var label = CreateText("Label", name.StartsWith("Blue") ? "青" : "朱", track, new Vector2(-358f, 0f), 26, TextAnchor.MiddleCenter, activeColor);
+            var label = CreateText("Label", name.StartsWith("Blue") ? "J" : "R", track, new Vector2(-358f, 0f), 26, TextAnchor.MiddleCenter, activeColor);
             label.fontStyle = FontStyle.Bold;
             label.rectTransform.sizeDelta = new Vector2(52f, 48f);
             var cells = new Image[TreasureRace.TrackLength];
@@ -1240,7 +1240,7 @@ namespace Guandan.UI
             ApplySkin(stampImage, tombButtonSprite, Color.white);
             stampImage.color = new Color(0.58f, 0.10f, 0.055f, 0.94f);
             stampImage.raycastTarget = false;
-            var stamp = CreateText("Seal", $"炸弹\n{label}", stampPanel.transform, Vector2.zero, 42, TextAnchor.MiddleCenter, new Color(1f, 0.84f, 0.45f));
+            var stamp = CreateText("Seal", $"BOMB\n{label}", stampPanel.transform, Vector2.zero, 42, TextAnchor.MiddleCenter, new Color(1f, 0.84f, 0.45f));
             stamp.rectTransform.sizeDelta = new Vector2(430f, 168f);
             stamp.fontStyle = FontStyle.Bold;
             var sparks = new Image[12];
@@ -1359,7 +1359,7 @@ namespace Guandan.UI
             var group = panel.AddComponent<CanvasGroup>();
             var accent = CreatePanelStatic("TeamAccent", panel.transform, new Vector2(0f, -40f), new Vector2(112f, 3f), color);
             accent.GetComponent<Image>().raycastTarget = false;
-            var label = CreateText("Label", $"{SeatName(seat)}\n第 {place} 名", panel.transform, new Vector2(0f, -2f), 23, TextAnchor.MiddleCenter, new Color(0.96f, 0.86f, 0.64f));
+            var label = CreateText("Label", $"{SeatName(seat)}\n#{place}", panel.transform, new Vector2(0f, -2f), 23, TextAnchor.MiddleCenter, new Color(0.96f, 0.86f, 0.64f));
             label.rectTransform.sizeDelta = new Vector2(228f, 82f);
             label.fontStyle = FontStyle.Bold;
             var shadow = label.gameObject.AddComponent<Shadow>();
@@ -1378,7 +1378,7 @@ namespace Guandan.UI
 
         private IEnumerator FlyCardRoutine(Card card, PlayerSeat from, PlayerSeat to, bool returning)
         {
-            yield return FlyCardArcRoutine(card, SeatEffectPosition(from), SeatEffectPosition(to), returning ? "还贡" : "进贡", 0f);
+            yield return FlyCardArcRoutine(card, SeatEffectPosition(from), SeatEffectPosition(to), returning ? "Return" : "Tribute", 0f);
         }
 
         private IEnumerator FlyCardArcRoutine(Card card, Vector2 start, Vector2 end, string title, float delay)
@@ -1406,8 +1406,8 @@ namespace Guandan.UI
             panel.GetComponent<Image>().raycastTarget = false;
             var group = panel.AddComponent<CanvasGroup>();
             var message = chestOpened
-                ? $"{(team == 0 ? "青队" : "朱队")}抵达第 {TreasureRace.TrackLength} 格\n宝箱开启"
-                : $"{(team == 0 ? "青队" : "朱队")}推进\n第 {from} 格  →  第 {to} 格";
+                ? $"{(team == 0 ? "Jade" : "Red")} reaches tile {TreasureRace.TrackLength}!\nChest Opened!"
+                : $"{(team == 0 ? "Jade" : "Red")} advances\nTile {from}  →  Tile {to}";
             var label = CreateText("Label", message, panel.transform, Vector2.zero, chestOpened ? 38 : 28, TextAnchor.MiddleCenter, new Color(1f, 0.86f, 0.50f));
             label.rectTransform.sizeDelta = new Vector2(590f, 150f);
             for (var time = 0f; time < 1.1f; time += Time.unscaledDeltaTime)
@@ -1437,11 +1437,11 @@ namespace Guandan.UI
         {
             if (!profilePanel.activeSelf) return;
             var profile = director.GetProfile(profileSeat);
-            profileRoleText.text = $"{SeatName(profileSeat)} · 人物资料";
+            profileRoleText.text = $"{SeatName(profileSeat)} · Profile";
             profileNameText.text = profile.Name;
             profileTitleText.text = profile.Title;
             profileBodyText.text = profile.Description;
-            profileTraitsText.text = $"性格：{string.Join("  ·  ", profile.Traits ?? Array.Empty<string>())}";
+            profileTraitsText.text = $"Traits: {string.Join("  ·  ", profile.Traits ?? Array.Empty<string>())}";
             profileReactionText.text = profile.Reaction;
         }
 
@@ -1597,7 +1597,7 @@ namespace Guandan.UI
             sealRect.anchoredPosition = new Vector2(0f, rect.sizeDelta.y * 0.5f - 31f);
             var sealText = seal.GetComponent<Text>();
             sealText.font = ResolveFont();
-            sealText.text = index switch { 0 => "身份签  ·  甲", 1 => "身份签  ·  乙", _ => "身份签  ·  丙" };
+            sealText.text = index switch { 0 => "Role Lot · A", 1 => "Role Lot · B", _ => "Role Lot · C" };
             sealText.fontSize = 13;
             sealText.alignment = TextAnchor.MiddleCenter;
             sealText.color = new Color(0.74f, 0.84f, 0.76f, 1f);
@@ -1698,19 +1698,19 @@ namespace Guandan.UI
             if (match == null) return "";
             for (var index = 0; index < match.FinishOrder.Count; index++)
             {
-                if (match.FinishOrder[index] == seat) return $"第 {index + 1} 名";
+                if (match.FinishOrder[index] == seat) return $"#{index + 1}";
             }
-            if (director.IsPresentationLocked) return "收牌中";
+            if (director.IsPresentationLocked) return "Dealing";
             var count = match.GetHand(seat).Count;
-            return count > 10 ? "?张" : $"{count}张";
+            return count > 10 ? "?" : $"{count}";
         }
 
         private static string SeatName(PlayerSeat seat) => seat switch
         {
-            PlayerSeat.South => "你",
-            PlayerSeat.East => "东家",
-            PlayerSeat.North => "队友",
-            PlayerSeat.West => "西家",
+            PlayerSeat.South => "You",
+            PlayerSeat.East => "East",
+            PlayerSeat.North => "Partner",
+            PlayerSeat.West => "West",
             _ => seat.ToString(),
         };
 
@@ -1725,7 +1725,7 @@ namespace Guandan.UI
                 CardSuit.Spades => "♠",
                 _ => string.Empty,
             };
-            var wild = card.IsWildcard(levelRank) ? "\n配" : "";
+            var wild = card.IsWildcard(levelRank) ? "\nWILD" : "";
             return $"{card.RankLabel}\n{suit}{wild}";
         }
     }

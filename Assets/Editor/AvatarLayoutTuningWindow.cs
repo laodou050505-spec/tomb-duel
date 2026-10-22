@@ -11,10 +11,10 @@ namespace Guandan.EditorTools
         private AvatarLayoutSettings settings;
         private Vector2 scroll;
 
-        [MenuItem("掼蛋/人物位置与大小调节")]
+        [MenuItem("TombDuel/Avatar Layout Tuning")]
         public static void Open()
         {
-            var window = GetWindow<AvatarLayoutTuningWindow>("人物调节");
+            var window = GetWindow<AvatarLayoutTuningWindow>("Avatar Layout");
             window.minSize = new Vector2(420f, 610f);
             window.Show();
         }
@@ -29,21 +29,21 @@ namespace Guandan.EditorTools
             if (settings == null) settings = EnsureSettingsAsset();
             scroll = EditorGUILayout.BeginScrollView(scroll);
             EditorGUILayout.Space(10f);
-            EditorGUILayout.LabelField("牌桌人物布局", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Table Avatar Layout", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox(
                 Application.isPlaying
-                    ? "当前为实时预览：修改后会立即应用到三名人物和 f4 凳子。"
-                    : "这些参数不会移动或保存墓穴场景。进入 Play 后可实时预览，数值会保留到下次运行。",
+                    ? "Live preview: changes apply immediately to all three avatars and the seat box."
+                    : "These parameters do not move or save the tomb scene. Enter Play mode to preview; values persist until next run.",
                 MessageType.Info);
 
             EditorGUI.BeginChangeCheck();
-            Undo.RecordObject(settings, "调整掼蛋人物布局");
-            settings.globalScale = EditorGUILayout.Slider("整体大小倍率", settings.globalScale, 0.75f, 1.45f);
-            settings.chestToTableOffset = EditorGUILayout.Slider("胸口相对桌面高度", settings.chestToTableOffset, -0.45f, 0.45f);
-            settings.chairToHipGap = EditorGUILayout.Slider("箱顶与臀部间距", settings.chairToHipGap, 0.02f, 0.28f);
-            DrawSeat("东家 · 右侧对手", settings.east);
-            DrawSeat("北家 · 对面队友", settings.north);
-            DrawSeat("西家 · 左侧对手", settings.west);
+            Undo.RecordObject(settings, "Adjust TombDuel Avatar Layout");
+            settings.globalScale = EditorGUILayout.Slider("Global Scale", settings.globalScale, 0.75f, 1.45f);
+            settings.chestToTableOffset = EditorGUILayout.Slider("Chest-to-Table Offset", settings.chestToTableOffset, -0.45f, 0.45f);
+            settings.chairToHipGap = EditorGUILayout.Slider("Seat-to-Hip Gap", settings.chairToHipGap, 0.02f, 0.28f);
+            DrawSeat("East · Right Opponent", settings.east);
+            DrawSeat("North · Partner Across", settings.north);
+            DrawSeat("West · Left Opponent", settings.west);
             if (EditorGUI.EndChangeCheck())
             {
                 EditorUtility.SetDirty(settings);
@@ -54,11 +54,11 @@ namespace Guandan.EditorTools
             EditorGUILayout.Space(14f);
             using (new EditorGUILayout.HorizontalScope())
             {
-                if (GUILayout.Button("应用到运行中的人物", GUILayout.Height(34f))) ApplyToRunningAvatars();
-                if (GUILayout.Button("恢复推荐值", GUILayout.Height(34f))) ResetRecommended();
+                if (GUILayout.Button("Apply to Running Avatars", GUILayout.Height(34f))) ApplyToRunningAvatars();
+                if (GUILayout.Button("Reset Recommended", GUILayout.Height(34f))) ResetRecommended();
             }
             EditorGUILayout.Space(8f);
-            EditorGUILayout.LabelField("位置偏移使用场景米制单位；Y 为上下，Yaw 为人物左右转向。", EditorStyles.wordWrappedMiniLabel);
+            EditorGUILayout.LabelField("Position offsets use scene metres. Y = up/down, Yaw = avatar rotation.", EditorStyles.wordWrappedMiniLabel);
             EditorGUILayout.EndScrollView();
         }
 
@@ -68,10 +68,10 @@ namespace Guandan.EditorTools
             EditorGUILayout.LabelField(label, EditorStyles.boldLabel);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
-                seat.positionOffset = EditorGUILayout.Vector3Field("位置偏移", seat.positionOffset);
-                seat.scale = EditorGUILayout.Slider("人物大小", seat.scale, 0.65f, 1.65f);
-                seat.yawOffset = EditorGUILayout.Slider("朝向微调 Yaw", seat.yawOffset, -45f, 45f);
-                seat.chairHeightMultiplier = EditorGUILayout.Slider("f4 箱子高度", seat.chairHeightMultiplier, 0.65f, 1.45f);
+                seat.positionOffset = EditorGUILayout.Vector3Field("Position Offset", seat.positionOffset);
+                seat.scale = EditorGUILayout.Slider("Avatar Scale", seat.scale, 0.65f, 1.65f);
+                seat.yawOffset = EditorGUILayout.Slider("Yaw Offset", seat.yawOffset, -45f, 45f);
+                seat.chairHeightMultiplier = EditorGUILayout.Slider("Seat Height Mult", seat.chairHeightMultiplier, 0.65f, 1.45f);
             }
         }
 
@@ -85,7 +85,7 @@ namespace Guandan.EditorTools
 
         private void ResetRecommended()
         {
-            Undo.RecordObject(settings, "恢复人物推荐布局");
+            Undo.RecordObject(settings, "Reset Avatar Layout to Recommended");
             settings.globalScale = 1f;
             settings.chestToTableOffset = 0f;
             settings.chairToHipGap = 0.08f;

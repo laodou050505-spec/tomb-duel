@@ -24,7 +24,7 @@ namespace Guandan.EditorTools
             "Assets/中国风墓穴考古/5/",
         };
 
-        [MenuItem("掼蛋/移除场景人物与 f4 箱子")]
+        [MenuItem("TombDuel/Remove Scene Avatars and Seat Boxes")]
         public static void RemoveSceneActors()
         {
             if (Application.isPlaying)

@@ -8,7 +8,7 @@ namespace Guandan.Editor
 {
     public static class GuandanRuleSmokeTests
     {
-        [MenuItem("掼蛋/验证规则烟测")]
+        [MenuItem("TombDuel/Run Rule Smoke Tests")]
         public static void Run()
         {
             var deck = Deck.CreateDoubleDeck();

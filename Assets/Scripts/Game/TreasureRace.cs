@@ -38,12 +38,12 @@ namespace Guandan.Game
 
         public string Label => Outcome switch
         {
-            RiskOutcome.Double => "灵光乍现，推进翻倍",
-            RiskOutcome.PlusOne => "抢先一步，多进一格",
-            RiskOutcome.Normal => "按步推进",
-            RiskOutcome.MinusOne => "脚下一滑，少进一格",
-            RiskOutcome.Retreat => "触发机关，倒退一格",
-            _ => "推进",
+            RiskOutcome.Double => "Flash of insight — advance doubled!",
+            RiskOutcome.PlusOne => "Quick step — advance +1!",
+            RiskOutcome.Normal => "Steady advance",
+            RiskOutcome.MinusOne => "A stumble — advance −1",
+            RiskOutcome.Retreat => "Trap triggered — retreat 1 tile",
+            _ => "Advance",
         };
     }
 

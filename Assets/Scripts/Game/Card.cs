@@ -48,8 +48,8 @@ namespace Guandan.Game
         {
             get
             {
-                if (IsSmallJoker) return "小王";
-                if (IsBigJoker) return "大王";
+                if (IsSmallJoker) return "Jkr";
+                if (IsBigJoker) return "BIG";
                 return Rank switch
                 {
                     11 => "J",
@@ -63,10 +63,10 @@ namespace Guandan.Game
 
         public string SuitLabel => Suit switch
         {
-            CardSuit.Clubs => "梅",
-            CardSuit.Diamonds => "方",
-            CardSuit.Hearts => "红",
-            CardSuit.Spades => "黑",
+            CardSuit.Clubs => "♣",
+            CardSuit.Diamonds => "♦",
+            CardSuit.Hearts => "♥",
+            CardSuit.Spades => "♠",
             _ => string.Empty,
         };
 

@@ -159,7 +159,7 @@ namespace Guandan.Game
             foreach (var seat in AllSeats) SortHand(hands[seat]);
 
             ActiveSeat = previousPlacements.Count == 0 ? markerOwner : firstDrawer;
-            Raise(MatchEventType.HandStarted, ActiveSeat, $"第 {HandNumber} 局，级牌 {RankLabel(LevelRank)}");
+            Raise(MatchEventType.HandStarted, ActiveSeat, $"Round {HandNumber} · Trump Rank {RankLabel(LevelRank)}");
             NotifyState();
         }
 
@@ -203,12 +203,12 @@ namespace Guandan.Game
         public bool PayTribute(PlayerSeat seat, Card card)
         {
             if (!GetLegalTributeCards(seat).Any(legal => legal.Id == card?.Id))
-                return Reject(seat, "这张牌不是当前可进贡的最大牌。\n");
+                return Reject(seat, "That card is not your highest tribute card.\n");
 
             var exchange = tributeExchanges.First(item => item.Payer == seat && item.TributeCard == null);
             hands[seat].RemoveAll(item => item.Id == card.Id);
             exchange.TributeCard = card;
-            Raise(MatchEventType.TributePaid, seat, $"{SeatLabel(seat)}完成进贡", card: card);
+            Raise(MatchEventType.TributePaid, seat, $"{SeatLabel(seat)} paid tribute", card: card);
 
             var unpaid = tributeExchanges.FirstOrDefault(item => item.TributeCard == null);
             if (unpaid != null)
@@ -252,7 +252,7 @@ namespace Guandan.Game
         public bool AssignEqualTributes()
         {
             if (Phase != MatchPhase.TributeAssignment || tributeExchanges.Count != 2)
-                return Reject(ActiveSeat, "当前不需要分配同点进贡。\n");
+                return Reject(ActiveSeat, "No equal tribute split needed right now.\n");
 
             AssignTributes(
                 new[]
@@ -266,38 +266,38 @@ namespace Guandan.Game
 
         public bool ReturnTribute(PlayerSeat seat, Card card)
         {
-            if (!GetLegalReturnCards(seat).Any(legal => legal.Id == card?.Id)) return Reject(seat, "这张牌不能用于还贡。\n");
+            if (!GetLegalReturnCards(seat).Any(legal => legal.Id == card?.Id)) return Reject(seat, "That card cannot be used for Return Tribute.\n");
             var exchange = tributeExchanges.First(item => item.Recipient == seat && !item.IsReturned);
             MoveCard(card, seat, exchange.Payer);
             exchange.ReturnCard = card;
-            Raise(MatchEventType.TributeReturned, seat, $"{SeatLabel(seat)}向{SeatLabel(exchange.Payer)}还贡", exchange.Payer, card: card);
+            Raise(MatchEventType.TributeReturned, seat, $"{SeatLabel(seat)} returned tribute to {SeatLabel(exchange.Payer)}", exchange.Payer, card: card);
             ContinueTributeReturnsOrBeginPlay();
             return true;
         }
 
         public bool Play(PlayerSeat seat, PlayPattern requestedPlay)
         {
-            if (Phase != MatchPhase.Playing || seat != ActiveSeat) return Reject(seat, "还没轮到该玩家。\n");
-            if (requestedPlay == null) return Reject(seat, "没有选择有效牌型。\n");
+            if (Phase != MatchPhase.Playing || seat != ActiveSeat) return Reject(seat, "Not your turn yet.\n");
+            if (requestedPlay == null) return Reject(seat, "No valid play selected.\n");
             var selected = requestedPlay.Cards
                 .Select(card => hands[seat].FirstOrDefault(item => item.Id == card.Id))
                 .Where(card => card != null)
                 .ToArray();
-            if (selected.Length != requestedPlay.Cards.Count) return Reject(seat, "手牌状态已经变化。\n");
+            if (selected.Length != requestedPlay.Cards.Count) return Reject(seat, "Hand has changed — please retry.\n");
             var legalVariants = GuandanRuleEngine.FindPatternsForSelection(selected, LevelRank, CurrentPlay);
             var legal = legalVariants.FirstOrDefault(play => play.Identity == requestedPlay.Identity) ?? legalVariants.FirstOrDefault();
-            if (legal == null) return Reject(seat, "所选牌不能压过桌面牌型。\n");
+            if (legal == null) return Reject(seat, "Those cards cannot beat the current play.\n");
 
             foreach (var card in legal.Cards) hands[seat].RemoveAll(item => item.Id == card.Id);
             CurrentPlay = legal;
             CurrentPlaySeat = seat;
             consecutivePasses = 0;
-            Raise(MatchEventType.CardsPlayed, seat, $"{SeatLabel(seat)}打出{legal.Label}", play: legal);
+            Raise(MatchEventType.CardsPlayed, seat, $"{SeatLabel(seat)} played {legal.Label}", play: legal);
 
             if (hands[seat].Count == 0)
             {
                 finishOrder.Add(seat);
-                Raise(MatchEventType.PlayerFinished, seat, $"{SeatLabel(seat)}获得第 {finishOrder.Count} 名");
+                Raise(MatchEventType.PlayerFinished, seat, $"{SeatLabel(seat)} finished #{finishOrder.Count}");
                 if (ShouldFinishHand())
                 {
                     FinishHand();
@@ -312,9 +312,9 @@ namespace Guandan.Game
 
         public bool Pass(PlayerSeat seat)
         {
-            if (Phase != MatchPhase.Playing || seat != ActiveSeat || CurrentPlay == null) return Reject(seat, "当前不能不出。\n");
+            if (Phase != MatchPhase.Playing || seat != ActiveSeat || CurrentPlay == null) return Reject(seat, "Cannot pass right now.\n");
             consecutivePasses++;
-            Raise(MatchEventType.Passed, seat, $"{SeatLabel(seat)}不出");
+            Raise(MatchEventType.Passed, seat, $"{SeatLabel(seat)} passed");
 
             var activeCount = AllSeats.Count(other => !HasFinished(other));
             var ownerStillActive = !HasFinished(CurrentPlaySeat);
@@ -325,7 +325,7 @@ namespace Guandan.Game
                 CurrentPlay = null;
                 consecutivePasses = 0;
                 ActiveSeat = leader;
-                Raise(MatchEventType.TrickReset, leader, $"新一轮由{SeatLabel(leader)}领出");
+                Raise(MatchEventType.TrickReset, leader, $"New trick — {SeatLabel(leader)} leads");
             }
             else
             {
@@ -368,7 +368,7 @@ namespace Guandan.Game
             if (bigJokers >= 2)
             {
                 tributeExchanges.Clear();
-                Raise(MatchEventType.AntiTribute, payers[0], "两张大王抗贡，本局免贡");
+                Raise(MatchEventType.AntiTribute, payers[0], "Two Big Jokers — Anti-Tribute: no tribute this round");
                 BeginPlay();
                 return;
             }
@@ -392,7 +392,7 @@ namespace Guandan.Game
                 Raise(
                     MatchEventType.TributeAssigned,
                     assignment.Payer,
-                    $"{SeatLabel(assignment.Payer)}向{SeatLabel(assignment.Recipient)}进贡",
+                    $"{SeatLabel(assignment.Payer)} paid tribute to {SeatLabel(assignment.Recipient)}",
                     assignment.Recipient,
                     card: exchange.TributeCard);
             }
@@ -458,7 +458,7 @@ namespace Guandan.Game
                 BaseSteps = baseSteps,
             };
             Phase = MatchPhase.HandComplete;
-            Raise(MatchEventType.HandFinished, finishOrder[0], $"{(winningTeam == 0 ? "青队" : "朱队")}推进 {baseSteps} 格", handResult: LastHandResult);
+            Raise(MatchEventType.HandFinished, finishOrder[0], $"{(winningTeam == 0 ? \"Jade Team\" : \"Red Team\")} advances {baseSteps} tile{(baseSteps != 1 ? \"s\" : \"\")}", handResult: LastHandResult);
             NotifyState();
         }
 
@@ -542,10 +542,10 @@ namespace Guandan.Game
 
         public static string SeatLabel(PlayerSeat seat) => seat switch
         {
-            PlayerSeat.South => "你",
-            PlayerSeat.East => "东家",
-            PlayerSeat.North => "队友",
-            PlayerSeat.West => "西家",
+            PlayerSeat.South => "You",
+            PlayerSeat.East => "East",
+            PlayerSeat.North => "Partner",
+            PlayerSeat.West => "West",
             _ => seat.ToString(),
         };
     }

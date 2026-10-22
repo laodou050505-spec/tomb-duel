@@ -51,7 +51,7 @@ namespace Guandan.EditorTools
             Debug.Log($"[GuandanAvatarAudit] {report.Length} chars written to {output}");
         }
 
-        [MenuItem("掼蛋/审计当前人物动画与摆放")]
+        [MenuItem("TombDuel/Audit Avatar Animations and Placement")]
         public static void WriteCurrent()
         {
             var scene = EditorSceneManager.GetActiveScene();

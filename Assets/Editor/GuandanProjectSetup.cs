@@ -26,7 +26,7 @@ namespace Guandan.Editor
         public const string ScenePath = "Assets/Scenes/GuandanTomb.unity";
         private const string RootName = "掼蛋夺宝 · 可编辑墓室";
 
-        [MenuItem("掼蛋/一键创建或重建可编辑墓穴场景")]
+        [MenuItem("TombDuel/Rebuild Editable Tomb Scene")]
         public static void CreateEditableTombScene()
         {
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
@@ -75,7 +75,7 @@ namespace Guandan.Editor
             Debug.Log($"[Guandan] 可编辑场景已保存：{ScenePath}。Environment 内物件均可直接替换。\n");
         }
 
-        [MenuItem("掼蛋/创建或更新独立启动场景")]
+        [MenuItem("TombDuel/Create Title Scene")]
         public static void CreateTitleScene()
         {
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
@@ -93,12 +93,12 @@ namespace Guandan.Editor
             Debug.Log($"[Guandan] 独立启动场景已保存：{TitleScenePath}。它不加载任何 GameplayRoot，START 会 Single 模式切入 {ScenePath}。\n");
         }
 
-        [MenuItem("掼蛋/配置 PICO Android 项目")]
+        [MenuItem("TombDuel/Configure PICO Android")]
         public static void ConfigurePicoProject()
         {
             PlayerSettings.companyName = "GuandanTomb";
-            PlayerSettings.productName = "地宫争锋";
-            PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.guandan.tombxr");
+            PlayerSettings.productName = "TOMB DUEL";
+            PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.guandan.tombxr.en");
             PlayerSettings.defaultScreenWidth = 1600;
             PlayerSettings.defaultScreenHeight = 1000;
             // The PICO runtime owns the stereoscopic display.  Keeping the Android
@@ -155,7 +155,7 @@ namespace Guandan.Editor
             Debug.Log("[Guandan] PICO 配置完成：Android / ARM64 / IL2CPP / Activity / Multiview / PXR Loader / 应用图标。\n");
         }
 
-        [MenuItem("掼蛋/验证项目")]
+        [MenuItem("TombDuel/Verify Project")]
         public static void VerifyProject()
         {
             var failures = new List<string>();
@@ -210,7 +210,7 @@ namespace Guandan.Editor
             VerifyProject();
         }
 
-        [MenuItem("掼蛋/构建/macOS 桌面测试包")]
+        [MenuItem("TombDuel/Build/macOS Desktop")]
         public static void BuildMacPlayer()
         {
             EnsureTitleSceneExists();
@@ -219,23 +219,23 @@ namespace Guandan.Editor
             {
                 scenes = new[] { TitleScenePath, ScenePath },
                 target = BuildTarget.StandaloneOSX,
-                locationPathName = "Builds/macOS/掼蛋.app",
+                locationPathName = "Builds/macOS/TombDuel.app",
                 options = BuildOptions.None,
             });
             if (report.summary.result != BuildResult.Succeeded) throw new BuildFailedException("macOS 测试包构建失败");
         }
 
-        [MenuItem("掼蛋/构建/PICO Android APK")]
+        [MenuItem("TombDuel/Build/PICO Android APK")]
         public static void BuildPicoApk()
         {
             // The title and existing world-space card table ship together in one APK.
             BuildPicoNativeScreenUiApk();
         }
 
-        [MenuItem("掼蛋/构建/PICO 原生VR平面牌UI APK")]
+        [MenuItem("TombDuel/Build/PICO Native VR Flat UI APK")]
         public static void BuildPicoNativeScreenUiApk()
         {
-            BuildPicoFlatUiApkAtPath("Builds/Android/地宫争锋-PICO.apk");
+            BuildPicoFlatUiApkAtPath("Builds/EN/TombDuel-EN-PICO.apk");
         }
 
         private static void BuildPicoFlatUiApkAtPath(string outputPath)
