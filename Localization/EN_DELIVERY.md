@@ -125,7 +125,14 @@ f56fad3 fix: 修复 C# 10 插值字符串内不合法的 \" 转义引号
 - Output: `Builds/EN/TombDuel-EN-PICO.apk`
 - Build method: `Guandan.Editor.GuandanProjectSetup.BuildPicoApk`
 
-Note: Build 1 and 2 failed due to C# 10 interpolated string syntax errors (fixed in commit f56fad3). Build 3 failed due to wrong namespace (`TombDuel.Editor` instead of `Guandan.Editor`). Build 4 succeeded (SHA: 73f2be2f...). Build 5 includes all translation fixes (Steady Dig / Bold Dig / Consecutive Triples / Draw Your Partner / ordinals / Expedition Leader / AI profile rewrites).
+**Build 8 (final):**
+**APK:** `Builds/EN/TombDuel-EN-PICO.apk`
+**Size:** 79 MB
+**SHA-256:** `bbd54629e3acd0971e3e86e33168ff16e1bc1d19b61d30b677ac5bd6615e4cfb`
+**Build date:** 2026-10-22 14:13
+**New cover:** `Assets/Resources/GuandanUI/TitleCover.png` + `Assets/Resources/GuandanUI/TripoTitle/01_generated_image_url.png` — bronze/verdigris "TOMB DUEL", no "GUANDAN TREASURE" subtitle
+
+Note: Build 1 and 2 failed due to C# 10 interpolated string syntax errors (fixed in commit f56fad3). Build 3 failed due to wrong namespace (`TombDuel.Editor` instead of `Guandan.Editor`). Build 4 succeeded (SHA: 73f2be2f...). Build 5 includes all translation fixes. Build 6 fixes possessive/verb grammar. Build 7 adds SeatLabelInline (lowercase mid-sentence "you"). Build 8 replaces TitleCover.png and TripoTitle with new banana2-generated "TOMB DUEL" cover (no subtitle).
 
 ---
 
@@ -182,7 +189,9 @@ No new 3D assets generated (Tripo credits: 0 used for this delivery).
 - [x] GameplayComfortValidation.cs updated: EN assertions (S\nJKR, B\nJKR, Wild→8, VICTORY!, DEFEATED), folder → VisualQA/EN-20261022
 - [x] EN_TEXT_TABLE.md updated to reflect all terminology changes
 - [x] UI texture audit: all 11 GuandanUI PNGs inspected — no baked Chinese text found
-- [x] Emulator install: com.guandan.tombxr.en installed on emulator-5554 (`adb install` Success)
+- [x] Emulator install Build 8: `adb -s emulator-5554 install -r` Success
   - Original `com.guandan.tombxr` preserved and coexists
   - Verified: `pm list packages | grep guandan` shows both packages
 - [x] Slot released: /tmp/en-unity-slotA files cleared after build
+- [x] New cover images: TitleCover.png + TripoTitle — bronze/verdigris "TOMB DUEL", no subtitle (banana2)
+- [x] Icon audit: pixel-compare original vs EN APK — 100% identical, no replacement needed
