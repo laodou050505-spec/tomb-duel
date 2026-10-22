@@ -27,10 +27,10 @@ International Guandan community conventions used throughout:
 | 四王炸 | Joker Bomb | Two Small + Two Big Jokers |
 | 小王 | Jkr (Small Joker) | Displayed on card face |
 | 大王 | BIG (Big Joker) | Displayed on card face |
-| 梅花 | ♣ Clubs | Suit symbol |
-| 方块 | ♦ Diamonds | Suit symbol |
-| 红桃 | ♥ Hearts | Suit symbol |
-| 黑桃 | ♠ Spades | Suit symbol |
+| 梅 (梅花) | ♣ | Suit label on card face; Card.cs uses single char "梅" |
+| 方 (方块) | ♦ | Suit label on card face; Card.cs uses single char "方" |
+| 红 (红桃) | ♥ | Suit label on card face; Card.cs uses single char "红" |
+| 黑 (黑桃) | ♠ | Suit label on card face; Card.cs uses single char "黑" |
 | 青队 | Jade Team | Team 0 |
 | 朱队 | Red Team | Team 1 |
 | 南 (你) | You / South | Human player seat |
@@ -139,32 +139,84 @@ International Guandan community conventions used throughout:
 
 ## Game Director (GameDirector.cs)
 
-| Key | Chinese | English | Source | Scene |
-|-----|---------|---------|--------|-------|
-| AI_ShenYan_Name | 沈砚 | Shen Yan | GameDirector.cs | Profile |
-| AI_ShenYan_Title | 谨慎的计算者 | The Careful Calculator | GameDirector.cs | Profile |
-| AI_TangGuo_Name | 唐果 | Tang Guo | GameDirector.cs | Profile |
-| AI_TangGuo_Title | 爱冒险的激进者 | The Thrill-Seeker | GameDirector.cs | Profile |
-| AI_QinZheng_Name | 秦峥 | Qin Zheng | GameDirector.cs | Profile |
-| AI_QinZheng_Title | 强势的压制者 | The Dominant Aggressor | GameDirector.cs | Profile |
-| AI_SuHe_Name | 苏禾 | Su He | GameDirector.cs | Profile |
-| AI_SuHe_Title | 温和的配合者 | The Gentle Cooperator | GameDirector.cs | Profile |
-| AI_LuoFang_Name | 罗放 | Luo Fang | GameDirector.cs | Profile |
-| AI_LuoFang_Title | 爱挑衅的嬉皮士 | The Playful Provocateur | GameDirector.cs | Profile |
-| AI_YeLan_Name | 叶岚 | Ye Lan | GameDirector.cs | Profile |
-| AI_YeLan_Title | 沉默快手 | The Silent Speed Player | GameDirector.cs | Profile |
-| Player_Name | (Human) | You | GameDirector.cs | Profile |
-| Player_Title | 人类发掘队长 | Human Excavation Leader | GameDirector.cs | Profile |
-| PhaseTableLabel | 地宫牌桌 | Tomb Card Table | GameDirector.cs | Phase label |
-| PhaseRaceLabel | 夺宝场景 · 选择路线 | Treasure Race · Choose route | GameDirector.cs | Phase label |
-| PhaseChestLabel | 地宫宝箱开启 | Tomb Chest Opened | GameDirector.cs | Phase label |
-| BtnPlay | 出牌 | Play | GameDirector.cs | Button |
-| BtnPass | 不出 | Pass | GameDirector.cs | Button |
-| BtnHint | 提示 | Hint | GameDirector.cs | Button |
-| BtnNextRound | 下一局 | Next Round | GameDirector.cs | Button |
-| BtnGoToRace | 前往夺宝 | Go to Race | GameDirector.cs | Button |
-| BtnSteady | 稳当 | Steady | GameDirector.cs | Button |
-| BtnRisky | 冒险 | Risky | GameDirector.cs | Button |
+### AI Profiles (line 1514–1519, 145)
+
+All 5 fields per profile: Name, Title (type), Description (long), Note (interaction hint), Traits (array).
+
+| Key | Chinese (原文精确) | English | Source |
+|-----|--------------------|---------|--------|
+| Player_Name | 你 | You | GameDirector.cs:145 |
+| Player_Title | 真人发掘领队 | Human Excavation Leader | GameDirector.cs:145 |
+| Player_Desc | 与你的队友一起完成牌局并打开中央宝箱。 | Complete the card hands with your teammate and unlock the central treasure chest. | GameDirector.cs:145 |
+| Player_Note | 稳住牌权，先看清桌面。 | Hold the lead; read the table first. | GameDirector.cs:145 |
+| Player_Traits | 真人, 发掘领队 | Human, Leader | GameDirector.cs:145 |
+| ShenYan_Name | 沈砚 | Shen Yan | GameDirector.cs:1514 |
+| ShenYan_Title | 谨慎的计算派 | The Careful Calculator | GameDirector.cs:1514 |
+| ShenYan_Desc | 习惯先看搭档的牌路，能稳就不冒险。复杂局面会思考很久，但很少冲动出炸。 | Reads the partner's style first; avoids risk when stable. Thinks long in complex positions, but rarely blitzes with a Bomb. | GameDirector.cs:1514 |
+| ShenYan_Note | 会轻轻敲桌，再把牌推到中央。 | Gently taps the table, then slides cards to center. | GameDirector.cs:1514 |
+| ShenYan_Traits | 沉稳, 重配合, 偏稳当 | Composed, Team-focused, Conservative | GameDirector.cs:1514 |
+| TangGuo_Name | 唐果 | Tang Guo | GameDirector.cs:1515 |
+| TangGuo_Title | 爱冒险的气氛组 | The Thrill-Seeker | GameDirector.cs:1515 |
+| TangGuo_Desc | 出牌节奏快，落后时尤其喜欢赌一把。收到鲜花会认真接住。 | Fast-paced; loves to gamble when behind. Catches flowers thrown at them with flair. | GameDirector.cs:1515 |
+| TangGuo_Note | 会先看向宝箱，再迅速拍下手里的牌。 | Glances at the treasure chest, then slaps cards down fast. | GameDirector.cs:1515 |
+| TangGuo_Traits | 活泼, 敢冒险, 爱鲜花 | Lively, Risk-taker, Flower lover | GameDirector.cs:1515 |
+| QinZheng_Name | 秦峥 | Qin Zheng | GameDirector.cs:1516 |
+| QinZheng_Title | 强硬的压制派 | The Dominant Aggressor | GameDirector.cs:1516 |
+| QinZheng_Desc | 喜欢抢回牌权，炸弹出手干脆。赢下一轮后会向对面扬眉。 | Loves reclaiming the lead; Bombs come out decisively. Raises an eyebrow at opponents after winning a trick. | GameDirector.cs:1516 |
+| QinZheng_Note | 被西红柿砸中后，大概率会立刻扔回来。 | Hit by a tomato? Almost certainly throws one right back. | GameDirector.cs:1516 |
+| QinZheng_Traits | 强硬, 好胜, 爱压制 | Firm, Competitive, Domineering | GameDirector.cs:1516 |
+| SuHe_Name | 苏禾 | Su He | GameDirector.cs:1517 |
+| SuHe_Title | 温和的协作派 | The Gentle Cooperator | GameDirector.cs:1517 |
+| SuHe_Desc | 会主动给搭档留出牌权，不轻易盖住队友。 | Willingly yields the lead to a partner; never buries a teammate's play. | GameDirector.cs:1517 |
+| SuHe_Note | 收到鲜花时会别在衣襟上，保持到本小局结束。 | Pins a flower to their lapel and keeps it through the round. | GameDirector.cs:1517 |
+| SuHe_Traits | 温和, 顾搭档, 有耐心 | Gentle, Partner-minded, Patient | GameDirector.cs:1517 |
+| LuoFang_Name | 罗放 | Luo Fang | GameDirector.cs:1518 |
+| LuoFang_Title | 爱热闹的挑衅派 | The Playful Provocateur | GameDirector.cs:1518 |
+| LuoFang_Desc | 牌桌动作很多，喜欢用表情扰乱气氛，但真正出牌并不莽撞。 | Many table gestures; likes stirring the atmosphere with expressions — but never plays recklessly. | GameDirector.cs:1518 |
+| LuoFang_Note | 最容易躲西红柿，也最容易捡起来扔回去。 | Easiest to dodge tomatoes, and most likely to pick one up and return fire. | GameDirector.cs:1518 |
+| LuoFang_Traits | 幽默, 爱互动, 会反击 | Humorous, Interactive, Retaliatory | GameDirector.cs:1518 |
+| YeLan_Name | 叶岚 | Ye Lan | GameDirector.cs:1519 |
+| YeLan_Title | 沉默的快打派 | The Silent Speed Player | GameDirector.cs:1519 |
+| YeLan_Desc | 喜欢尽快清理手牌，局势明朗时会突然提速。 | Aims to clear the hand quickly; accelerates suddenly when the game is clear. | GameDirector.cs:1519 |
+| YeLan_Note | 很少说话，但会用一张漂亮的顺子回应。 | Rarely speaks, but answers with a beautiful Straight. | GameDirector.cs:1519 |
+| YeLan_Traits | 安静, 快打, 看残局 | Quiet, Fast-player, Endgame reader | GameDirector.cs:1519 |
+
+### 3D World Buttons and Labels
+
+| Key | Chinese (原文精确) | English | Source | Scene |
+|-----|--------------------|---------|--------|-------|
+| Btn3D_Play | 出牌 | Play | GameDirector.cs:1200 | 3D button |
+| Btn3D_Pass | 不出 | Pass | GameDirector.cs:1201 | 3D button |
+| Btn3D_Hint | 提示 | Hint | GameDirector.cs:1202 | 3D button |
+| Btn3D_Continue | 下一局 | Next Round | GameDirector.cs:1203 | 3D button |
+| Btn3D_GoRace | 前往夺宝 | Go to Race | GameDirector.cs:1206 | 3D button |
+| Btn3D_Steady | 稳当探方 | Steady | GameDirector.cs:1204 | 3D route button |
+| Btn3D_Risky | 激进探方 | Risky | GameDirector.cs:1205 | 3D route button |
+| RaceLabel_Init | 夺宝 · 青 0 / 12    朱 0 / 12 | Race · Jade 0 / 12   Red 0 / 12 | GameDirector.cs:1199 | 3D race HUD |
+| RaceLabel_Live | 夺宝 · 青 {J} / {max}    朱 {R} / {max} | Race · Jade {J} / {max}   Red {R} / {max} | GameDirector.cs:1369 | 3D race HUD |
+
+### Seat Suffix Labels (GameDirector.cs:1361)
+
+| Key | Chinese (原文精确) | English | Source |
+|-----|--------------------|---------|--------|
+| SeatSuffix_Place | · 第 {N} 名 | · #{N} | GameDirector.cs:1361 |
+| SeatSuffix_Unknown | · ?张 | · ? | GameDirector.cs:1361 |
+| SeatSuffix_Count | · {N}张 | · {N} | GameDirector.cs:1361 |
+
+### Phase Labels (GameDirector.cs:1403–1407)
+
+| Key | Chinese (原文精确) | English | Source |
+|-----|--------------------|---------|--------|
+| Phase_TributeReturn | 还贡 · 请选择一张牌 | Return Tribute · Select a card | GameDirector.cs:1403 |
+| Phase_Playing | 掼蛋 · 级牌 {R} · {seat}行动 | Guandan · Rank {R} · {seat} to act | GameDirector.cs:1404 |
+| Phase_HandComplete | 夺宝 · 选择探方路线 | Treasure Race · Choose route | GameDirector.cs:1405 |
+| Phase_MatchComplete | 地宫宝箱已开启 | Tomb Chest Opened | GameDirector.cs:1406 |
+| Phase_Default | 墓室牌局 | Tomb Card Table | GameDirector.cs:1407 |
+
+### Deal Announcement
+
+| Key | Chinese (原文精确) | English | Source | Scene |
+|-----|--------------------|---------|--------|-------|
 | WildDeal | 红桃 {R} 为逢人配 | ♥ {R} is the Wild Card | GameDirector.cs | Deal announcement |
 | Lottery_Draw | 抽签中 | Drawing lots… | GameDirector.cs | Lottery |
 | StraightFlushDemo | 同花顺 · 演出预览 | Straight Flush · Demo | GameDirector.cs:417 | Debug key |
