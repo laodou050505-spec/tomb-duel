@@ -297,7 +297,7 @@ namespace Guandan.Game
             if (hands[seat].Count == 0)
             {
                 finishOrder.Add(seat);
-                Raise(MatchEventType.PlayerFinished, seat, $"{SeatLabel(seat)} finished #{finishOrder.Count}");
+                Raise(MatchEventType.PlayerFinished, seat, $"{SeatLabel(seat)} finished {Ordinal(finishOrder.Count)}");
                 if (ShouldFinishHand())
                 {
                     FinishHand();
@@ -549,6 +549,15 @@ namespace Guandan.Game
             PlayerSeat.North => "Partner",
             PlayerSeat.West => "West",
             _ => seat.ToString(),
+        };
+
+        public static string Ordinal(int n) => n switch
+        {
+            1 => "1st",
+            2 => "2nd",
+            3 => "3rd",
+            4 => "4th",
+            _ => n + "th",
         };
     }
 }

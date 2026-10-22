@@ -21,12 +21,12 @@ International Guandan community conventions used throughout:
 | 三带二 | Full House | Triple + Pair |
 | 顺子 | Straight | 5+ consecutive ranks |
 | 连对 | Consecutive Pairs | 3+ consecutive pairs |
-| 钢板 | Steel Plate | 3+ consecutive triples |
+| 钢板 | Consecutive Triples | 3+ consecutive triples |
 | 炸弹 | Bomb | 4+ cards of same rank |
 | 同花顺 | Straight Flush | 5-card same-suit straight |
 | 四王炸 | Joker Bomb | Two Small + Two Big Jokers |
-| 小王 | Jkr (Small Joker) | Displayed on card face |
-| 大王 | BIG (Big Joker) | Displayed on card face |
+| 小王 | S JKR (Small Joker) | Two-line: "S\nJKR"; displayed on card face |
+| 大王 | B JKR (Big Joker) | Two-line: "B\nJKR"; displayed on card face |
 | 梅 (梅花) | ♣ | Suit label on card face; Card.cs uses single char "梅" |
 | 方 (方块) | ♦ | Suit label on card face; Card.cs uses single char "方" |
 | 红 (红桃) | ♥ | Suit label on card face; Card.cs uses single char "红" |
@@ -43,8 +43,8 @@ International Guandan community conventions used throughout:
 | 末游 | 4th place | Last to play out |
 | 甲签/乙签/丙签 | Lot A / Lot B / Lot C | Role lottery lots |
 | 夺宝 | Treasure Race | The tile-advancing mini-game |
-| 稳当推进 | Steady Advance | Safe route choice (no risk) |
-| 深入探方 | Risky Dig | Risk route choice (variable outcome) |
+| 稳当推进 | Steady Dig | Safe route choice (no risk) |
+| 深入探方 | Bold Dig | Risk route choice (variable outcome) |
 
 ---
 
@@ -58,7 +58,7 @@ International Guandan community conventions used throughout:
 | FullHouse | 三带二 | Full House | PlayPattern.cs:Label | Hint / played card UI |
 | Straight | 顺子 | Straight | PlayPattern.cs:Label | Hint / played card UI |
 | ConsecutivePairs | 连对 | Consecutive Pairs | PlayPattern.cs:Label | Hint / played card UI |
-| SteelPlate | 钢板 | Steel Plate | PlayPattern.cs:Label | Hint / played card UI |
+| SteelPlate | 钢板 | Consecutive Triples | PlayPattern.cs:Label | Hint / played card UI |
 | Bomb | {N}张炸弹 | {N}-card Bomb | PlayPattern.cs:Label | Hint / played card UI |
 | StraightFlush | 同花顺 | Straight Flush | PlayPattern.cs:Label | Hint / played card UI |
 | JokerBomb | 四王炸 | Joker Bomb | PlayPattern.cs:Label | Hint / played card UI |
@@ -83,13 +83,13 @@ International Guandan community conventions used throughout:
 
 | Key | Chinese | English | Source | Scene |
 |-----|---------|---------|--------|-------|
-| SmallJoker | 小王 | Jkr | Card.cs:RankLabel | Card face |
-| BigJoker | 大王 | BIG | Card.cs:RankLabel | Card face |
+| SmallJoker | 小王 | S\nJKR | Card.cs:RankLabel | Card face (two-line) |
+| BigJoker | 大王 | B\nJKR | Card.cs:RankLabel | Card face (two-line) |
 | SuitClubs | 梅 | ♣ | Card.cs:SuitLabel | Card face |
 | SuitDiamonds | 方 | ♦ | Card.cs:SuitLabel | Card face |
 | SuitHearts | 红 | ♥ | Card.cs:SuitLabel | Card face |
 | SuitSpades | 黑 | ♠ | Card.cs:SuitLabel | Card face |
-| CardBack | 掼\n蛋 | DUEL | CardView.cs:29 | Physical 3D card back |
+| CardBack | 掼\n蛋 | TOMB\nDUEL | CardView.cs:29 | Physical 3D card back (two-line) |
 
 ---
 
@@ -127,7 +127,7 @@ International Guandan community conventions used throughout:
 
 | Key | Chinese | English | Source |
 |-----|---------|---------|--------|
-| FinishedNth | 第 {N} 名 | #{N} | WorldSeatStatusUi.cs |
+| FinishedNth | 第 {N} 名 | 1st / 2nd / 3rd / 4th (ordinal) | WorldSeatStatusUi.cs — uses GuandanMatchEngine.Ordinal() |
 | CardCountUnknown | ?张 | ? | WorldSeatStatusUi.cs |
 | CardCount | {N}张 | {N} | WorldSeatStatusUi.cs |
 | CurrentAction | 当前 · {action} | Now: {action} | WorldSeatStatusUi.cs |
@@ -146,13 +146,13 @@ All 5 fields per profile: Name, Title (type), Description (long), Note (interact
 | Key | Chinese (原文精确) | English | Source |
 |-----|--------------------|---------|--------|
 | Player_Name | 你 | You | GameDirector.cs:145 |
-| Player_Title | 真人发掘领队 | Human Excavation Leader | GameDirector.cs:145 |
+| Player_Title | 真人发掘领队 | Expedition Leader | GameDirector.cs:145 |
 | Player_Desc | 与你的队友一起完成牌局并打开中央宝箱。 | Complete the card hands with your teammate and unlock the central treasure chest. | GameDirector.cs:145 |
 | Player_Note | 稳住牌权，先看清桌面。 | Hold the lead; read the table first. | GameDirector.cs:145 |
-| Player_Traits | 真人, 发掘领队 | Human, Leader | GameDirector.cs:145 |
+| Player_Traits | 真人, 发掘领队 | Player, Leader | GameDirector.cs:145 |
 | ShenYan_Name | 沈砚 | Shen Yan | GameDirector.cs:1514 |
 | ShenYan_Title | 谨慎的计算派 | The Careful Calculator | GameDirector.cs:1514 |
-| ShenYan_Desc | 习惯先看搭档的牌路，能稳就不冒险。复杂局面会思考很久，但很少冲动出炸。 | Reads the partner's style first; avoids risk when stable. Thinks long in complex positions, but rarely blitzes with a Bomb. | GameDirector.cs:1514 |
+| ShenYan_Desc | 习惯先看搭档的牌路，能稳就不冒险。复杂局面会思考很久，但很少冲动出炸。 | Watches the partner's play first and avoids risks whenever possible. Thinks long in tricky spots but rarely bombs on impulse. | GameDirector.cs:1514 |
 | ShenYan_Note | 会轻轻敲桌，再把牌推到中央。 | Gently taps the table, then slides cards to center. | GameDirector.cs:1514 |
 | ShenYan_Traits | 沉稳, 重配合, 偏稳当 | Composed, Team-focused, Conservative | GameDirector.cs:1514 |
 | TangGuo_Name | 唐果 | Tang Guo | GameDirector.cs:1515 |
@@ -167,17 +167,17 @@ All 5 fields per profile: Name, Title (type), Description (long), Note (interact
 | QinZheng_Traits | 强硬, 好胜, 爱压制 | Firm, Competitive, Domineering | GameDirector.cs:1516 |
 | SuHe_Name | 苏禾 | Su He | GameDirector.cs:1517 |
 | SuHe_Title | 温和的协作派 | The Gentle Cooperator | GameDirector.cs:1517 |
-| SuHe_Desc | 会主动给搭档留出牌权，不轻易盖住队友。 | Willingly yields the lead to a partner; never buries a teammate's play. | GameDirector.cs:1517 |
+| SuHe_Desc | 会主动给搭档留出牌权，不轻易盖住队友。 | Willingly yields the lead to a partner; rarely tops a teammate's play. | GameDirector.cs:1517 |
 | SuHe_Note | 收到鲜花时会别在衣襟上，保持到本小局结束。 | Pins a flower to their lapel and keeps it through the round. | GameDirector.cs:1517 |
 | SuHe_Traits | 温和, 顾搭档, 有耐心 | Gentle, Partner-minded, Patient | GameDirector.cs:1517 |
 | LuoFang_Name | 罗放 | Luo Fang | GameDirector.cs:1518 |
 | LuoFang_Title | 爱热闹的挑衅派 | The Playful Provocateur | GameDirector.cs:1518 |
-| LuoFang_Desc | 牌桌动作很多，喜欢用表情扰乱气氛，但真正出牌并不莽撞。 | Many table gestures; likes stirring the atmosphere with expressions — but never plays recklessly. | GameDirector.cs:1518 |
-| LuoFang_Note | 最容易躲西红柿，也最容易捡起来扔回去。 | Easiest to dodge tomatoes, and most likely to pick one up and return fire. | GameDirector.cs:1518 |
+| LuoFang_Desc | 牌桌动作很多，喜欢用表情扰乱气氛，但真正出牌并不莽撞。 | Full of table antics and loves stirring things up with expressions, but never plays recklessly. | GameDirector.cs:1518 |
+| LuoFang_Note | 最容易躲西红柿，也最容易捡起来扔回去。 | The best at dodging tomatoes, and the quickest to throw one back. | GameDirector.cs:1518 |
 | LuoFang_Traits | 幽默, 爱互动, 会反击 | Humorous, Interactive, Retaliatory | GameDirector.cs:1518 |
 | YeLan_Name | 叶岚 | Ye Lan | GameDirector.cs:1519 |
 | YeLan_Title | 沉默的快打派 | The Silent Speed Player | GameDirector.cs:1519 |
-| YeLan_Desc | 喜欢尽快清理手牌，局势明朗时会突然提速。 | Aims to clear the hand quickly; accelerates suddenly when the game is clear. | GameDirector.cs:1519 |
+| YeLan_Desc | 喜欢尽快清理手牌，局势明朗时会突然提速。 | Likes to clear the hand fast and suddenly speeds up once the outcome is clear. | GameDirector.cs:1519 |
 | YeLan_Note | 很少说话，但会用一张漂亮的顺子回应。 | Rarely speaks, but answers with a beautiful Straight. | GameDirector.cs:1519 |
 | YeLan_Traits | 安静, 快打, 看残局 | Quiet, Fast-player, Endgame reader | GameDirector.cs:1519 |
 
@@ -190,8 +190,8 @@ All 5 fields per profile: Name, Title (type), Description (long), Note (interact
 | Btn3D_Hint | 提示 | Hint | GameDirector.cs:1202 | 3D button |
 | Btn3D_Continue | 下一局 | Next Round | GameDirector.cs:1203 | 3D button |
 | Btn3D_GoRace | 前往夺宝 | Go to Race | GameDirector.cs:1206 | 3D button |
-| Btn3D_Steady | 稳当探方 | Steady | GameDirector.cs:1204 | 3D route button |
-| Btn3D_Risky | 激进探方 | Risky | GameDirector.cs:1205 | 3D route button |
+| Btn3D_Steady | 稳当探方 | Steady Dig | GameDirector.cs:1204 | 3D route button |
+| Btn3D_Risky | 激进探方 | Bold Dig | GameDirector.cs:1205 | 3D route button |
 | RaceLabel_Init | 夺宝 · 青 0 / 12    朱 0 / 12 | Race · Jade 0 / 12   Red 0 / 12 | GameDirector.cs:1199 | 3D race HUD |
 | RaceLabel_Live | 夺宝 · 青 {J} / {max}    朱 {R} / {max} | Race · Jade {J} / {max}   Red {R} / {max} | GameDirector.cs:1369 | 3D race HUD |
 
@@ -199,7 +199,7 @@ All 5 fields per profile: Name, Title (type), Description (long), Note (interact
 
 | Key | Chinese (原文精确) | English | Source |
 |-----|--------------------|---------|--------|
-| SeatSuffix_Place | · 第 {N} 名 | · #{N} | GameDirector.cs:1361 |
+| SeatSuffix_Place | · 第 {N} 名 | · 1st/2nd/3rd/4th (ordinal) | GameDirector.cs:1361 — uses GuandanMatchEngine.Ordinal() |
 | SeatSuffix_Unknown | · ?张 | · ? | GameDirector.cs:1361 |
 | SeatSuffix_Count | · {N}张 | · {N} | GameDirector.cs:1361 |
 
@@ -208,7 +208,7 @@ All 5 fields per profile: Name, Title (type), Description (long), Note (interact
 | Key | Chinese (原文精确) | English | Source |
 |-----|--------------------|---------|--------|
 | Phase_TributeReturn | 还贡 · 请选择一张牌 | Return Tribute · Select a card | GameDirector.cs:1403 |
-| Phase_Playing | 掼蛋 · 级牌 {R} · {seat}行动 | Guandan · Rank {R} · {seat} to act | GameDirector.cs:1404 |
+| Phase_Playing | 掼蛋 · 级牌 {R} · {seat}行动 | Trump Rank {R} · {seat}'s turn | GameDirector.cs:1404 |
 | Phase_HandComplete | 夺宝 · 选择探方路线 | Treasure Race · Choose route | GameDirector.cs:1405 |
 | Phase_MatchComplete | 地宫宝箱已开启 | Tomb Chest Opened | GameDirector.cs:1406 |
 | Phase_Default | 墓室牌局 | Tomb Card Table | GameDirector.cs:1407 |
@@ -227,7 +227,7 @@ All 5 fields per profile: Name, Title (type), Description (long), Note (interact
 
 | Key | Chinese | English | Source | Scene |
 |-----|---------|---------|--------|-------|
-| LotteryTitle | 先抽同行人 | Draw a Lot | ScreenGameUi.cs:276 | Lottery panel |
+| LotteryTitle | 先抽同行人 | Draw Your Partner | ScreenGameUi.cs:276 | Lottery panel |
 | LotteryHint | 三支身份签中，一支成为队友，其余两支成为对手 | One lot becomes your partner. The other two become opponents. | ScreenGameUi.cs:277 | Lottery panel |
 | MainTitle | 掼蛋夺宝 · 第 {N} 小局 | TOMB DUEL · Round {N} | ScreenGameUi.cs:291 | HUD |
 | JadeLevel | 青队 · 打 {R} | Jade · Rank {R} | ScreenGameUi.cs:292 | HUD |
@@ -251,14 +251,14 @@ All 5 fields per profile: Name, Title (type), Description (long), Note (interact
 | BtnWest | 西家 | West | ScreenGameUi.cs:634 | Profile button |
 | RouteTitle | 选择发掘路线 | Choose Route | ScreenGameUi.cs:656 | Route panel |
 | EnterTreasure | 进入夺宝场景 | Enter Treasure Race | ScreenGameUi.cs:662 | Button |
-| BtnSteady | 稳当推进 | Steady Advance | ScreenGameUi.cs:663 | Button |
-| BtnRisky | 深入探方 | Risky Dig | ScreenGameUi.cs:664 | Button |
+| BtnSteady | 稳当推进 | Steady Dig | ScreenGameUi.cs:663 | Button |
+| BtnRisky | 深入探方 | Bold Dig | ScreenGameUi.cs:664 | Button |
 | BtnContinue | 返回牌桌 · 下一局 | Back to Table · Next Round | ScreenGameUi.cs:667 | Button |
 | BtnRestart | 重新抽签 | Draw Again | ScreenGameUi.cs:668 | Button |
 | BtnProfileClose | 关闭人物资料 | Close | ScreenGameUi.cs:693 | Button |
 | VariantTitle | 选择逢人配的牌型解释 | Choose Wild Card Role | ScreenGameUi.cs:697 | Wild card panel |
 | BtnCancel | 取消 | Cancel | ScreenGameUi.cs:700 | Button |
-| Placement | 你 · 第 {N} 名 | You · #{N} | ScreenGameUi.cs:771 | Hand info |
+| Placement | 你 · 第 {N} 名 | You · 1st/2nd/3rd/4th (ordinal) | ScreenGameUi.cs:771 — uses GuandanMatchEngine.Ordinal() |
 | Dealing | 正在发牌 {V} / 27 | Dealing {V} / 27 | ScreenGameUi.cs:772 | Hand info |
 | HandCount | 手牌 {N} | Hand: {N} | ScreenGameUi.cs:772 | Hand info |
 | RevealingRank | 正在揭示本局级牌 | Revealing trump rank… | ScreenGameUi.cs:774 | Selection text |
@@ -281,8 +281,8 @@ All 5 fields per profile: Name, Title (type), Description (long), Note (interact
 | WonDetail | 你与队友率先取得地宫宝藏\n青队 {J} 格 · 朱队 {R} 格 | You and your partner claimed the tomb treasure!\nJade {J} · Red {R} tiles | ScreenGameUi.cs:905 | Result |
 | LostDetail | 对手率先取得宝藏 · 再战一局\n青队 {J} 格 · 朱队 {R} 格 | Opponents claimed the treasure — play again!\nJade {J} · Red {R} tiles | ScreenGameUi.cs:906 | Result |
 | RoundRecord | 本局发掘记录 · {team} {copy} · 基础前进 {N} 格 | Round · {team} {copy} · Advance {N} tile(s) | ScreenGameUi.cs:912 | Round summary |
-| SteadyDynamic | 稳当推进\n确定前进 {N} 格 | Steady Advance\n+{N} tile(s) | ScreenGameUi.cs:932 | Button |
-| RiskyDynamic | 深入探方\n翻倍 10%... | Risky Dig\n×2 (10%) +1 (15%) Normal (55%)\n−1 (12%) Retreat (8%) | ScreenGameUi.cs:933 | Button |
+| SteadyDynamic | 稳当推进\n确定前进 {N} 格 | Steady Dig\n+{N} tile(s) | ScreenGameUi.cs:932 | Button |
+| RiskyDynamic | 深入探方\n翻倍 10%... | Bold Dig\n×2 (10%) +1 (15%) Normal (55%)\n−1 (12%) Retreat (8%) | ScreenGameUi.cs:933 | Button |
 | ChooseRoute | 选择发掘路线 | Choose Route | ScreenGameUi.cs:936 | Route title |
 | OpponentChoosing | {name}正在选择探方 | {name} is choosing… | ScreenGameUi.cs:936 | Route title |
 | RoundDone | 本局结算 · 前往夺宝 | Round done · To Race | ScreenGameUi.cs:936 | Route title |
@@ -303,7 +303,7 @@ All 5 fields per profile: Name, Title (type), Description (long), Note (interact
 | TeamRail_J | 青 | J | ScreenGameUi.cs:1141 | Score rail |
 | TeamRail_R | 朱 | R | ScreenGameUi.cs:1141 | Score rail |
 | BombStamp | 炸弹\n{label} | BOMB\n{label} | ScreenGameUi.cs:1243 | Bomb effect |
-| PlacementStamp | {seat}\n第 {N} 名 | {seat}\n#{N} | ScreenGameUi.cs:1362 | Finish stamp |
+| PlacementStamp | {seat}\n第 {N} 名 | {seat}\n1st/2nd/3rd/4th (ordinal) | ScreenGameUi.cs:1362 — uses GuandanMatchEngine.Ordinal() |
 | FlyCard_Return | 还贡 | Return | ScreenGameUi.cs:1381 | Fly card |
 | FlyCard_Tribute2 | 进贡 | Tribute | ScreenGameUi.cs:1381 | Fly card |
 | TreasureChest | {team}抵达第 {N} 格\n宝箱开启 | {team} reaches tile {N}!\nChest Opened! | ScreenGameUi.cs:1409 | Treasure move |
@@ -313,7 +313,7 @@ All 5 fields per profile: Name, Title (type), Description (long), Note (interact
 | SealLotA | 身份签 · 甲 | Role Lot · A | ScreenGameUi.cs:1600 | Lottery seal |
 | SealLotB | 身份签 · 乙 | Role Lot · B | ScreenGameUi.cs:1600 | Lottery seal |
 | SealLotC | 身份签 · 丙 | Role Lot · C | ScreenGameUi.cs:1600 | Lottery seal |
-| PlaceNth | 第 {N} 名 | #{N} | ScreenGameUi.cs:1701 | Seat count |
+| PlaceNth | 第 {N} 名 | 1st/2nd/3rd/4th (ordinal) | ScreenGameUi.cs:1701 — uses GuandanMatchEngine.Ordinal() |
 | Dealing_State | 收牌中 | Dealing | ScreenGameUi.cs:1703 | Seat count |
 | UnknownCount | ?张 | ? | ScreenGameUi.cs:1705 | Seat count |
 | KnownCount | {N}张 | {N} | ScreenGameUi.cs:1705 | Seat count |

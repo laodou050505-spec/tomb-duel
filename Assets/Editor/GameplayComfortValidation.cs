@@ -85,8 +85,8 @@ namespace Guandan.Editor
                         Require(orderedFullHouse.SequenceEqual(new[]{5,5,5,12,12}),"Full house keeps equal visible ranks together");
                         var cardLabel=typeof(ScreenGameUi).GetMethod("CardLabel",BindingFlags.Static|BindingFlags.NonPublic);
                         var smallJoker=deck.First(c=>c.IsSmallJoker); var bigJoker=deck.First(c=>c.IsBigJoker);
-                        Require((string)cardLabel.Invoke(null,new object[]{smallJoker,director.Match.LevelRank})=="小王","Small joker label has no duplicate 王");
-                        Require((string)cardLabel.Invoke(null,new object[]{bigJoker,director.Match.LevelRank})=="大王","Big joker label has no duplicate 王");
+                        Require((string)cardLabel.Invoke(null,new object[]{smallJoker,director.Match.LevelRank})=="S\nJKR","Small joker label is S/JKR");
+                        Require((string)cardLabel.Invoke(null,new object[]{bigJoker,director.Match.LevelRank})=="B\nJKR","Big joker label is B/JKR");
                         break;
                     case 2:
                         var plaques=UnityEngine.Object.FindObjectsByType<WorldSeatStatusUi>(FindObjectsSortMode.None);
@@ -110,8 +110,8 @@ namespace Guandan.Editor
                             }
                         }
                         Capture("02-table");
-                        Require(plaques.SelectMany(p=>p.GetComponentsInChildren<Text>()).Any(t=>t.name=="WildcardMeaning" && t.text=="配\n8"),"Played wildcard badge states represented rank");
-                        Require(plaques.SelectMany(p=>p.GetComponentsInChildren<Text>()).Any(t=>t.name=="WildcardExplanationText" && t.text=="配作 8" && t.fontSize>=68),"Readable wildcard meaning beneath single-row cards");
+                        Require(plaques.SelectMany(p=>p.GetComponentsInChildren<Text>()).Any(t=>t.name=="WildcardMeaning" && t.text=="Wild\n→8"),"Played wildcard badge states represented rank");
+                        Require(plaques.SelectMany(p=>p.GetComponentsInChildren<Text>()).Any(t=>t.name=="WildcardExplanationText" && t.text=="Wild → 8" && t.fontSize>=68),"Readable wildcard meaning beneath single-row cards");
                         // The two status labels now flank the action buttons, below all hand cards.
                         var hand = FindRect(ui,"HandRoot");
                         var cardTop = hand.anchoredPosition.y + 67f + 69f + 18f;
@@ -203,7 +203,7 @@ namespace Guandan.Editor
                     case 10:
                         if(!director.MatchResultReady && EditorApplication.timeSinceStartup-stageTime<3) return;
                         Require(director.Race.IsComplete,"Treasure completed"); AssertReachable(ui,"Restart"); Capture("08-treasure-complete");
-                        Require(FindRect(ui,"MatchResultTitle").GetComponent<Text>().text=="恭喜获胜","Victory panel copy");
+                        Require(FindRect(ui,"MatchResultTitle").GetComponent<Text>().text=="VICTORY!","Victory panel copy");
                         Require(FindRect(ui,"MatchResultPanel").GetComponent<RawImage>().texture!=null,"Nano Banana victory texture");
                         var resultPanel=FindRect(ui,"MatchResultPanel");
                         var resultTitle=FindRect(ui,"MatchResultTitle"); var resultDetail=FindRect(ui,"MatchResultDetail");
@@ -245,7 +245,7 @@ namespace Guandan.Editor
                     case 13:
                         if(!director.MatchResultReady && EditorApplication.timeSinceStartup-stageTime<3) return;
                         Require(director.MatchResultReady,"Defeat presentation completes");
-                        Require(FindRect(ui,"MatchResultTitle").GetComponent<Text>().text=="惜败此局","Defeat panel copy");
+                        Require(FindRect(ui,"MatchResultTitle").GetComponent<Text>().text=="DEFEATED","Defeat panel copy");
                         Require(FindRect(ui,"MatchResultPanel").GetComponent<RawImage>().texture.name=="ResultDefeat","Distinct defeat artwork");
                         Require(!UnityEngine.Object.FindFirstObjectByType<TreasureCelebration>().IsPlaying,"No congratulatory confetti on player defeat");
                         AssertReachable(ui,"Restart"); Capture("11-defeat"); Click(ui,"Restart"); break;
@@ -289,7 +289,7 @@ namespace Guandan.Editor
         }
         private static void Capture(string name)
         {
-            const string folder="VisualQA/Gameplay-20260909-Finale-Wildcards"; Directory.CreateDirectory(folder);
+            const string folder="VisualQA/EN-20261022"; Directory.CreateDirectory(folder);
             var camera=Camera.main; var prev=camera.targetTexture; var active=RenderTexture.active;
             var target=new RenderTexture(1600,1000,24);camera.targetTexture=target;Canvas.ForceUpdateCanvases();camera.Render();RenderTexture.active=target;
             var image=new Texture2D(1600,1000,TextureFormat.RGB24,false);image.ReadPixels(new Rect(0,0,1600,1000),0,0);image.Apply();

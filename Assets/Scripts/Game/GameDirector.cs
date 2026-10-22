@@ -142,7 +142,7 @@ namespace Guandan.Game
 
         public PlayerProfile GetProfile(PlayerSeat seat)
         {
-            if (seat == PlayerSeat.South) return new PlayerProfile("You", "Human Excavation Leader", "Complete the card hands with your teammate and unlock the central treasure chest.", "Hold the lead; read the table first.", new[] { "Human", "Leader" }, 0f, 0f, 0f, 0f);
+            if (seat == PlayerSeat.South) return new PlayerProfile("You", "Expedition Leader", "Complete the card hands with your teammate and unlock the central treasure chest.", "Hold the lead; read the table first.", new[] { "Player", "Leader" }, 0f, 0f, 0f, 0f);
             if (lotteryProfiles == null || lotteryProfiles.Length < 3) lotteryProfiles = CreateLotteryProfiles(NextSeed());
             return seat switch
             {
@@ -1204,8 +1204,8 @@ namespace Guandan.Game
             // A real tomb-floor console transports the view to the authored race track.
             // Route choices sit beside that track; neither uses a camera canvas.
             enterTreasureButton = EnsureButton("EnterTreasure", "Go to Race", GameAction.EnterTreasure, treasureTrackAnchor, new Vector3(0f, 0.08f, 0f));
-            steadyButton = EnsureButton("SteadyRoute", "Steady", GameAction.SteadyRoute, treasureTrackAnchor, new Vector3(-2.0f, 0.08f, 17.0f));
-            riskyButton = EnsureButton("RiskyRoute", "Risky", GameAction.RiskyRoute, treasureTrackAnchor, new Vector3(2.0f, 0.08f, 17.0f));
+            steadyButton = EnsureButton("SteadyRoute", "Steady Dig", GameAction.SteadyRoute, treasureTrackAnchor, new Vector3(-2.0f, 0.08f, 17.0f));
+            riskyButton = EnsureButton("RiskyRoute", "Bold Dig", GameAction.RiskyRoute, treasureTrackAnchor, new Vector3(2.0f, 0.08f, 17.0f));
             BuildWorldLottery();
             steadyButton.SetAvailable(false);
             riskyButton.SetAvailable(false);
@@ -1404,7 +1404,7 @@ namespace Guandan.Game
                 phaseLabel.text = match.Phase switch
                 {
                     MatchPhase.TributeReturn => "Return Tribute · Choose a card",
-                    MatchPhase.Playing => $"Guandan · Trump {GuandanMatchEngine.RankLabel(match.LevelRank)} · {GuandanMatchEngine.SeatLabel(match.ActiveSeat)}'s turn",
+                    MatchPhase.Playing => $"Trump Rank {GuandanMatchEngine.RankLabel(match.LevelRank)} · {GuandanMatchEngine.SeatLabel(match.ActiveSeat)}'s turn",
                     MatchPhase.HandComplete => "Treasure Race · Choose route",
                     MatchPhase.MatchComplete => "Tomb Chest Opened",
                     _ => "Tomb Card Table",
@@ -1514,12 +1514,12 @@ namespace Guandan.Game
         {
             var pool = new[]
             {
-                new PlayerProfile("Shen Yan", "The Careful Calculator", "Reads the partner's style first; avoids risk when stable. Thinks long in complex positions, but rarely blitzes with a Bomb.", "Gently taps the table, then slides cards to center.", new[] { "Composed", "Team-focused", "Conservative" }, 0.14f, 0.12f, 1.6f, 5.2f),
+                new PlayerProfile("Shen Yan", "The Careful Calculator", "Watches the partner's play first and avoids risks whenever possible. Thinks long in tricky spots but rarely bombs on impulse.", "Gently taps the table, then slides cards to center.", new[] { "Composed", "Team-focused", "Conservative" }, 0.14f, 0.12f, 1.6f, 5.2f),
                 new PlayerProfile("Tang Guo", "The Thrill-Seeker", "Fast-paced; loves to gamble when behind. Catches flowers thrown at them with flair.", "Glances at the treasure chest, then slaps cards down fast.", new[] { "Lively", "Risk-taker", "Flower lover" }, 0.76f, 0.42f, 0.65f, 2.0f),
                 new PlayerProfile("Qin Zheng", "The Dominant Aggressor", "Loves reclaiming the lead; Bombs come out decisively. Raises an eyebrow at opponents after winning a trick.", "Hit by a tomato? Almost certainly throws one right back.", new[] { "Firm", "Competitive", "Domineering" }, 0.58f, 0.70f, 0.9f, 3.1f),
-                new PlayerProfile("Su He", "The Gentle Cooperator", "Willingly yields the lead to a partner; never buries a teammate's play.", "Pins a flower to their lapel and keeps it through the round.", new[] { "Gentle", "Partner-minded", "Patient" }, 0.28f, 0.18f, 1.2f, 4.3f),
-                new PlayerProfile("Luo Fang", "The Playful Provocateur", "Many table gestures; likes stirring the atmosphere with expressions — but never plays recklessly.", "Easiest to dodge tomatoes, and most likely to pick one up and return fire.", new[] { "Humorous", "Interactive", "Retaliatory" }, 0.52f, 0.34f, 0.75f, 2.7f),
-                new PlayerProfile("Ye Lan", "The Silent Speed Player", "Aims to clear the hand quickly; accelerates suddenly when the game is clear.", "Rarely speaks, but answers with a beautiful Straight.", new[] { "Quiet", "Fast-player", "Endgame reader" }, 0.44f, 0.26f, 0.55f, 1.8f),
+                new PlayerProfile("Su He", "The Gentle Cooperator", "Willingly yields the lead to a partner; rarely tops a teammate's play.", "Pins a flower to their lapel and keeps it through the round.", new[] { "Gentle", "Partner-minded", "Patient" }, 0.28f, 0.18f, 1.2f, 4.3f),
+                new PlayerProfile("Luo Fang", "The Playful Provocateur", "Full of table antics and loves stirring things up with expressions, but never plays recklessly.", "The best at dodging tomatoes, and the quickest to throw one back.", new[] { "Humorous", "Interactive", "Retaliatory" }, 0.52f, 0.34f, 0.75f, 2.7f),
+                new PlayerProfile("Ye Lan", "The Silent Speed Player", "Likes to clear the hand fast and suddenly speeds up once the outcome is clear.", "Rarely speaks, but answers with a beautiful Straight.", new[] { "Quiet", "Fast-player", "Endgame reader" }, 0.44f, 0.26f, 0.55f, 1.8f),
             };
             var random = new System.Random(sourceSeed);
             for (var i = pool.Length - 1; i > 0; i--)

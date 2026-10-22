@@ -26,7 +26,7 @@ namespace Guandan.Game
             label = GetComponentInChildren<TextMesh>(true);
             if (label != null)
             {
-                label.text = faceUp ? value.ShortLabel : "DUEL";
+                label.text = faceUp ? value.ShortLabel : "TOMB\nDUEL";
                 label.color = faceUp && value.IsRed ? new Color(0.68f, 0.08f, 0.06f) : new Color(0.08f, 0.07f, 0.05f);
             }
             ApplyVisual();

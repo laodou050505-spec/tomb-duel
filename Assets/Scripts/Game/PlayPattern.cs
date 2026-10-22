@@ -78,7 +78,7 @@ namespace Guandan.Game
             PlayKind.FullHouse => "Full House",
             PlayKind.Straight => "Straight",
             PlayKind.ConsecutivePairs => "Consecutive Pairs",
-            PlayKind.SteelPlate => "Steel Plate",
+            PlayKind.SteelPlate => "Consecutive Triples",
             PlayKind.Bomb => $"{Cards.Count}-card Bomb",
             PlayKind.StraightFlush => "Straight Flush",
             PlayKind.JokerBomb => "Joker Bomb",

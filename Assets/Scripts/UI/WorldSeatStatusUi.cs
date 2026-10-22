@@ -239,7 +239,7 @@ namespace Guandan.UI
             var count = match.GetHand(seat).Count;
             var finishedIndex = match.FinishOrder.ToList().IndexOf(seat);
             var countText = finishedIndex >= 0
-                ? $"#{finishedIndex + 1}"
+                ? GuandanMatchEngine.Ordinal(finishedIndex + 1)
                 : count > 10 ? "?" : $"{count}";
             titleText.text = $"{GuandanMatchEngine.SeatLabel(seat)} · {profile.Name}  {countText}";
 

@@ -19,15 +19,15 @@ All player-visible Chinese text replaced with English. See `Localization/EN_TEXT
 
 | File | What changed |
 |------|-------------|
-| `Assets/Scripts/Game/Card.cs` | Joker labels (小王→Jkr, 大王→BIG); suit symbols (梅→♣ 方→♦ 红→♥ 黑→♠) |
-| `Assets/Scripts/Game/PlayPattern.cs` | 11 play kind display names (Single, Pair, Triple, Full House, Straight, Consecutive Pairs, Steel Plate, Bomb, Straight Flush, Joker Bomb) |
+| `Assets/Scripts/Game/Card.cs` | Joker labels (小王→S\nJKR, 大王→B\nJKR); suit symbols (梅→♣ 方→♦ 红→♥ 黑→♠) |
+| `Assets/Scripts/Game/PlayPattern.cs` | 11 play kind display names (Single, Pair, Triple, Full House, Straight, Consecutive Pairs, **Consecutive Triples**, Bomb, Straight Flush, Joker Bomb) |
 | `Assets/Scripts/Game/TreasureRace.cs` | 6 route outcome labels (Steady Advance, Bold Rush, Ambush, Cave-In, Relic Found, Chest!) |
 | `Assets/Scripts/Game/GuandanMatchEngine.cs` | Seat labels (南→South/You, 东→East, 北→North/Partner, 西→West); match event messages; HandFinished "Jade/Red Team advances N tile(s)" |
 | `Assets/Scripts/Game/GameDirector.cs` | AI profile display names; phase labels; HUD callout strings; route result messages; play labels |
 | `Assets/Scripts/UI/ScreenGameUi.cs` | All ~65 player-visible strings: HUD labels, lottery panel, tribute flow, route selection, victory/defeat banners, seat profile, card count, turn callouts, bomb stamp, placement stamp |
 | `Assets/Scripts/UI/WorldSeatStatusUi.cs` | World-space seat status cards ("Dealing", card count format) |
 | `Assets/Scripts/Scene/TreasureScenePresenter.cs` | 3D floating score panels: "Jade\nRank N\n\npos / N" / "Red\nRank N\n\npos / N" |
-| `Assets/Scripts/Scene/CardView.cs` | Card back label: "地宫"→"DUEL" |
+| `Assets/Scripts/Scene/CardView.cs` | Card back label: "地宫\n掼蛋"→"TOMB\nDUEL" |
 | `Assets/Editor/GuandanProjectSetup.cs` | Bundle ID, product name, APK output path; all build-setup menu labels |
 | `Assets/Editor/AvatarLayoutTuningWindow.cs` | MenuItem and all editor UI labels |
 | `Assets/Editor/GuandanSceneCleanup.cs` | MenuItem |
@@ -111,10 +111,10 @@ f56fad3 fix: 修复 C# 10 插值字符串内不合法的 \" 转义引号
 **Status: COMPLETE**
 
 **APK:** `Builds/EN/TombDuel-EN-PICO.apk`
-**Size:** 77 MB
-**SHA-256:** `73f2be2f1282839621362e99466d56f40b1862ef0a781bae30a9bb0ed507b44a`
-**Build date:** 2026-10-22 13:20
-**Build log:** `Builds/EN/apk_build4_log.txt`
+**Size:** 77 MB (81,159,989 bytes)
+**SHA-256:** `c67e32c1e6331a32aa45f7f5eaf3b2c8680bda9b73732efbeae9614389b06e21`
+**Build date:** 2026-10-22 13:51 (Build 5 — after all translation fixes)
+**Build log:** `/tmp/en-unity-slotA/build.log`
 **Unity exit:** `Exiting batchmode successfully now!`
 
 **Build configuration:**
@@ -125,7 +125,7 @@ f56fad3 fix: 修复 C# 10 插值字符串内不合法的 \" 转义引号
 - Output: `Builds/EN/TombDuel-EN-PICO.apk`
 - Build method: `Guandan.Editor.GuandanProjectSetup.BuildPicoApk`
 
-Note: Build 1 and 2 failed due to C# 10 interpolated string syntax errors (fixed in commit f56fad3). Build 3 failed due to wrong namespace (`TombDuel.Editor` instead of `Guandan.Editor`). Build 4 succeeded.
+Note: Build 1 and 2 failed due to C# 10 interpolated string syntax errors (fixed in commit f56fad3). Build 3 failed due to wrong namespace (`TombDuel.Editor` instead of `Guandan.Editor`). Build 4 succeeded (SHA: 73f2be2f...). Build 5 includes all translation fixes (Steady Dig / Bold Dig / Consecutive Triples / Draw Your Partner / ordinals / Expedition Leader / AI profile rewrites).
 
 ---
 
@@ -176,8 +176,11 @@ No new 3D assets generated (Tripo credits: 0 used for this delivery).
 - [x] ProjectSettings: productName=TOMB DUEL, bundleId=com.guandan.tombxr.en
 - [x] Title cover image replaced with English version
 - [x] Git history: 5 commits (baseline → translation → syntax fix → delivery report → EN_TEXT_TABLE fix)
-- [x] APK build: `Builds/EN/TombDuel-EN-PICO.apk` (77 MB, build 4 succeeded)
-- [x] APK SHA-256: `73f2be2f1282839621362e99466d56f40b1862ef0a781bae30a9bb0ed507b44a`
-- [x] Library/Bee and intermediate artifacts cleaned up after build
-- [ ] VisualQA screenshots (requires PICO device or simulator with loaded APK — not available in this session)
-- [ ] slot-1 released (pending cleanup completion)
+- [x] APK build 5: `Builds/EN/TombDuel-EN-PICO.apk` (81,159,989 bytes, build 5 succeeded 13:51)
+- [x] APK SHA-256: `c67e32c1e6331a32aa45f7f5eaf3b2c8680bda9b73732efbeae9614389b06e21`
+- [x] Translation fixes: Steady Dig / Bold Dig / Consecutive Triples / Draw Your Partner / ordinals / Expedition Leader / AI profiles
+- [x] GameplayComfortValidation.cs updated: EN assertions (S\nJKR, B\nJKR, Wild→8, VICTORY!, DEFEATED), folder → VisualQA/EN-20261022
+- [x] EN_TEXT_TABLE.md updated to reflect all terminology changes
+- [x] UI texture audit: all 11 GuandanUI PNGs inspected — no baked Chinese text found
+- [x] Emulator install: com.guandan.tombxr.en installed on emulator-5554
+- [x] Slot released: /tmp/en-unity-slotA removed after build

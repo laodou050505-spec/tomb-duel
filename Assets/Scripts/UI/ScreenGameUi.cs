@@ -273,7 +273,7 @@ namespace Guandan.UI
 
             if (!director.LotteryChosen)
             {
-                titleText.text = "Draw a Lot";
+                titleText.text = "Draw Your Partner";
                 progressText.text = "One lot becomes your partner. The other two become opponents.";
                 turnText.text = director.LotteryStatusMessage;
                 lotteryResultText.text = director.LotteryStatusMessage;
@@ -582,7 +582,7 @@ namespace Guandan.UI
 
             lotteryPanel = CreatePanel("LotteryPanel", root, new Vector2(0f, -26f), new Vector2(1360f, 660f), new Color(0.04f, 0.055f, 0.05f, 0.94f));
             ApplySkin(lotteryPanel.GetComponent<Image>(), tombPanelSprite, Color.white);
-            var lotteryPrompt = CreateText("LotteryPrompt", "Draw a Lot", lotteryPanel.transform as RectTransform, new Vector2(0f, 258f), 40, TextAnchor.MiddleCenter, new Color(0.94f, 0.80f, 0.46f));
+            var lotteryPrompt = CreateText("LotteryPrompt", "Draw Your Partner", lotteryPanel.transform as RectTransform, new Vector2(0f, 258f), 40, TextAnchor.MiddleCenter, new Color(0.94f, 0.80f, 0.46f));
             lotteryPrompt.rectTransform.sizeDelta = new Vector2(900f, 60f);
             var lotteryHint = CreateText("LotteryHint", "One lot becomes your partner. The other two become opponents.", lotteryPanel.transform as RectTransform, new Vector2(0f, 204f), 22, TextAnchor.MiddleCenter, new Color(0.80f, 0.82f, 0.74f));
             lotteryHint.rectTransform.sizeDelta = new Vector2(1120f, 44f);
@@ -660,8 +660,8 @@ namespace Guandan.UI
             blueRouteCells = CreateRouteTrack("BlueRoute", routePanel.transform, new Vector2(-405f, 42f), new Color(0.20f, 0.66f, 0.58f));
             redRouteCells = CreateRouteTrack("RedRoute", routePanel.transform, new Vector2(405f, 42f), new Color(0.78f, 0.24f, 0.16f));
             enterTreasureButtonUi = CreateButton("EnterTreasure", new Vector2(0f, -44f), new Vector2(440f, 88f), "Enter Treasure Race", new Color(0.70f, 0.42f, 0.16f), UiHitKind.Action, -1, "enter-treasure");
-            steadyButtonUi = CreateButton("Steady", new Vector2(-340f, -104f), new Vector2(620f, 136f), "Steady Advance", new Color(0.22f, 0.38f, 0.32f), UiHitKind.Action, -1, "steady");
-            riskyButtonUi = CreateButton("Risky", new Vector2(340f, -104f), new Vector2(620f, 136f), "Risky Dig", new Color(0.43f, 0.22f, 0.16f), UiHitKind.Action, -1, "risky");
+            steadyButtonUi = CreateButton("Steady", new Vector2(-340f, -104f), new Vector2(620f, 136f), "Steady Dig", new Color(0.22f, 0.38f, 0.32f), UiHitKind.Action, -1, "steady");
+            riskyButtonUi = CreateButton("Risky", new Vector2(340f, -104f), new Vector2(620f, 136f), "Bold Dig", new Color(0.43f, 0.22f, 0.16f), UiHitKind.Action, -1, "risky");
             routeResultText = CreateText("RouteResult", "", routePanel.transform as RectTransform, new Vector2(0f, -226f), 34, TextAnchor.MiddleCenter, new Color(0.98f, 0.86f, 0.55f));
             routeResultText.rectTransform.sizeDelta = new Vector2(1320f, 100f);
             continueButtonUi = CreateButton("Continue", new Vector2(0f, -324f), new Vector2(500f, 104f), "Back to Table · Next Round", new Color(0.18f, 0.28f, 0.25f), UiHitKind.Action, -1, "continue");
@@ -768,7 +768,7 @@ namespace Guandan.UI
                 if (match.FinishOrder[index] == PlayerSeat.South) placement = index + 1;
             }
             handInfoText.text = placement > 0
-                ? $"You · #{placement}"
+                ? $"You · {GuandanMatchEngine.Ordinal(placement)}"
                 : director.IsPresentationLocked ? $"Dealing {visibleCount} / 27" : $"Hand: {allCards.Count}";
             if (director.IsPresentationLocked)
                 selectionText.text = director.DealVisibleCount >= 27 ? "Revealing trump rank…" : "Cards arriving…";
@@ -929,8 +929,8 @@ namespace Guandan.UI
             enterTreasureButtonUi.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -44f);
             steadyButtonUi.interactable = humanChoice && viewReady;
             riskyButtonUi.interactable = humanChoice && viewReady;
-            SetButtonText("Steady", "Steady Advance\n+" + result.BaseSteps + (result.BaseSteps != 1 ? " tiles" : " tile"));
-            SetButtonText("Risky", "Risky Dig\n×2 (10%)  +1 (15%)  Normal (55%)\n−1 (12%)  Retreat (8%)");
+            SetButtonText("Steady", "Steady Dig\n+" + result.BaseSteps + (result.BaseSteps != 1 ? " tiles" : " tile"));
+            SetButtonText("Risky", "Bold Dig\n×2 (10%)  +1 (15%)  Normal (55%)\n−1 (12%)  Retreat (8%)");
             if (!director.RaceResolved)
             {
                 routeTitleText.text = viewReady ? (humanChoice ? "Choose Route" : $"{firstName} is choosing…") : "Round done · To Race";
@@ -1359,7 +1359,7 @@ namespace Guandan.UI
             var group = panel.AddComponent<CanvasGroup>();
             var accent = CreatePanelStatic("TeamAccent", panel.transform, new Vector2(0f, -40f), new Vector2(112f, 3f), color);
             accent.GetComponent<Image>().raycastTarget = false;
-            var label = CreateText("Label", $"{SeatName(seat)}\n#{place}", panel.transform, new Vector2(0f, -2f), 23, TextAnchor.MiddleCenter, new Color(0.96f, 0.86f, 0.64f));
+            var label = CreateText("Label", $"{SeatName(seat)}\n{GuandanMatchEngine.Ordinal(place)}", panel.transform, new Vector2(0f, -2f), 23, TextAnchor.MiddleCenter, new Color(0.96f, 0.86f, 0.64f));
             label.rectTransform.sizeDelta = new Vector2(228f, 82f);
             label.fontStyle = FontStyle.Bold;
             var shadow = label.gameObject.AddComponent<Shadow>();

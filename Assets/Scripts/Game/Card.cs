@@ -48,8 +48,8 @@ namespace Guandan.Game
         {
             get
             {
-                if (IsSmallJoker) return "Jkr";
-                if (IsBigJoker) return "BIG";
+                if (IsSmallJoker) return "S\nJKR";
+                if (IsBigJoker) return "B\nJKR";
                 return Rank switch
                 {
                     11 => "J",
