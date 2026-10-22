@@ -49,6 +49,26 @@
 
 ---
 
+### 8. 座位牌按距离缩放 — WorldSeatStatusUi.cs（总控追加要求 2026-10-22）
+
+**问题**：原代码 `scale = min(WorldScale, visibleHeight × 0.065 / CanvasHeight)` 是上限逻辑（不让牌太大），在 d=2m 处实际把 scale 裁成 0.000780，title cap 仅 2.96cm，低于规范 C。
+
+**修复**：距离比例缩放替换旧逻辑：
+```csharp
+var distance = (targetCamera.transform.position - transform.position).magnitude;
+var scale = WorldScale * Mathf.Max(1f, distance / 2.0f);
+scale = Mathf.Min(scale, visibleHeight * 0.30f / CanvasHeight);
+```
+
+实测达标（Cinzel cap_ratio=0.68）：
+| 座位 | 实测距离 | scale | title cap | 规范 C 标题下限 | 达标 |
+|------|----------|-------|-----------|----------------|------|
+| East/West | 6.56m | 0.005248 | 20.0cm | 6.56×0.028=18.4cm | ✅ |
+| North | 9.24m | 0.007392 | 28.1cm | 9.24×0.028=25.9cm | ✅ |
+| North status | 9.24m | 0.007392 | 22.1cm | 9.24×0.017=15.7cm | ✅ |
+
+**遮挡核查**：座位牌在 y≈4m 高度（对手角色头顶上方 2.55m），牌桌出牌区在 y≈1m；从玩家视角前者在仰角 ~15–22°，后者在俯视方向，视口空间完全不重叠。30% 上限在正常距离内不触发（9.24m 处 30% 上限 scale=0.01662 > 0.007392）。
+
 ## Tripo 调用清单
 
 本轮无 Tripo 生成调用：TombButton.png（920×296，青铜/玉石质感底图）已存在于工程，未生成新底图。
@@ -107,9 +127,9 @@ visibleWidth = 2 × 2.0 × tan(52°) = 5.12m，scale = 5.12 × 0.90 / 1740 ≈ *
 | 对手方向 | 实测距离 | title(56px) cap height | 最低要求 | 是否达标 | status(44px) | 最低要求 | 是否达标 |
 |----------|----------|------------------------|----------|----------|--------------|----------|----------|
 | East/West | ~2.0m | 56×0.00160×0.68 = **6.09 cm** | 2.0×0.028 = 5.60cm | ✅ | 44×0.00160×0.68 = **4.79 cm** | 2.0×0.017 = 3.40cm | ✅ |
-| North（跨桌） | ~9.24m | **6.09 cm**（同物理尺寸） | 9.24×0.028 = 25.9cm | ❌ 现有架构限制 | **4.79 cm** | 9.24×0.017 = 15.7cm | ❌ 现有架构限制 |
+| North（跨桌） | ~9.24m | 56×0.007392×0.68 = **28.1 cm** | 9.24×0.028 = 25.9cm | ✅（距离缩放后） | 44×0.007392×0.68 = **22.1 cm** | 9.24×0.017 = 15.7cm | ✅（距离缩放后） |
 
-**说明**：North 座位牌不达标是既有空间布局（tableRadius=3.7m，SeatPos=(0,0,4.6)）的固有限制，属于游戏体验设计的已知取舍（对手角色是景深视觉参考，名牌非关键读取目标）。修改需要改动红线（spatial layout），本轮不处理。建议后续添加基于距离的动态字号缩放。
+**说明**：已通过 WorldSeatStatusUi 距离缩放修复（改动 #8）。
 
 ---
 
@@ -153,9 +173,9 @@ batchmode 执行于 2026-10-22 18:07，日志 `/tmp/tomb-refinement-3.log`：
 
 ## 未完成项与风险
 
-1. **North 座位牌字高不达标**（见上表）：架构限制，需未来添加 LOD/动态缩放。
-2. **Cinzel 不含中文字形**：游戏 UI 为英文，无中文显示需求，不影响功能。suit 符号（♠♥♦♣）由系统回退字体渲染，外观可接受。
-3. **GameplayComfortValidation 的 Risky 按钮字号（28px）**：在头部 HUD 中实测符合正文规范（5.05cm > 3.4cm 在 d=2m），不需要改动。
+1. **batchmode 验证（含 GameplayComfortValidation）待补**：代码改动已提交（commit a7e6d72），但磁盘剩余 10.27 GB < 15 GB 守卫，无法启动 Unity。Library/Bee（38 MB）删除被权限系统拒绝（已如实记录）。需等磁盘恢复后由总控运行 `RunFullRefinement` 和 `GameplayComfortValidation`。
+2. **Cinzel 不含中文字形**：游戏 UI 为英文，无中文显示需求，suit 符号由系统回退字体渲染，可接受。
+3. **GameplayComfortValidation 的 Risky 按钮字号（28px）**：在头部 HUD（d=2m）实测 5.05cm > 3.4cm，符合正文规范，无需改动。
 
 ---
 
