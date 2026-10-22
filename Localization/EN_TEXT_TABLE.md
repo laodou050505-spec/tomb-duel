@@ -208,7 +208,7 @@ All 5 fields per profile: Name, Title (type), Description (long), Note (interact
 | Key | Chinese (原文精确) | English | Source |
 |-----|--------------------|---------|--------|
 | Phase_TributeReturn | 还贡 · 请选择一张牌 | Return Tribute · Select a card | GameDirector.cs:1403 |
-| Phase_Playing | 掼蛋 · 级牌 {R} · {seat}行动 | Trump Rank {R} · {seat}'s turn | GameDirector.cs:1404 |
+| Phase_Playing | 掼蛋 · 级牌 {R} · {seat}行动 | Trump Rank {R} · Your turn / East's turn | GameDirector.cs:1404 — uses SeatTurnPhrase() |
 | Phase_HandComplete | 夺宝 · 选择探方路线 | Treasure Race · Choose route | GameDirector.cs:1405 |
 | Phase_MatchComplete | 地宫宝箱已开启 | Tomb Chest Opened | GameDirector.cs:1406 |
 | Phase_Default | 墓室牌局 | Tomb Card Table | GameDirector.cs:1407 |

@@ -1404,7 +1404,7 @@ namespace Guandan.Game
                 phaseLabel.text = match.Phase switch
                 {
                     MatchPhase.TributeReturn => "Return Tribute · Choose a card",
-                    MatchPhase.Playing => $"Trump Rank {GuandanMatchEngine.RankLabel(match.LevelRank)} · {GuandanMatchEngine.SeatLabel(match.ActiveSeat)}'s turn",
+                    MatchPhase.Playing => $"Trump Rank {GuandanMatchEngine.RankLabel(match.LevelRank)} · {GuandanMatchEngine.SeatTurnPhrase(match.ActiveSeat)}",
                     MatchPhase.HandComplete => "Treasure Race · Choose route",
                     MatchPhase.MatchComplete => "Tomb Chest Opened",
                     _ => "Tomb Card Table",

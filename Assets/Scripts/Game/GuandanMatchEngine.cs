@@ -325,7 +325,7 @@ namespace Guandan.Game
                 CurrentPlay = null;
                 consecutivePasses = 0;
                 ActiveSeat = leader;
-                Raise(MatchEventType.TrickReset, leader, $"New trick — {SeatLabel(leader)} leads");
+                Raise(MatchEventType.TrickReset, leader, $"New trick — {SeatLeadPhrase(leader)}");
             }
             else
             {
@@ -559,5 +559,13 @@ namespace Guandan.Game
             4 => "4th",
             _ => n + "th",
         };
+
+        // "Your turn" for South; "East's turn" etc. for AI seats.
+        public static string SeatTurnPhrase(PlayerSeat seat) =>
+            seat == PlayerSeat.South ? "Your turn" : $"{SeatLabel(seat)}'s turn";
+
+        // "You lead" for South; "East leads" etc. for AI seats.
+        public static string SeatLeadPhrase(PlayerSeat seat) =>
+            seat == PlayerSeat.South ? "You lead" : $"{SeatLabel(seat)} leads";
     }
 }
