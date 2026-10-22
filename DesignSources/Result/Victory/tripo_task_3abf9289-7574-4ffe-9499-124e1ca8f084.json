@@ -1,0 +1,19 @@
+{
+  "task_id": "3abf9289-7574-4ffe-9499-124e1ca8f084",
+  "status": "success",
+  "type": "image_to_image",
+  "progress": 100,
+  "input": {
+    "prompt": "Create the matching VICTORY version of this Chinese tomb treasure game result UI plaque. Preserve the precise frame shape, front view, proportions and empty center. Replace the broken top medallion with a radiant intact turquoise jade disc and a small open golden treasure chest emblem. Frame becomes richer luminous antique gold bronze with bright turquoise inlay, auspicious ceremonial cloud ornament. Golden silk ribbons and subtle golden rays confined to top and side edges. Keep middle 65 percent EMPTY very dark jade stone for live text and bottom button. Warm celebratory gold light, elegant premium quality. No text, letters, numbers, buttons, people or watermarks. 16:9 plaque fills image edge to edge.",
+    "model_version": "banana"
+  },
+  "output": {
+    "generated_image_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_c6fae067c9334bd9af3d07029c0e7b00/20260909/3abf9289-7574-4ffe-9499-124e1ca8f084/generated_image.png?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfYzZmYWUwNjdjOTMzNGJkOWFmM2QwNzAyOWMwZTdiMDAvMjAyNjA5MDkvM2FiZjkyODktNzU3NC00ZmZlLTk0OTktMTI0ZTFjYThmMDg0L2dlbmVyYXRlZF9pbWFnZS5wbmciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3ODkwMjQ4Nzd9fX1dfQ__&Signature=UsHAmvQsHWgeylMf4eoH2ajHJdf3glfbl4D-qErC1SeliJLSERzldeha9zpvvhu-V9szb69zO0Ffgtb2ns5EmeNGPMwQpk2xx7t7Fv7jiSC04gI18CSN2KciWsY48CBwyfoOYD8hFukodcCe1ewxgzsaj951UCsM~YYwEQXni0w3CI8WR4BFSgkYcNrz2EIHLtdMBIqbQ-mDj32xkD7CwTyGzWOKgssEUZy~PNZex~2ix2xhBUedzO4DuSeUbriqS230klgIirxcI3ZVWsM6wbAAbGs4~EJEHnhRDUlH6fgx9QNpC70noHHfxHi7cq8m62fraNruEusoM7yy0a~6HA__&Key-Pair-Id=K1676C64NMVM2J"
+  },
+  "created_at": "2026-09-09T07:20:58.316618Z",
+  "completed_at": "2026-09-09T07:21:16.965600Z",
+  "credits_consumed": 5.0,
+  "downloaded_files": [
+    "/Users/ld/Documents/Codex/2026-08-16/jie/outputs/掼蛋/DesignSources/Result/Victory/01_generated_image_url.png"
+  ]
+}

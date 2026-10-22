@@ -1,0 +1,19 @@
+{
+  "task_id": "bd2af20b-c863-4be3-bb1c-56057917089e",
+  "status": "success",
+  "type": "image_to_image",
+  "progress": 100,
+  "input": {
+    "prompt": "Create a premium 16:9 game title-screen background for an original PICO VR game called Tomb Duel. Fuse a cinematic ancient Chinese underground tomb chamber with weathered rammed-earth walls, oxidized bronze reliefs, dark jade inlays, a monumental circular jade-and-bronze seal hovering above a stone altar, and a distant treasure chest glow. Use deep charcoal black, oxidized bronze, muted jade teal, and restrained vermilion accents. Composition: strong central emblem slightly above center, large quiet negative space around it for a title and menu overlay, subtle vignette, atmospheric dust, volumetric shafts of light, high-end concept art and premium game poster finish. Add very subtle thin teal HUD brackets and red indicator marks around the outer edges, inspired by sci-fi interface references but integrated into the ancient materials. No people, no playing cards, no logos, no brand names, no watermark, no readable text, no random letters, no UI panels, no white border. The image must feel immersive, elegant, mysterious, and readable behind foreground menu typography.",
+    "model_version": "banana"
+  },
+  "output": {
+    "generated_image_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_c6fae067c9334bd9af3d07029c0e7b00/20260908/bd2af20b-c863-4be3-bb1c-56057917089e/generated_image.png?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfYzZmYWUwNjdjOTMzNGJkOWFmM2QwNzAyOWMwZTdiMDAvMjAyNjA5MDgvYmQyYWYyMGItYzg2My00YmUzLWJiMWMtNTYwNTc5MTcwODllL2dlbmVyYXRlZF9pbWFnZS5wbmciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3ODg5MzE4Nzh9fX1dfQ__&Signature=QkaEjcpkoC5-N49ZqZi4n-T7J3Y4e4Cboe1Ww-qgsV2QgAP4tlgLt0zyxoJBvq6Jtj-KrlWCjdUc7z-BJrXt1wvaULDFGHcJqr4aqt80QSKEtBN2xbWtO0yHsyqtJT~b-ERtO5inwBhuqq3Nld8V7iCGxU4uc4tqXSBq99qit7UykoyEuy7xtAYqG7WH0jMGwfeP0~GknJs1c52MQ441EqbieRwIisYj4zHgK2Ux5SFbR3LFMRyVcC0tAe17NbplnArXncraRuexD93fjCgF6rxRfVBMU8arzS1cP8U9Griq1U4DwpissjYJSaddw9iO4YC~KS0VDsq5-znGJbkMFg__&Key-Pair-Id=K1676C64NMVM2J"
+  },
+  "created_at": "2026-09-08T05:30:56.922934Z",
+  "completed_at": "2026-09-08T05:31:17.461953Z",
+  "credits_consumed": 5.0,
+  "downloaded_files": [
+    "/Users/ld/Documents/Codex/2026-08-16/jie/outputs/掼蛋/Assets/Resources/GuandanUI/TripoTitle/01_generated_image_url.png"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "sha256": "b8d37b524fb92e5ea16c10b4b6c2fe4d754964767ab4251fe41814e2edd5cd29",
+  "bytes": 78654505,
+  "scene_files": [
+    "assets/bin/Data/level0",
+    "assets/bin/Data/level1"
+  ],
+  "native_vr": true,
+  "arm64_il2cpp": true,
+  "title_first": true
+}

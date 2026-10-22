@@ -1,0 +1,7 @@
+Starting: Intent { cmp=com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity }
+Warning: Activity not started because the  current activity is being kept for the user.
+Status: ok
+LaunchState: UNKNOWN (0)
+TotalTime: 0
+WaitTime: 3
+Complete

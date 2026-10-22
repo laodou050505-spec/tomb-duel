@@ -1,0 +1,19 @@
+{
+  "task_id": "58bafa5a-e0c2-45c1-91d6-c21beba218ec",
+  "status": "success",
+  "type": "image_to_image",
+  "progress": 100,
+  "input": {
+    "prompt": "Refine the input into the final premium widescreen main menu background for TOMB DUEL, a Chinese tomb treasure card game. Preserve the symmetrical ancient Chinese underground chamber, oxidized bronze, dark jade, carved reliefs, depth and central distant treasure chest. Remove ALL existing pseudo-Chinese characters on the circular seal and ALL tiny letters and sci-fi corner brackets at the borders. Replace the central seal inscription with a beautiful purely abstract interlocking jade-and-bronze geometric relic, no writing on the relic. Add a large exceptionally legible custom gold chiseled serif English title TOMB DUEL, exactly those two words, in one elegant monumental line centered horizontally at approximately 37 percent image height. Title width approximately 62 percent of canvas, high contrast pale antique gold with subtle aged metal texture. Below it at 48 percent image height add the smaller widely spaced text GUANDAN TREASURE exactly. Large title is the unmistakable focal point layered over the seal. Retain Chinese tomb architecture as dim atmospheric layers rather than a black void. Reserve the entire central lower quarter from 68 to 92 percent height as dark quiet background for two live Unity buttons; do not draw buttons or menu text there. Keep all text and focal artwork within central 82 percent width. Finish like an expensive fantasy game title screen, restrained bronze and jade, no watermark, no other text, no people, no cards, no white borders.",
+    "model_version": "banana"
+  },
+  "output": {
+    "generated_image_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_c6fae067c9334bd9af3d07029c0e7b00/20260908/58bafa5a-e0c2-45c1-91d6-c21beba218ec/generated_image.png?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfYzZmYWUwNjdjOTMzNGJkOWFmM2QwNzAyOWMwZTdiMDAvMjAyNjA5MDgvNThiYWZhNWEtZTBjMi00NWMxLTkxZDYtYzIxYmViYTIxOGVjL2dlbmVyYXRlZF9pbWFnZS5wbmciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3ODg5MzM4ODh9fX1dfQ__&Signature=kVT775-u0rQctzOYAtQzcgBwdpQcz3Uz19nATdqDAfmMY2JgOtacYAI93mIECvejX7HTWUwMxioNFy2tg5K7Y~DYutRBMuXslLTrB6XreYpHoZqaSNFASqtPZPfdezyIBvzGxP714V0Omto7g8rsOMzn4i3Lk0b5NdFE1IA3BTjTVePjrYRjwPEw7DK9L3-aIDR7jGlRt4WfCG4lX21w8ZZfxs7KwzkPaQRJIZDAzIfizqIXv7e9yx92V0ci9Ayrb2cImBEtpzicpXx3O8ByJX86UrquuZ5db2rLhIRfiRdshdNnfgTedj3sg1UkeRXOVqy88XgCCfOs9sJSd6LE9w__&Key-Pair-Id=K1676C64NMVM2J"
+  },
+  "created_at": "2026-09-08T06:04:27.946014Z",
+  "completed_at": "2026-09-08T06:04:48.033244Z",
+  "credits_consumed": 5.0,
+  "downloaded_files": [
+    "/Users/ld/Documents/Codex/2026-08-16/jie/outputs/掼蛋/DesignSources/Title/Final/01_generated_image_url.png"
+  ]
+}

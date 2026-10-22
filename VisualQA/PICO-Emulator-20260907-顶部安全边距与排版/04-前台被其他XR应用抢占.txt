@@ -1,0 +1,230 @@
+ACTIVITY MANAGER ACTIVITIES (dumpsys activity activities)
+Display #0 (activities from top to bottom):
+  * Task{8052592 #18 type=home U=0 visible=true visibleRequested=true mode=fullscreen translucent=false sz=1}
+    mBounds=Rect(0, 0 - 2560, 1440)
+    * Task{c8fab63 #19 type=home A=1000:com.picoxr.launcher U=0 rootTaskId=18 visible=true visibleRequested=true mode=fullscreen translucent=false sz=1}
+      mLastNonFullscreenBounds=Rect(54, 501 - 2106, 1658)
+      isSleeping=false
+      topResumedActivity=ActivityRecord{151284724 u0 com.picoxr.launcher/.MainActivity t19}
+      * Hist  #0: ActivityRecord{151284724 u0 com.picoxr.launcher/.MainActivity t19}
+        packageName=com.picoxr.launcher processName=com.picoxr.launcher
+        launchedFromUid=0 launchedFromPackage=null launchedFromFeature=null userId=0
+        app=ProcessRecord{1755490 7919:com.picoxr.launcher/1000 PRSmt{6191189 p:0 rp:7919 t:null sa:0 usps:0 sps:2 kt:0 fs:0 inSfile:false freezeBlockFlags:0 pendingInstallProviderCount:0 fm:INVALID}}
+        Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.picoxr.launcher/.MainActivity (has extras) }
+        rootOfTask=true task=Task{c8fab63 #19 type=home A=1000:com.picoxr.launcher}
+        taskAffinity=1000:com.picoxr.launcher
+        mActivityComponent=com.picoxr.launcher/.MainActivity
+        baseDir=/system/priv-app/SpaceLauncher/SpaceLauncher.apk
+        dataDir=/data/user/0/com.picoxr.launcher
+        stateNotNeeded=false componentSpecified=true mActivityType=home
+        compat={320dpi always-compat} theme=0x1030007
+        mLastReportedConfigurations:
+                RequestedOverrideConfiguration={0.0 ?mcc0mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?ldr ?wideColorGamut ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=null mMaxBounds=Rect(0, 0 - 0, 0) mDisplayRotation=undefined mWindowingMode=undefined mActivityType=home mAlwaysOnTop=undefined mRotation=undefined} ?fontWeightAdjustment}
+        ResolvedOverrideConfiguration={0.0 ?mcc0mnc ?localeList ?layoutDir sw720dp w1280dp h720dp ?density ?lsize ?long ?ldr ?wideColorGamut land ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 2560, 1440) mAppBounds=Rect(0, 0 - 2560, 1440) mMaxBounds=Rect(0, 0 - 2560, 1440) mDisplayRotation=undefined mWindowingMode=undefined mActivityType=home mAlwaysOnTop=undefined mRotation=undefined} s.9 ?fontWeightAdjustment}
+        taskDescription: label="null" icon=null iconResource=/0 iconFilename=null primaryColor=ff222222
+          backgroundColor=ff000000 statusBarColor=ff000000 navigationBarColor=808080
+         backgroundColorFloating=ff000000
+        launchFailed=false launchCount=0 lastLaunchTime=-31m44s846ms
+        mHaveState=false mIcicle=null
+        state=RESUMED delayedResume=false finishing=false
+        keysPaused=false inHistory=true idle=true
+        occludesParent=true mNoDisplay=false immersive=false launchMode=2
+        mActivityType=home
+        windows=[Window{f9241bd u0 com.picoxr.launcher/com.picoxr.launcher.MainActivity}]
+        windowType=2
+        mOccludesParent=true
+        overrideOrientation=SCREEN_ORIENTATION_LANDSCAPE
+        requestedOrientation=SCREEN_ORIENTATION_LANDSCAPE
+        mVisibleRequested=true mVisible=true mClientVisible=true reportedDrawn=true reportedVisible=true
+        mNumInterestingWindows=1 mNumDrawnWindows=1 allDrawn=true)
+        startingData=null firstWindowDrawn=true
+        nowVisible=true lastVisibleTime=-1m12s830ms
+        resizeMode=RESIZE_MODE_RESIZEABLE
+        mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+        supportsSizeChanges=SIZE_CHANGES_UNSUPPORTED_METADATA
+        configChanges=0x40002fff
+        neverSandboxDisplayApis=false
+        alwaysSandboxDisplayApis=false
+        isTransparentPolicyRunning=false
+        areBoundsLetterboxed=false
+        isLetterboxRunning=false
+
+  * Task{eb86faa #40 type=standard U=0 visible=false visibleRequested=false mode=fullscreen translucent=true sz=1}
+    mBounds=Rect(0, 0 - 1080, 1920)
+    * Task{e422738 #41 type=standard A=10097:com.guandan.tombxr minWidth=400 minHeight=300 U=0 rootTaskId=40 visible=false visibleRequested=false mode=fullscreen translucent=true sz=1}
+      mLastPausedActivity: ActivityRecord{54407756 u0 com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity t41}
+      mLastNonFullscreenBounds=Rect(54, 501 - 2106, 1658)
+      isSleeping=false
+      mMinWidth=400 mMinHeight=300
+      * Hist  #0: ActivityRecord{54407756 u0 com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity t41}
+        packageName=com.guandan.tombxr processName=com.guandan.tombxr
+        launchedFromUid=2000 launchedFromPackage=com.android.shell launchedFromFeature=null userId=0
+        app=ProcessRecord{58e7ee4 12368:com.guandan.tombxr/u0a97 PRSmt{3978d8b p:0 rp:12368 t:null sa:900 usps:15 sps:15 kt:0 fs:0 inSfile:false freezeBlockFlags:0 pendingInstallProviderCount:0 fm:INVALID}}
+        Intent { flg=0x10000000 xflg=0x5 cmp=com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity }
+        rootOfTask=true task=Task{e422738 #41 type=standard A=10097:com.guandan.tombxr minWidth=400 minHeight=300}
+        taskAffinity=10097:com.guandan.tombxr
+        mActivityComponent=com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity
+        baseDir=/data/app/~~undaK84vFLcS741mjwRDBw==/com.guandan.tombxr-BrrPzwzE5fCkjr6IGRudvQ==/base.apk
+        dataDir=/data/user/0/com.guandan.tombxr
+        stateNotNeeded=false componentSpecified=true mActivityType=standard
+        compat={320dpi always-compat} theme=0x0
+        mLastReportedConfigurations:
+                RequestedOverrideConfiguration={0.0 ?mcc0mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?ldr ?wideColorGamut ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=null mMaxBounds=Rect(0, 0 - 0, 0) mDisplayRotation=undefined mWindowingMode=undefined mActivityType=standard mAlwaysOnTop=undefined mRotation=undefined} ?fontWeightAdjustment}
+        taskDescription: label="null" icon=null iconResource=/0 iconFilename=null primaryColor=ff1a1b20
+          backgroundColor=ffeeedf4 statusBarColor=ff1a1b20 navigationBarColor=808080
+         backgroundColorFloating=fff1f0f7
+        launchFailed=false launchCount=0 lastLaunchTime=-5m13s360ms
+        mHaveState=true mIcicle=Bundle[mParcelledData.dataSize=432]
+        state=STOPPED delayedResume=false finishing=false
+        keysPaused=false inHistory=true idle=true
+        occludesParent=true mNoDisplay=false immersive=false launchMode=2
+        mActivityType=standard
+        windows=[Window{acb547 u0 com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity}]
+        windowType=2
+        mOccludesParent=true
+        overrideOrientation=SCREEN_ORIENTATION_LANDSCAPE
+        requestedOrientation=SCREEN_ORIENTATION_LANDSCAPE
+        mVisibleRequested=false mVisible=false mClientVisible=false reportedDrawn=false reportedVisible=false
+        mAppStopped=true
+        mNumInterestingWindows=1 mNumDrawnWindows=1 allDrawn=false)
+        nowVisible=false lastVisibleTime=-5m13s266ms
+        resizeMode=RESIZE_MODE_RESIZEABLE
+        mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+        supportsSizeChanges=SIZE_CHANGES_UNSUPPORTED_METADATA
+        configChanges=0x40003fff
+        neverSandboxDisplayApis=false
+        alwaysSandboxDisplayApis=false
+        isTransparentPolicyRunning=false
+        areBoundsLetterboxed=false
+        isLetterboxRunning=false
+
+  * Task{6337591 #0 type=undefined U=0 visible=false visibleRequested=false mode=fullscreen translucent=true sz=0}
+    isSleeping=false
+
+  * Task{2fcfb0e #20 type=standard U=0 visible=false visibleRequested=false mode=fullscreen translucent=true sz=1}
+    mBounds=Rect(0, 0 - 2256, 1760)
+    * Task{509592f #21 type=standard A=1000:com.picoxr.systemui U=0 rootTaskId=20 visible=false visibleRequested=false mode=fullscreen translucent=true sz=1}
+      mLastNonFullscreenBounds=Rect(668, 347 - 1492, 1811)
+      isSleeping=false
+      * Hist  #0: ActivityRecord{78220816 u0 com.picoxr.systemui/.platform.MainActivity t21}
+        packageName=com.picoxr.systemui processName=com.picoxr.systemui
+        launchedFromUid=1000 launchedFromPackage=com.picoxr.worldspace launchedFromFeature=null userId=0
+        app=ProcessRecord{5f3f5d4 8062:com.picoxr.systemui/1000 PRSmt{32443be p:0 rp:8062 t:null sa:-800 usps:0 sps:0 kt:0 fs:0 inSfile:false freezeBlockFlags:0 pendingInstallProviderCount:0 fm:INVALID}}
+        Intent { flg=0x10000000 xflg=0x4 cmp=com.picoxr.systemui/.platform.MainActivity (has extras) }
+        rootOfTask=true task=Task{509592f #21 type=standard A=1000:com.picoxr.systemui}
+        taskAffinity=1000:com.picoxr.systemui
+        mActivityComponent=com.picoxr.systemui/.platform.MainActivity
+        baseDir=/system/priv-app/SpatialSystemUI/SpatialSystemUI.apk
+        dataDir=/data/user/0/com.picoxr.systemui
+        stateNotNeeded=false componentSpecified=true mActivityType=standard
+        compat={320dpi always-compat} theme=0x7f110295
+        mLastReportedConfigurations:
+                RequestedOverrideConfiguration={0.0 ?mcc0mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?ldr ?wideColorGamut ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=null mMaxBounds=Rect(0, 0 - 0, 0) mDisplayRotation=undefined mWindowingMode=undefined mActivityType=standard mAlwaysOnTop=undefined mRotation=undefined} ?fontWeightAdjustment}
+        taskDescription: label="null" icon=null iconResource=/0 iconFilename=null primaryColor=ffe6e6e6
+          backgroundColor=ffffffff statusBarColor=0 navigationBarColor=808080
+         backgroundColorFloating=ffffffff
+        launchFailed=false launchCount=0 lastLaunchTime=-31m42s602ms
+        mHaveState=true mIcicle=Bundle[mParcelledData.dataSize=2068]
+        state=STOPPED delayedResume=false finishing=false
+        keysPaused=false inHistory=true idle=true
+        occludesParent=true mNoDisplay=false immersive=false launchMode=3
+        mActivityType=standard
+        windows=[Window{539382 u0 com.picoxr.systemui/com.picoxr.systemui.platform.MainActivity}]
+        windowType=2
+        mOccludesParent=true
+        overrideOrientation=SCREEN_ORIENTATION_UNSPECIFIED
+        requestedOrientation=SCREEN_ORIENTATION_UNSPECIFIED
+        mVisibleRequested=false mVisible=false mClientVisible=false reportedDrawn=false reportedVisible=false
+        mAppStopped=true
+        mNumInterestingWindows=1 mNumDrawnWindows=1 allDrawn=false)
+        nowVisible=false lastVisibleTime=-8m19s937ms
+        resizeMode=RESIZE_MODE_RESIZEABLE
+        mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+        supportsSizeChanges=SIZE_CHANGES_UNSUPPORTED_METADATA
+        configChanges=0x40000ffb
+        neverSandboxDisplayApis=false
+        alwaysSandboxDisplayApis=false
+        isTransparentPolicyRunning=false
+        areBoundsLetterboxed=false
+        isLetterboxRunning=false
+
+  Resumed activities in task display areas (from top to bottom):
+    Resumed: ActivityRecord{151284724 u0 com.picoxr.launcher/.MainActivity t19}
+
+Display #2 (activities from top to bottom):
+
+  * Task{b354346 #4 type=standard U=0 visible=true visibleRequested=true mode=fullscreen translucent=false sz=1}
+    * Task{e512907 #5 type=standard A=1000:com.pxr.scenarioprovider minWidth=1920 minHeight=1920 U=0 rootTaskId=4 visible=true visibleRequested=true mode=fullscreen translucent=false sz=1}
+      mLastNonFullscreenBounds=Rect(-955, -955 - 965, 965)
+      isSleeping=false
+      topResumedActivity=ActivityRecord{223975457 u0 com.pxr.scenarioprovider/com.unity3d.player.UnityPlayerActivity t5}
+      mMinWidth=1920 mMinHeight=1920
+      * Hist  #0: ActivityRecord{223975457 u0 com.pxr.scenarioprovider/com.unity3d.player.UnityPlayerActivity t5}
+        packageName=com.pxr.scenarioprovider processName=com.pxr.scenarioprovider
+        launchedFromUid=1000 launchedFromPackage=com.pxr.scenarioprovider launchedFromFeature=null userId=0
+        app=ProcessRecord{7ca9d67 1771:com.pxr.scenarioprovider/1000 PRSmt{8674873 p:0 rp:1771 t:null sa:100 usps:0 sps:2 kt:0 fs:0 inSfile:false freezeBlockFlags:0 pendingInstallProviderCount:0 fm:INVALID}}
+        Intent { flg=0x10000000 xflg=0x4 cmp=com.pxr.scenarioprovider/com.unity3d.player.UnityPlayerActivity }
+        rootOfTask=true task=Task{e512907 #5 type=standard A=1000:com.pxr.scenarioprovider minWidth=1920 minHeight=1920}
+        taskAffinity=1000:com.pxr.scenarioprovider
+        mActivityComponent=com.pxr.scenarioprovider/com.unity3d.player.UnityPlayerActivity
+        baseDir=/system/priv-app/ScenarioProvider/ScenarioProvider.apk
+        dataDir=/data/user/0/com.pxr.scenarioprovider
+        stateNotNeeded=false componentSpecified=true mActivityType=standard
+        compat={320dpi always-compat} theme=0x7f040001
+        mLastReportedConfigurations:
+                RequestedOverrideConfiguration={0.0 ?mcc0mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?ldr ?wideColorGamut ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 0, 0) mAppBounds=null mMaxBounds=Rect(0, 0 - 0, 0) mDisplayRotation=undefined mWindowingMode=undefined mActivityType=standard mAlwaysOnTop=undefined mRotation=undefined} ?fontWeightAdjustment}
+        ResolvedOverrideConfiguration={0.0 ?mcc0mnc ?localeList ?layoutDir sw10dp w10dp h10dp ?density ?lsize ?long ?ldr ?wideColorGamut port ?uimode ?night ?touch ?keyb/?/? ?nav/? winConfig={ mBounds=Rect(0, 0 - 10, 10) mAppBounds=Rect(0, 0 - 10, 10) mMaxBounds=Rect(0, 0 - 10, 10) mDisplayRotation=undefined mWindowingMode=undefined mActivityType=standard mAlwaysOnTop=undefined mRotation=undefined} s.2 ?fontWeightAdjustment}
+        taskDescription: label="null" icon=null iconResource=/0 iconFilename=null primaryColor=fff5f5f5
+          backgroundColor=fffafafa statusBarColor=ff757575 navigationBarColor=808080
+         backgroundColorFloating=ffffffff
+        launchFailed=false launchCount=1 lastLaunchTime=-1h1m24s125ms
+        mHaveState=false mIcicle=null
+        state=RESUMED delayedResume=false finishing=false
+        keysPaused=false inHistory=true idle=true
+        occludesParent=true mNoDisplay=false immersive=false launchMode=2
+        mActivityType=standard
+        windows=[Window{691ad42 u0 com.pxr.scenarioprovider/com.unity3d.player.UnityPlayerActivity}]
+        windowType=2
+        mOccludesParent=true
+        overrideOrientation=SCREEN_ORIENTATION_LANDSCAPE
+        requestedOrientation=SCREEN_ORIENTATION_LANDSCAPE
+        mVisibleRequested=true mVisible=true mClientVisible=true reportedDrawn=true reportedVisible=true
+        mNumInterestingWindows=1 mNumDrawnWindows=1 allDrawn=true)
+        startingData=null firstWindowDrawn=true
+        nowVisible=true lastVisibleTime=-1h1m24s61ms
+        resizeMode=RESIZE_MODE_RESIZEABLE
+        mLastReportedMultiWindowMode=false mLastReportedPictureInPictureMode=false
+        supportsSizeChanges=SIZE_CHANGES_UNSUPPORTED_METADATA
+        configChanges=0x40003fff
+        neverSandboxDisplayApis=false
+        alwaysSandboxDisplayApis=false
+        isTransparentPolicyRunning=false
+        areBoundsLetterboxed=false
+        isLetterboxRunning=false
+
+  Resumed activities in task display areas (from top to bottom):
+    Resumed: ActivityRecord{223975457 u0 com.pxr.scenarioprovider/com.unity3d.player.UnityPlayerActivity t5}
+
+  ResumedActivity: ActivityRecord{151284724 u0 com.picoxr.launcher/.MainActivity t19}
+
+ActivityTaskSupervisor state:
+  topDisplayFocusedRootTask=Task{8052592 #18 type=home}
+  Display: mDisplayId=0
+
+  ignoreOrientationRequest=true
+  mLayoutSeq=290
+  mCurrentFocus=Window{f9241bd u0 com.picoxr.launcher/com.picoxr.launcher.MainActivity}
+  mFocusedApp=ActivityRecord{151284724 u0 com.picoxr.launcher/.MainActivity t19}
+
+  mHoldScreenWindow=null
+  mObscuringWindow=null
+  mLastWakeLockHoldingWindow=null
+  mLastWakeLockObscuringWindow=null
+
+   mPointerEventDispatcher: com.android.server.wm.PointerEventDispatcher@578ca34
+  com.android.server.wm.PointerEventDispatcher
+   mInputChannel: PointerEventDispatcher0
+   mSeqMap: {}
+   mReceiverPtr:
+    mInputConsumer:
+      mResampleTouch = true

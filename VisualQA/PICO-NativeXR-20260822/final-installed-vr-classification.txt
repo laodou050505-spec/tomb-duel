@@ -1,0 +1,8 @@
+69-  default size: 1080x1920
+70-  process keep alive: false
+71-  app flags: 0
+72:  com.unity3d.player.UnityPlayerActivity isVrActivity: true
+73:  android.app.AppDetailsActivity isVrActivity: false
+74-
+75-Queries:
+76-  system apps queryable: false

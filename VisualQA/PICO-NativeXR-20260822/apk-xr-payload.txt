@@ -1,0 +1,9 @@
+ 48093704  01-01-1981 01:01   lib/arm64-v8a/libil2cpp.so
+   264112  01-01-1981 01:01   lib/arm64-v8a/libpxrplatformloader.so
+   682064  01-01-1981 01:01   lib/arm64-v8a/libpxrplatformloader4j.so
+ 21677888  01-01-1981 01:01   lib/arm64-v8a/libunity.so
+      353  01-01-1981 01:01   assets/bin/Data/boot.config
+  1048576  01-01-1981 01:01   assets/bin/Data/globalgamemanagers.assets.split0
+  1048576  01-01-1981 01:01   assets/bin/Data/globalgamemanagers.assets.split1
+   890576  01-01-1981 01:01   assets/bin/Data/globalgamemanagers.assets.split2
+   281108  01-01-1981 01:01   assets/bin/Data/globalgamemanagers

@@ -1,0 +1,19 @@
+{
+  "task_id": "47d3a532-850d-4555-9531-b1cfd461cf1e",
+  "status": "success",
+  "type": "image_to_image",
+  "progress": 100,
+  "input": {
+    "prompt": "Premium Chinese tomb treasure game defeat result UI texture, dignified and encouraging. Reference ONLY bronze and jade style. ONE flat front-facing rectangular plaque fills entire image. Aged bronze frame, desaturated blue-green jade inlay, muted vermilion cord accents, engraved cloud corners. Small cracked jade disc emblem with dim ember at very top center occupying upper 25 percent. Cool charcoal blue stone and restrained bronze highlights. Middle 65 percent is quiet empty very dark blue charcoal stone for runtime text and button. Symmetrical ornate crisp realistic game art, no perspective. NO text, letters, characters, numbers, buttons, watermarks, people, landscape or golden victory burst.",
+    "model_version": "banana"
+  },
+  "output": {
+    "generated_image_url": "https://tripo-data.rg1.data.tripo3d.com/tcli_c6fae067c9334bd9af3d07029c0e7b00/20260909/47d3a532-850d-4555-9531-b1cfd461cf1e/generated_image.png?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly90cmlwby1kYXRhLnJnMS5kYXRhLnRyaXBvM2QuY29tL3RjbGlfYzZmYWUwNjdjOTMzNGJkOWFmM2QwNzAyOWMwZTdiMDAvMjAyNjA5MDkvNDdkM2E1MzItODUwZC00NTU1LTk1MzEtYjFjZmQ0NjFjZjFlL2dlbmVyYXRlZF9pbWFnZS5wbmciLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3ODkwMjQyNjl9fX1dfQ__&Signature=R6P5whR~TXDr9dqmYIcI3XpSv30072quGnz9dvKspKU1EK2ilR2paw9c8TMGXtlKWjIfCIJcG4JkTvKu~VgGj-lv4RmPB9xM6Tq4V5Nfw8F4KbgnW8kZRuDZiQuWjbdG090Bk2k8XVJLw40RDSSOA-PrpTwSiGNxO4WW~Jfika4xZj~Y-rzjj2G5l~aTMMzshtVMD6agcVW8GhfgPoSSCyNVvn-xJ8DC81vJVUBBNd4uqwPtFzBBoNJIDgRwPH9UamdXfBPm1urZKkJyoFPPZCpQ82P7XwdrOwcYrursGnHTj1dL5wz3nmsW8oI1akCW4w1UMCnKzCc2Z1k8Q6um9Q__&Key-Pair-Id=K1676C64NMVM2J"
+  },
+  "created_at": "2026-09-09T07:10:59.685630Z",
+  "completed_at": "2026-09-09T07:11:07.880332Z",
+  "credits_consumed": 5.0,
+  "downloaded_files": [
+    "/Users/ld/Documents/Codex/2026-08-16/jie/outputs/掼蛋/DesignSources/Result/Defeat/01_generated_image_url.png"
+  ]
+}
