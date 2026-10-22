@@ -458,7 +458,9 @@ namespace Guandan.Game
                 BaseSteps = baseSteps,
             };
             Phase = MatchPhase.HandComplete;
-            Raise(MatchEventType.HandFinished, finishOrder[0], $"{(winningTeam == 0 ? \"Jade Team\" : \"Red Team\")} advances {baseSteps} tile{(baseSteps != 1 ? \"s\" : \"\")}", handResult: LastHandResult);
+            var winTeamName = winningTeam == 0 ? "Jade Team" : "Red Team";
+            var tilePlural = baseSteps != 1 ? "tiles" : "tile";
+            Raise(MatchEventType.HandFinished, finishOrder[0], $"{winTeamName} advances {baseSteps} {tilePlural}", handResult: LastHandResult);
             NotifyState();
         }
 

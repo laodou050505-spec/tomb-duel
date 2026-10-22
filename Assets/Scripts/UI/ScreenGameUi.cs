@@ -909,7 +909,7 @@ namespace Guandan.UI
             var result = director.Match.LastHandResult;
             var winningTeamName = result.WinningTeam == 0 ? "Jade Team" : "Red Team";
             var firstName = result.FirstSeat == PlayerSeat.South ? "You" : director.GetProfile(result.FirstSeat).Name;
-            routeSummaryText.text = $"Round · {winningTeamName} {FinishCopy(result)} · Advance {result.BaseSteps} tile{(result.BaseSteps != 1 ? "s" : "")}";
+            routeSummaryText.text = "Round · " + winningTeamName + " " + FinishCopy(result) + " · Advance " + result.BaseSteps + (result.BaseSteps != 1 ? " tiles" : " tile");
             routeResultText.text = director.RouteResultMessage;
             RenderRouteTrack(blueRouteCells, director.Race.GetPosition(0), new Color(0.20f, 0.66f, 0.58f));
             RenderRouteTrack(redRouteCells, director.Race.GetPosition(1), new Color(0.78f, 0.24f, 0.16f));
@@ -929,7 +929,7 @@ namespace Guandan.UI
             enterTreasureButtonUi.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -44f);
             steadyButtonUi.interactable = humanChoice && viewReady;
             riskyButtonUi.interactable = humanChoice && viewReady;
-            SetButtonText("Steady", $"Steady Advance\n+{result.BaseSteps} tile{(result.BaseSteps != 1 ? \"s\" : \"\")}");
+            SetButtonText("Steady", "Steady Advance\n+" + result.BaseSteps + (result.BaseSteps != 1 ? " tiles" : " tile"));
             SetButtonText("Risky", "Risky Dig\n×2 (10%)  +1 (15%)  Normal (55%)\n−1 (12%)  Retreat (8%)");
             if (!director.RaceResolved)
             {

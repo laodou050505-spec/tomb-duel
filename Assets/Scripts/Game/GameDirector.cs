@@ -930,7 +930,8 @@ namespace Guandan.Game
             var team = match.LastHandResult.WinningTeam;
             var previousPosition = race.GetPosition(team);
             var result = race.Move(team, match.LastHandResult.BaseSteps, route, raceRandom.NextDouble());
-            routeResultMessage = $"{result.Label} · {(team == 0 ? \"Jade Team\" : \"Red Team\")} reaches tile {result.Position}";
+            var raceTeamName = team == 0 ? "Jade Team" : "Red Team";
+            routeResultMessage = $"{result.Label} · {raceTeamName} reaches tile {result.Position}";
             raceResolved = true;
             ShowMessage(routeResultMessage);
             RefreshRaceLabel();
@@ -942,7 +943,8 @@ namespace Guandan.Game
                 gameAudio?.Chest();
                 match.MarkMatchComplete();
                 continueButton?.SetAvailable(false);
-                routeResultMessage = $"{(race.WinningTeam == 0 ? \"Jade Team\" : \"Red Team\")} opens the central chest first!";
+                var chestWinner = race.WinningTeam == 0 ? "Jade Team" : "Red Team";
+                routeResultMessage = $"{chestWinner} opens the central chest first!";
                 ShowMessage(routeResultMessage);
             }
             else
@@ -990,7 +992,8 @@ namespace Guandan.Game
                     break;
                 case MatchEventType.CardsPlayed:
                     var cardNames = gameEvent.Play == null ? string.Empty : string.Join(" ", gameEvent.Play.Cards.Select(card => card.ShortLabel));
-                    seatPlayLabels[gameEvent.Seat] = $"{GuandanMatchEngine.SeatLabel(gameEvent.Seat)} · {gameEvent.Play?.Label ?? "Played"}\n{cardNames}";
+                    var playLabel = gameEvent.Play?.Label ?? "Played";
+                    seatPlayLabels[gameEvent.Seat] = $"{GuandanMatchEngine.SeatLabel(gameEvent.Seat)} · {playLabel}\n{cardNames}";
                     seatPlayPatterns[gameEvent.Seat] = gameEvent.Play;
                     if (gameEvent.Play?.IsBomb == true)
                     {
