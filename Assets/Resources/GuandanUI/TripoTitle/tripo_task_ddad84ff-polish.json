@@ -1,0 +1,16 @@
+{
+  "task_id": "ddad84ff-b4e0-438c-8a1d-10f2eaab5d93",
+  "status": "success",
+  "type": "image_to_image",
+  "model": "banana2",
+  "aspect_ratio": "16:9",
+  "purpose": "打磨轮 2026-10-22：从 banana（原版 bd2af20b）升级为 banana2，增强金石刻字发光、宝箱光与大气深度",
+  "credits_consumed": 10.0,
+  "created_at": "2026-10-22T08:23:20.563Z",
+  "completed_at": "2026-10-22T08:23:40.764Z",
+  "input_reference": "file_0c0638b6-7d3d-45ce-b773-ff75ca1ec130",
+  "downloaded_files": [
+    "Assets/Resources/GuandanUI/TitleCover.png",
+    "Assets/Resources/GuandanUI/TripoTitle/01_generated_image_url.png"
+  ]
+}

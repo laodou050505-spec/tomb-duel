@@ -101,6 +101,7 @@ namespace Guandan.UI
         private Button profileWestUi;
         private Button[] lotteryButtons;
         private bool built;
+        private bool matchResultWasActive;   // polish: victory entrance guard
         private PlayerSeat profileSeat;
         private static Font uiFont;
         private static Sprite tombPanelSprite;
@@ -178,6 +179,7 @@ namespace Guandan.UI
             {
                 case UiHitKind.Card:
                     director.ToggleCardById(value);
+                    if (built && effectRoot != null) StartCoroutine(CardSelectFlashRoutine());
                     break;
                 case UiHitKind.Action:
                     switch (value)
@@ -264,7 +266,7 @@ namespace Guandan.UI
             lotteryPanel.SetActive(!director.LotteryChosen);
             tablePanel.SetActive(director.LotteryChosen && !director.RaceOpen);
             routePanel.SetActive(director.RaceOpen);
-            if (matchResultPanel != null && !director.RaceOpen) matchResultPanel.SetActive(false);
+            if (matchResultPanel != null && !director.RaceOpen) { matchResultPanel.SetActive(false); matchResultWasActive = false; }
             if (director.RaceOpen)
             {
                 profilePanel.SetActive(false);
@@ -311,6 +313,20 @@ namespace Guandan.UI
             playButtonUi.interactable = director.CanSubmitSelection;
             passButtonUi.interactable = humanTurn && match.CurrentPlay != null;
             SetButtonText("Play", match.Phase == MatchPhase.TributeReturn ? "Return" : "Play");
+            // polish: Play button pulses warm red-gold when a valid hand is ready to submit
+            {
+                var playColors = playButtonUi.colors;
+                if (director.CanSubmitSelection)
+                {
+                    var t = 0.5f + 0.5f * Mathf.Sin(Time.time * 4.2f);
+                    playColors.normalColor = Color.Lerp(new Color(0.62f, 0.20f, 0.12f), new Color(0.84f, 0.40f, 0.18f), t);
+                }
+                else
+                {
+                    playColors.normalColor = new Color(0.62f, 0.20f, 0.12f);
+                }
+                playButtonUi.colors = playColors;
+            }
             levelAnnouncementPanel.SetActive(director.IsPresentationLocked && director.DealVisibleCount >= 27);
             levelAnnouncementText.text = director.PresentationMessage;
             RenderHand();
@@ -341,7 +357,13 @@ namespace Guandan.UI
 
         public void PlayBombImpact(string label)
         {
-            if (built) StartCoroutine(BombImpactRoutine(label));
+            if (built) StartCoroutine(BombImpactRoutine(label, straightFlush: false));
+        }
+
+        // polish: straight flush uses a distinct jade-gold colour scheme to distinguish from a plain bomb
+        public void PlayStraightFlushImpact(string label)
+        {
+            if (built) StartCoroutine(BombImpactRoutine(label, straightFlush: true));
         }
 
         public void PlayPlacementStamp(PlayerSeat seat, int place)
@@ -771,13 +793,35 @@ namespace Guandan.UI
                 ? $"You · {GuandanMatchEngine.Ordinal(placement)}"
                 : director.IsPresentationLocked ? $"Dealing {visibleCount} / 27" : $"Hand: {allCards.Count}";
             if (director.IsPresentationLocked)
+            {
                 selectionText.text = director.DealVisibleCount >= 27 ? "Revealing trump rank…" : "Cards arriving…";
+                selectionText.color = new Color(0.95f, 0.92f, 0.80f);
+            }
             else if (match.Phase == MatchPhase.TributeReturn && match.ActiveSeat == PlayerSeat.South)
+            {
                 selectionText.text = director.SelectedCount == 1 ? "Confirm return tribute card" : "Select a card to return";
+                selectionText.color = new Color(0.95f, 0.88f, 0.60f);
+            }
             else if (director.SelectedCount > 0)
-                selectionText.text = director.CanSubmitSelection ? $"{director.SelectedCount} selected · Ready" : $"{director.SelectedCount} selected · Invalid";
+            {
+                // polish: colour-coded selection feedback
+                if (director.CanSubmitSelection)
+                {
+                    selectionText.text = $"{director.SelectedCount} selected · Ready";
+                    selectionText.color = new Color(0.62f, 0.96f, 0.72f);   // soft green = valid
+                }
+                else
+                {
+                    selectionText.text = $"{director.SelectedCount} selected · Invalid";
+                    selectionText.color = new Color(0.96f, 0.52f, 0.38f);   // warm orange-red = invalid
+                }
+            }
             else
-                selectionText.text = match.Phase == MatchPhase.Playing && match.ActiveSeat == PlayerSeat.South ? "Select cards to play" : "Waiting for others";
+            {
+                selectionText.text = match.Phase == MatchPhase.Playing && match.ActiveSeat == PlayerSeat.South
+                    ? "Select cards to play" : "Waiting for others";
+                selectionText.color = new Color(0.95f, 0.92f, 0.80f);
+            }
         }
 
         private const float HandCardWidth = 96f;
@@ -819,7 +863,19 @@ namespace Guandan.UI
             if (match.ActiveSeat != PlayerSeat.South) return; // AI status belongs to its seat plaque.
             switch (match.ActiveSeat)
             {
-                case PlayerSeat.South: turnCalloutSouth.text = value; break;
+                case PlayerSeat.South:
+                    turnCalloutSouth.text = value;
+                    // polish: pulse the "Your turn" callout between gold and bright amber for urgency
+                    if (match.Phase == MatchPhase.Playing)
+                    {
+                        var t = 0.5f + 0.5f * Mathf.Sin(Time.time * 2.8f);
+                        turnCalloutSouth.color = Color.Lerp(new Color(0.96f, 0.82f, 0.48f), new Color(1f, 0.96f, 0.72f), t);
+                    }
+                    else
+                    {
+                        turnCalloutSouth.color = new Color(0.96f, 0.82f, 0.48f);
+                    }
+                    break;
                 case PlayerSeat.East: turnCalloutEast.text = value; break;
                 case PlayerSeat.North: turnCalloutNorth.text = value; break;
                 case PlayerSeat.West: turnCalloutWest.text = value; break;
@@ -888,6 +944,12 @@ namespace Guandan.UI
             var complete = director.Race.IsComplete;
             var ready = complete && director.MatchResultReady;
             matchResultPanel.SetActive(ready);
+            if (ready && !matchResultWasActive && effectRoot != null)
+            {
+                var won = director.Race?.WinningTeam == 0;
+                StartCoroutine(ResultEntranceRoutine(won));
+            }
+            matchResultWasActive = ready;
             routeTitleText.gameObject.SetActive(!ready);
             if (complete)
             {
@@ -1159,13 +1221,15 @@ namespace Guandan.UI
         private static void RenderRouteTrack(Image[] cells, int position, Color activeColor)
         {
             if (cells == null) return;
+            // polish: frontier cell pulses softly to draw attention to progress
+            var pulse = 0.5f + 0.5f * Mathf.Sin(Time.time * 3.4f);   // 0..1, ~3 Hz
             for (var index = 0; index < cells.Length; index++)
             {
                 if (cells[index] == null) continue;
                 cells[index].color = index < position
                     ? activeColor
                     : index == position && position < cells.Length
-                        ? Color.Lerp(activeColor, Color.white, 0.22f)
+                        ? Color.Lerp(activeColor, Color.white, 0.18f + pulse * 0.22f)
                         : new Color(0.12f, 0.14f, 0.13f, 0.88f);
             }
         }
@@ -1226,21 +1290,28 @@ namespace Guandan.UI
             return rect;
         }
 
-        private IEnumerator BombImpactRoutine(string label)
+        private IEnumerator BombImpactRoutine(string label, bool straightFlush = false)
         {
             EnsureBombSprites();
-            var panel = CreatePanel("BombImpact", effectRoot, Vector2.zero, new Vector2(CanvasWidth, CanvasHeight), new Color(0.42f, 0.025f, 0.012f, 0.14f));
+            // polish: straight flush uses jade-teal backdrop; plain bomb uses vermilion
+            var backdropColor = straightFlush
+                ? new Color(0.02f, 0.18f, 0.16f, 0.18f)
+                : new Color(0.42f, 0.025f, 0.012f, 0.14f);
+            var panel = CreatePanel("BombImpact", effectRoot, Vector2.zero, new Vector2(CanvasWidth, CanvasHeight), backdropColor);
             panel.GetComponent<Image>().raycastTarget = false;
             var group = panel.AddComponent<CanvasGroup>();
-            var ringA = CreateBombRing(panel.transform, new Color(0.94f, 0.30f, 0.10f, 0.92f), 0.2f);
-            var ringB = CreateBombRing(panel.transform, new Color(1.00f, 0.76f, 0.28f, 0.76f), 0.2f);
-            var ringC = CreateBombRing(panel.transform, new Color(0.52f, 0.84f, 0.70f, 0.58f), 0.2f);
-            var stampPanel = CreatePanel("VermilionSeal", panel.transform, Vector2.zero, new Vector2(470f, 188f), new Color(0.46f, 0.055f, 0.028f, 0.94f));
+            // polish: straight flush = jade/gold rings; bomb = fire/gold rings
+            var ringA = CreateBombRing(panel.transform, straightFlush ? new Color(0.28f, 0.90f, 0.74f, 0.92f) : new Color(0.94f, 0.30f, 0.10f, 0.92f), 0.2f);
+            var ringB = CreateBombRing(panel.transform, straightFlush ? new Color(0.60f, 0.96f, 0.84f, 0.76f) : new Color(1.00f, 0.76f, 0.28f, 0.76f), 0.2f);
+            var ringC = CreateBombRing(panel.transform, straightFlush ? new Color(1.00f, 0.88f, 0.36f, 0.58f) : new Color(0.52f, 0.84f, 0.70f, 0.58f), 0.2f);
+            var sealBgColor = straightFlush ? new Color(0.04f, 0.22f, 0.20f, 0.94f) : new Color(0.46f, 0.055f, 0.028f, 0.94f);
+            var stampPanel = CreatePanel("VermilionSeal", panel.transform, Vector2.zero, new Vector2(470f, 188f), sealBgColor);
             var stampImage = stampPanel.GetComponent<Image>();
             ApplySkin(stampImage, tombButtonSprite, Color.white);
-            stampImage.color = new Color(0.58f, 0.10f, 0.055f, 0.94f);
+            stampImage.color = straightFlush ? new Color(0.06f, 0.30f, 0.26f, 0.94f) : new Color(0.58f, 0.10f, 0.055f, 0.94f);
             stampImage.raycastTarget = false;
-            var stamp = CreateText("Seal", $"BOMB\n{label}", stampPanel.transform, Vector2.zero, 42, TextAnchor.MiddleCenter, new Color(1f, 0.84f, 0.45f));
+            var stampText = straightFlush ? $"STRAIGHT\nFLUSH" : $"BOMB\n{label}";
+            var stamp = CreateText("Seal", stampText, stampPanel.transform, Vector2.zero, 42, TextAnchor.MiddleCenter, new Color(1f, 0.92f, 0.48f));
             stamp.rectTransform.sizeDelta = new Vector2(430f, 168f);
             stamp.fontStyle = FontStyle.Bold;
             var sparks = new Image[12];
@@ -1338,6 +1409,78 @@ namespace Guandan.UI
             return image;
         }
 
+        // polish: brief golden shimmer at hand area when player toggles a card
+        private IEnumerator CardSelectFlashRoutine()
+        {
+            EnsureBombSprites();
+            var flash = CreatePanel("CardFlash", effectRoot, new Vector2(0f, -468f), new Vector2(1740f, 18f), new Color(0.98f, 0.82f, 0.32f, 1f));
+            flash.GetComponent<Image>().raycastTarget = false;
+            var group = flash.AddComponent<CanvasGroup>();
+            for (var t = 0f; t < 0.22f; t += Time.unscaledDeltaTime)
+            {
+                var progress = t / 0.22f;
+                group.alpha = progress < 0.4f ? Mathf.Lerp(0f, 0.55f, progress / 0.4f)
+                                              : Mathf.Lerp(0.55f, 0f, (progress - 0.4f) / 0.6f);
+                yield return null;
+            }
+            Destroy(flash);
+        }
+
+        // polish: victory fireworks — 24 gold sparks burst outward when result panel appears
+        private IEnumerator ResultEntranceRoutine(bool won)
+        {
+            EnsureBombSprites();
+            const int count = 24;
+            var sparks = new Image[count];
+            var dirs = new Vector2[count];
+            var origin = new Vector2(0f, 0f);
+            for (var i = 0; i < count; i++)
+            {
+                var angle = (i / (float)count) * Mathf.PI * 2f + UnityEngine.Random.Range(-0.12f, 0.12f);
+                dirs[i] = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                var sp = new GameObject($"ResultSpark_{i:00}", typeof(RectTransform), typeof(Image));
+                sp.transform.SetParent(effectRoot, false);
+                var spRect = sp.transform as RectTransform;
+                var radius = won ? (i % 5 == 0 ? 26f : 16f) : 14f;
+                spRect.sizeDelta = new Vector2(radius, radius);
+                spRect.anchoredPosition = origin;
+                var spImg = sp.GetComponent<Image>();
+                spImg.sprite = bombSparkSprite;
+                spImg.raycastTarget = false;
+                if (won)
+                    spImg.color = i % 4 == 0 ? new Color(1.00f, 0.88f, 0.30f, 0.96f)
+                                : i % 4 == 1 ? new Color(1.00f, 0.70f, 0.18f, 0.92f)
+                                : i % 4 == 2 ? new Color(0.98f, 0.96f, 0.62f, 0.86f)
+                                             : new Color(0.72f, 0.96f, 0.82f, 0.80f);
+                else
+                    spImg.color = new Color(0.76f, 0.86f, 0.90f, 0.78f);
+                sparks[i] = spImg;
+            }
+
+            // brief screen-edge flash ring
+            var flashRing = CreateBombRing(effectRoot, won ? new Color(1f, 0.82f, 0.28f, 0.42f) : new Color(0.62f, 0.76f, 0.84f, 0.30f), 0.1f);
+            flashRing.rectTransform.sizeDelta = new Vector2(1800f, 1800f);
+
+            var maxRadius = won ? 820f : 560f;
+            for (var t = 0f; t < 1.4f; t += Time.unscaledDeltaTime)
+            {
+                var progress = Mathf.Clamp01(t / 1.4f);
+                var burst = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(progress * 1.3f));
+                flashRing.rectTransform.localScale = Vector3.one * Mathf.Lerp(0.05f, 2.2f, burst);
+                SetAlpha(flashRing, Mathf.Lerp(0.42f, 0f, Mathf.Clamp01(progress * 1.1f)));
+                for (var i = 0; i < sparks.Length; i++)
+                {
+                    if (sparks[i] == null) continue;
+                    sparks[i].rectTransform.anchoredPosition = origin + dirs[i] * Mathf.Lerp(0f, maxRadius, burst);
+                    sparks[i].rectTransform.localRotation = Quaternion.Euler(0f, 0f, t * (i % 2 == 0 ? 280f : -240f));
+                    SetAlpha(sparks[i], Mathf.Lerp(0.96f, 0f, Mathf.Clamp01(progress * 1.05f)));
+                }
+                yield return null;
+            }
+            foreach (var sp in sparks) if (sp != null) Destroy(sp.gameObject);
+            if (flashRing != null) Destroy(flashRing.gameObject);
+        }
+
         private static void SetAlpha(Image image, float alpha)
         {
             if (image == null) return;
@@ -1402,21 +1545,68 @@ namespace Guandan.UI
         private IEnumerator TreasureMoveRoutine(int team, int from, int to, bool chestOpened)
         {
             var color = team == 0 ? new Color(0.12f, 0.50f, 0.44f, 0.96f) : new Color(0.64f, 0.16f, 0.10f, 0.96f);
-            var panel = CreatePanel("TreasureMove", effectRoot, new Vector2(0f, -454f), new Vector2(620f, 106f), color);
+            var panelWidth = chestOpened ? 760f : 620f;
+            var panelHeight = chestOpened ? 130f : 106f;
+            var panel = CreatePanel("TreasureMove", effectRoot, new Vector2(0f, -430f), new Vector2(panelWidth, panelHeight), color);
             panel.GetComponent<Image>().raycastTarget = false;
             var group = panel.AddComponent<CanvasGroup>();
             var message = chestOpened
                 ? $"{(team == 0 ? "Jade" : "Red")} reaches tile {TreasureRace.TrackLength}!\nChest Opened!"
                 : $"{(team == 0 ? "Jade" : "Red")} advances\nTile {from}  →  Tile {to}";
-            var label = CreateText("Label", message, panel.transform, Vector2.zero, chestOpened ? 38 : 28, TextAnchor.MiddleCenter, new Color(1f, 0.86f, 0.50f));
-            label.rectTransform.sizeDelta = new Vector2(590f, 150f);
-            for (var time = 0f; time < 1.1f; time += Time.unscaledDeltaTime)
+            var label = CreateText("Label", message, panel.transform, Vector2.zero, chestOpened ? 42 : 28, TextAnchor.MiddleCenter, new Color(1f, 0.90f, 0.55f));
+            label.rectTransform.sizeDelta = new Vector2(panelWidth - 30f, panelHeight + 50f);
+            label.fontStyle = FontStyle.Bold;
+
+            // polish: gold burst sparks for chest-opened
+            Image[] chestSparks = null;
+            Vector2[] chestSparkDirs = null;
+            if (chestOpened)
             {
-                var progress = Mathf.Clamp01(time / 1.1f);
-                panel.transform.localScale = Vector3.one * Mathf.Lerp(0.82f, 1f, Mathf.Min(1f, progress * 4f));
+                EnsureBombSprites();
+                chestSparks = new Image[20];
+                chestSparkDirs = new Vector2[20];
+                for (var i = 0; i < chestSparks.Length; i++)
+                {
+                    var angle = (i / (float)chestSparks.Length) * Mathf.PI * 2f;
+                    chestSparkDirs[i] = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                    var sp = new GameObject($"ChestSpark_{i:00}", typeof(RectTransform), typeof(Image));
+                    sp.transform.SetParent(effectRoot, false);
+                    var spRect = sp.transform as RectTransform;
+                    spRect.sizeDelta = new Vector2(i % 4 == 0 ? 22f : 13f, i % 4 == 0 ? 22f : 13f);
+                    var spImg = sp.GetComponent<Image>();
+                    spImg.sprite = bombSparkSprite;
+                    spImg.color = i % 3 == 0 ? new Color(1f, 0.82f, 0.24f, 0.96f)
+                                : i % 3 == 1 ? new Color(1f, 0.65f, 0.15f, 0.88f)
+                                             : new Color(0.96f, 0.92f, 0.55f, 0.82f);
+                    spImg.raycastTarget = false;
+                    chestSparks[i] = spImg;
+                }
+            }
+
+            var duration = chestOpened ? 1.7f : 1.1f;
+            for (var time = 0f; time < duration; time += Time.unscaledDeltaTime)
+            {
+                var progress = Mathf.Clamp01(time / duration);
+                var popT = Mathf.SmoothStep(0f, 1f, Mathf.Min(1f, progress * 4f));
+                panel.transform.localScale = Vector3.one * Mathf.Lerp(chestOpened ? 0.72f : 0.82f, 1f, popT);
                 group.alpha = progress < 0.72f ? 1f : 1f - (progress - 0.72f) / 0.28f;
+                if (chestSparks != null)
+                {
+                    var burst = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(progress * 1.4f));
+                    for (var i = 0; i < chestSparks.Length; i++)
+                    {
+                        if (chestSparks[i] == null) continue;
+                        var spRect = chestSparks[i].rectTransform;
+                        spRect.anchoredPosition = chestSparkDirs[i] * Mathf.Lerp(10f, 430f, burst);
+                        spRect.localRotation = Quaternion.Euler(0f, 0f, time * (i % 2 == 0 ? 240f : -200f));
+                        SetAlpha(chestSparks[i], Mathf.Lerp(0.96f, 0f, Mathf.Clamp01(progress * 1.1f)));
+                    }
+                }
                 yield return null;
             }
+            if (chestSparks != null)
+                foreach (var sp in chestSparks)
+                    if (sp != null) Destroy(sp.gameObject);
             Destroy(panel);
         }
 

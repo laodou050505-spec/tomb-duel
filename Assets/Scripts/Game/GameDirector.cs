@@ -998,7 +998,11 @@ namespace Guandan.Game
                     if (gameEvent.Play?.IsBomb == true)
                     {
                         gameAudio?.Bomb();
-                        screenUi?.PlayBombImpact(gameEvent.Play.Label);
+                        // polish: straight flush gets a distinct jade-teal impact; other bombs use vermilion
+                        if (gameEvent.Play.Kind == PlayKind.StraightFlush)
+                            screenUi?.PlayStraightFlushImpact(gameEvent.Play.Label);
+                        else
+                            screenUi?.PlayBombImpact(gameEvent.Play.Label);
                     }
                     else gameAudio?.Card();
                     ShowMessage($"{gameEvent.Message}");
