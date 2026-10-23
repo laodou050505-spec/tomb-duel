@@ -234,7 +234,10 @@ namespace Guandan.Title
             // Spec C at d=4.26m title min: 4.26×0.028=11.9cm → need fontSize≥44 (44×0.004×0.68=12.0cm).
             // EXIT is secondary action, body spec: 4.26×0.017=7.24cm → fontSize≥28 (28×0.004×0.68=7.62cm).
             int fontSize = action == TitleAction.Start ? 46 : 34;
-            var text = Label("Label", visual, label, Vector2.zero, size, fontSize, new Color(0.97f, 0.90f, 0.68f), cinzel);
+            // v4 视觉居中修正：全大写文字无下行部分，但 Unity Text 按完整行高（含 descender 空间）居中，
+            // 导致大写字母视觉中心偏低约 fontSize×13%。将文字矩形上移等量补偿。
+            var textOffset = new Vector2(0f, Mathf.Round(fontSize * 0.13f));
+            var text = Label("Label", visual, label, textOffset, size, fontSize, new Color(0.97f, 0.90f, 0.68f), cinzel);
             if (cinzel != null) text.fontStyle = FontStyle.Bold;
 
             var button = hit.gameObject.AddComponent<TitleActionButton>();

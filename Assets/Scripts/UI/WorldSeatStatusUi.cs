@@ -253,13 +253,21 @@ namespace Guandan.UI
             var profile = director.GetProfile(seat);
             var count = match.GetHand(seat).Count;
             var finishedIndex = match.FinishOrder.ToList().IndexOf(seat);
-            var countText = finishedIndex >= 0
-                ? GuandanMatchEngine.Ordinal(finishedIndex + 1)
-                : $"{count}";
-            titleText.text = $"{GuandanMatchEngine.SeatLabel(seat)} · {profile.Name}  {countText}";
+
+            // v4：名牌名字独占一行，手牌数显示在 statusText 中
+            // 超过 10 张显示 "10+"（隐藏信息规则），不超过 10 张显示实际数量
+            var cardCountText = count > 10 ? "10+" : $"{count}";
+
+            // 标题行：仅显示座位标签和玩家名，不附加数字（避免 "YE LAN ?" 歧义）
+            titleText.text = $"{GuandanMatchEngine.SeatLabel(seat)} · {profile.Name}";
 
             var play = director.GetSeatPlayLabel(seat);
-            if (!string.IsNullOrEmpty(play))
+            if (finishedIndex >= 0)
+            {
+                // 已结束：显示名次，不显示手牌数
+                statusText.text = GuandanMatchEngine.Ordinal(finishedIndex + 1);
+            }
+            else if (!string.IsNullOrEmpty(play))
             {
                 var lines = play.Split('\n');
                 var action = lines[0];
@@ -274,7 +282,8 @@ namespace Guandan.UI
             }
             else
             {
-                statusText.text = "Waiting…";
+                // 等待时显示手牌数（隐藏信息：超过10张只显示 "10+"）
+                statusText.text = $"Cards: {cardCountText}";
             }
 
             var teamColor = seat == PlayerSeat.North
