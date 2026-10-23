@@ -1060,7 +1060,8 @@ namespace Guandan.UI
             {
                 // Every played combination stays in one readable row. Larger combinations
                 // overlap progressively instead of wrapping into a second line.
-                const float width = 190f, height = 285f, preferredStep = 165f;
+                // v4：对家出牌缩至约55%，不遮挡对面人物脸部
+                const float width = 104f, height = 156f, preferredStep = 90f;
                 var horizontalStep = cards.Count <= 1
                     ? width
                     : Mathf.Min(preferredStep, (858f - width) / (cards.Count - 1));

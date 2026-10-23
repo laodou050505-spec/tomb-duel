@@ -255,7 +255,7 @@ namespace Guandan.UI
             var finishedIndex = match.FinishOrder.ToList().IndexOf(seat);
             var countText = finishedIndex >= 0
                 ? GuandanMatchEngine.Ordinal(finishedIndex + 1)
-                : count > 10 ? "?" : $"{count}";
+                : $"{count}";
             titleText.text = $"{GuandanMatchEngine.SeatLabel(seat)} · {profile.Name}  {countText}";
 
             var play = director.GetSeatPlayLabel(seat);
