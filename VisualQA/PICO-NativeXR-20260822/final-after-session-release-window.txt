@@ -1,9 +1,0 @@
-126:  Window #4 Window{127cc8f u0 com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity}:
-128:    mOwnerUid=10097 showForAllUsers=false package=com.guandan.tombxr appop=NONE
-137:    mBaseLayer=21000 mSubLayer=0    mToken=ActivityRecord{253955953 u0 com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity t11}
-138:    mActivityRecord=ActivityRecord{253955953 u0 com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity t11}
-148:    WindowStateAnimator{b055ae6 com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity}:
-149:      mSurface=Surface(name=com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity)/@0xce771dd
-302:                    |-Task{70831ad #11 type=standard A=10097:com.guandan.tombxr minWidth=400 minHeight=300}
-303:                        |-ActivityRecord{253955953 u0 com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity t11}
-304:                            |-Window{127cc8f u0 com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity}

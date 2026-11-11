@@ -1,8 +1,0 @@
-Stopping: com.guandan.tombxr
-Starting: Intent { cmp=com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity }
-Status: ok
-LaunchState: COLD
-Activity: com.guandan.tombxr/com.unity3d.player.UnityPlayerActivity
-TotalTime: 72
-WaitTime: 74
-Complete

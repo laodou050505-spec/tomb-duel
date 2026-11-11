@@ -1,2 +1,0 @@
-8378c1b8241c419b0ad7bf07c9ec06b6def7bc3a775d6fa7a08535e9caa37d74  Builds/Android/地宫争锋-PICO.apk
-12e47361b04be5579383b64553b1ee28d4a52dfe39f9a7cf060035b5e2ac2f7f  Assets/Scenes/GuandanTomb.unity

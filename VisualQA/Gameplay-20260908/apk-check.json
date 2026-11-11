@@ -1,9 +1,0 @@
-{
-  "apk": "/Users/ld/Documents/Codex/2026-08-16/jie/outputs/掼蛋/Builds/Android/地宫争锋-PICO.apk",
-  "bytes": 78664585,
-  "sha256": "52cceb894a6fd7014d6f7aeaaf6125bf4ee6ea4ebc42ea188c3eaee4d4430e73",
-  "il2cpp": [
-    "lib/arm64-v8a/libil2cpp.so"
-  ],
-  "zip": "pass"
-}
