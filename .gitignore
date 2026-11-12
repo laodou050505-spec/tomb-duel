@@ -16,3 +16,9 @@ mono_crash.*
 Evidence/
 VisualQA/
 Preview/
+
+# 本地临时文件与过程截图，不入库
+Backups/
+CoverBackups/
+Assets/_Recovery/
+Assets/_Recovery.meta
